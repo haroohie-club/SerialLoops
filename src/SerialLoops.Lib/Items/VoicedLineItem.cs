@@ -15,6 +15,7 @@ namespace SerialLoops.Lib.Items;
 public class VoicedLineItem : Item, ISoundItem
 {
     private string _vceFile;
+    private Func<string, string> _localize;
 
     public string VoiceFile { get; set; }
     public int Index { get; set; }
@@ -23,6 +24,7 @@ public class VoicedLineItem : Item, ISoundItem
     public VoicedLineItem(string voiceFile, int index, Project project) : base(Path.GetFileNameWithoutExtension(voiceFile), ItemType.Voice)
     {
         _vceFile = voiceFile;
+        _localize = project.Localize;
         SetVoiceFile(project);
         Index = index;
     }
@@ -47,12 +49,12 @@ public class VoicedLineItem : Item, ISoundItem
         {
             if (!File.Exists(_vceFile))
             {
-                log.LogError("Failed to load voice file: file not found.");
+                log.LogError(_localize("ErrorVoiceFileNotFound"));
                 log.LogWarning(_vceFile);
             }
             else
             {
-                log.LogError("Failed to load voice file: file invalid.");
+                log.LogError(_localize("ErrorInvalidVoiceFile"));
                 log.LogWarning(_vceFile);
             }
         }

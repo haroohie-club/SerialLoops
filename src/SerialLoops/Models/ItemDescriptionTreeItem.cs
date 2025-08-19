@@ -54,7 +54,7 @@ public class ItemDescriptionTreeItem : ITreeItem, IViewFor<ItemDescription>
         {
             ICommand findReferencesCommand = ReactiveCommand.Create(FindReferences);
             _panel.ContextMenu = new();
-            MenuItem references = new() { Header = Strings.Find_References___, Command = findReferencesCommand};
+            MenuItem references = new() { Header = Strings.ItemsPanelContextFindItems, Command = findReferencesCommand};
             _panel.ContextMenu.Items.Add(references);
         }
 

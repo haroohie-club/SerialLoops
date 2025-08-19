@@ -49,7 +49,7 @@ public class SystemTextureEditorViewModel : EditorViewModel
             }
             catch (Exception ex)
             {
-                _log.LogException(string.Format(Strings.Failed_to_export_system_texture__0__to_file__1_, SystemTexture.DisplayName, savedFile.Path.LocalPath), ex);
+                _log.LogException(string.Format(Strings.ErrorFailedExportingSysTex, SystemTexture.DisplayName, savedFile.Path.LocalPath), ex);
             }
         }
     }
@@ -91,7 +91,7 @@ public class SystemTextureEditorViewModel : EditorViewModel
                 }
                 catch (Exception ex)
                 {
-                    _log.LogException(string.Format(Strings.Failed_to_replace_system_texture__0__with_file__1_, SystemTexture.DisplayName, openFile.Path.LocalPath), ex);
+                    _log.LogException(string.Format(Strings.ErrorFailedReplacingSysTex, SystemTexture.DisplayName, openFile.Path.LocalPath), ex);
                 }
             }
         }

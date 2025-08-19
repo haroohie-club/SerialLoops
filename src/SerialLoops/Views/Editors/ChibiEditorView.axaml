@@ -23,7 +23,7 @@
                 <controls:ChibiDirectionSelector DataContext="{Binding DirectionSelector}"/>
             </StackPanel>
         </HeaderedContentControl>
-        <controls:HeaderedContentControlWithSvg Grid.Row="1" Grid.Column="1" Header="{x:Static assets:Strings.Frames}"
+        <controls:HeaderedContentControlWithSvg Grid.Row="1" Grid.Column="1" Header="{x:Static assets:Strings.ChibiEditorFramesLabel}"
                                                 IconPath="avares://SerialLoops/Assets/Icons/Help.svg"
                                                 IconTip="{x:Static assets:Strings.FramesToSecondsHelp}">
             <ScrollViewer VerticalScrollBarVisibility="Auto">

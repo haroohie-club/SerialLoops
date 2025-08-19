@@ -69,7 +69,7 @@ public class AsmHacksDialogViewModel : ViewModelBase
             }
             catch (Exception ex)
             {
-                _log.LogException(string.Format(Strings.Failed_to_add_parameters_for_hack_file__0__in_hack__1_, file.File, SelectedHack.Name), ex);
+                _log.LogException(string.Format(Strings.ErrorFailedAddingParametersToHack, file.File, SelectedHack.Name), ex);
             }
         }
     }
@@ -187,7 +187,7 @@ public class AsmHacksDialogViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            _log.LogException(string.Format(Strings.Failed_to_read_ARM9_from___0__, arm9Path), ex);
+            _log.LogException(string.Format(Strings.ErrorFailedReadingARM9, arm9Path), ex);
         }
 
         Overlay[] overlays = [];
@@ -213,14 +213,14 @@ public class AsmHacksDialogViewModel : ViewModelBase
                 }
                 catch (Exception ex)
                 {
-                    _log.LogException(Strings.Failed_to_insert_ARM9_assembly_hacks, ex);
+                    _log.LogException(Strings.ErrorFailedInsertingHacks, ex);
                 }
             }, () => { });
             await new ProgressDialog { DataContext = tracker }.ShowDialog(dialog);
         }
         catch (Exception ex)
         {
-            _log.LogException(Strings.Failed_to_insert_ARM9_assembly_hacks, ex);
+            _log.LogException(Strings.ErrorFailedInsertingHacks, ex);
         }
 
         try
@@ -229,7 +229,7 @@ public class AsmHacksDialogViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            _log.LogException("Failed to write ARM9 to disk", ex);
+            _log.LogException(_project.Localize("ErrorFailedWritingArm9"), ex);
         }
 
         // Save the modified overlays
@@ -244,7 +244,7 @@ public class AsmHacksDialogViewModel : ViewModelBase
             }
             catch (Exception ex)
             {
-                _log.LogException(string.Format(Strings.Failed_saving_overlay__0__to_disk, overlay.Name), ex);
+                _log.LogException(string.Format(Strings.ErrorFailedSavingOverlay, overlay.Name), ex);
             }
         }
         // For the other overlays, we're going copy in their original forms since we might have reverted hacks on them
@@ -265,7 +265,7 @@ public class AsmHacksDialogViewModel : ViewModelBase
         string[] failedHackNames = appliedHacks.Where(h => !h.Applied(_project)).Select(h => h.Name).ToArray();
         if (failedHackNames.Length > 0)
         {
-            _log.LogError(string.Format(Strings.Failed_to_apply_the_following_hacks_to_the_ROM__n_0__n_nPlease_check_the_log_file_for_more_information__n_nIn_order_to_preserve_state__no_hacks_were_applied_, string.Join(", ", failedHackNames)));
+            _log.LogError(string.Format(Strings.ErrorFailedToApplyHacks, string.Join(", ", failedHackNames)));
             foreach (AsmHack hack in appliedHacks)
             {
                 hack.Revert(_project, _log);

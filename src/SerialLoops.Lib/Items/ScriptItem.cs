@@ -199,7 +199,7 @@ public class ScriptItem : Item
         }
         catch (Exception ex)
         {
-            log.LogException("Failed to calculate graph edges!", ex);
+            log.LogException(_localize("ErrorFailedCalculatingScriptGraph"), ex);
             log.Log($"Script: {Name}, DisplayName: {DisplayName}");
         }
     }

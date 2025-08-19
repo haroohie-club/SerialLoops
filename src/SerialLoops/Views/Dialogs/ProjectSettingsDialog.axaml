@@ -23,7 +23,7 @@
             <StackPanel Spacing="5" Margin="5">
                 <TabControl>
                     <TabControl.Items>
-                        <TabItem Header="{x:Static assets:Strings.Game_Banner}">
+                        <TabItem Header="{x:Static assets:Strings.ProjectSettingsGameBanner}">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20" Margin="5 20">
                                 <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <StackPanel Width="64">
@@ -33,7 +33,7 @@
                                     <Button Content="{x:Static assets:Strings.Replace___}" Command="{Binding ReplaceCommand}" />
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <TextBlock Text="{x:Static assets:Strings.Game_Title}" />
+                                    <TextBlock Text="{x:Static assets:Strings.ProjectSettingsGameTitleLabel}" />
                                     <TextBox Text="{Binding GameTitle}" AcceptsReturn="True"
                                              MaxLines="3" MinLines="3" Width="350" MaxWidth="350" />
                                 </StackPanel>

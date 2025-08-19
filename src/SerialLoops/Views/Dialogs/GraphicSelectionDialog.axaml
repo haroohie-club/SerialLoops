@@ -24,7 +24,7 @@
 
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="20 30" Spacing="10">
             <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,*">
-                <TextBox Name="Filter" Grid.Column="0" Grid.Row="0" Watermark="{x:Static assets:Strings.Filter_by_name}"
+                <TextBox Name="Filter" Grid.Column="0" Grid.Row="0" Watermark="{x:Static assets:Strings.FilterByName}"
                          Width="150" Text="{Binding Filter}" />
                 <ScrollViewer Grid.Column="0" Grid.Row="1" Height="400">
                     <ListBox Name="Selector" ItemsSource="{Binding Items}" SelectedItem="{Binding CurrentSelection}">

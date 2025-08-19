@@ -105,7 +105,7 @@ public class BackgroundItem : Item, IPreviewableGraphic
                 tracker.Focus(localize("Setting screen image..."), 1);
                 if (Graphic2.SetScreenImage(image, quantizer, Graphic1, suppressErrors: true) < 0)
                 {
-                    log.LogError(localize("Failed to replace screen image: image too complex (generated more than 255 tiles); please use a simpler image"));
+                    log.LogError(localize("ErrorFailedReplacingKbg"));
                     return false;
                 }
                 tracker.Finished++;

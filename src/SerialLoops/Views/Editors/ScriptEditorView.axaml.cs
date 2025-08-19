@@ -42,7 +42,7 @@ public partial class ScriptEditorView : UserControl
         [
             new NativeMenuItem
             {
-                Header = Strings.Generate_Template,
+                Header = Strings.ScriptTemplateGenerateLabel,
                 Command = vm.GenerateTemplateCommand,
             },
             new NativeMenuItem

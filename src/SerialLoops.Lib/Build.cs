@@ -104,7 +104,7 @@ public static class Build
         }
         catch (IOException exc)
         {
-            log.LogException("Failed to write include files to disk.", exc);
+            log.LogException(project.Localize("ErrorFailedWritingIncludeFiles"), exc);
             return false;
         }
         tracker.Finished += 4;
@@ -197,7 +197,7 @@ public static class Build
         }
         catch (IOException exc)
         {
-            log.LogException("Failed to write NitroPacker NDS project file to disk", exc);
+            log.LogException(project.Localize("ErrorFailedWritingNPProjectFile"), exc);
             return false;
         }
         tracker.Finished++;
@@ -233,7 +233,7 @@ public static class Build
         }
         catch (IOException exc)
         {
-            log.LogException($"Failed to copy newly built archives to the iterative originals directory", exc);
+            log.LogException(project.Localize("ErrorFailedCopyingArchivesToIterativeDir"), exc);
         }
     }
 
@@ -273,7 +273,7 @@ public static class Build
         }
         catch (Exception ex)
         {
-            log.LogException(string.Format(localize("Failed replacing graphics file {0} with file '{1}'"), index, filePath), ex);
+            log.LogException(string.Format(localize("ErrorFailedReplacingGraphicsFile"), index, filePath), ex);
         }
     }
 
@@ -290,7 +290,7 @@ public static class Build
         }
         catch (Exception ex)
         {
-            log.LogException(string.Format(localize("Failed replacing graphics file {0} with file '{1}'"), index, filePath), ex);
+            log.LogException(string.Format(localize("ErrorFailedReplacingGraphicsFile"), index, filePath), ex);
         }
     }
 
@@ -309,7 +309,7 @@ public static class Build
         }
         catch (Exception ex)
         {
-            log.LogException(string.Format(localize("Failed replacing graphics file {0} with file '{1}'"), index, filePath), ex);
+            log.LogException(string.Format(localize("ErrorFailedReplacingGraphicsFile"), index, filePath), ex);
         }
     }
 
@@ -330,7 +330,7 @@ public static class Build
         }
         catch (Exception ex)
         {
-            log.LogException(string.Format(localize("Failed replacing source file {0} in evt.bin with file '{1}'"), index, filePath), ex);
+            log.LogException(string.Format(localize("ErrorFailedReplacingEvtSourceFile"), index, filePath), ex);
             return false;
         }
     }
@@ -351,7 +351,7 @@ public static class Build
         }
         catch (Exception ex)
         {
-            log.LogException(string.Format(localize("Failed replacing source file {0} in dat.bin with file '{1}'"), index, filePath), ex);
+            log.LogException(string.Format(localize("ErrorFailedReplacingDatFile"), index, filePath), ex);
             return false;
         }
     }
@@ -426,7 +426,7 @@ public static class Build
         }
         catch (Exception ex)
         {
-            log.LogException(string.Format(localize("Failed replacing file {0} in evt.bin with file '{1}'"), index, filePath), ex);
+            log.LogException(string.Format(localize("ErrorFailedReplacingEvtFile"), index, filePath), ex);
         }
     }
     private static void ReplaceSingleFile(ArchiveFile<DataFile> archive, string filePath, int index, Func<string, string> localize, ILogger log)
@@ -440,7 +440,7 @@ public static class Build
         }
         catch (Exception ex)
         {
-            log.LogException(string.Format(localize("Failed replacing source file {0} in dat.bin with file '{1}'"), index, filePath), ex);
+            log.LogException(string.Format(localize("ErrorFailedReplacingDatFile"), index, filePath), ex);
         }
     }
     private static void ReplaceSingleBinaryFile(ArchiveFile<GraphicsFile> archive, string filePath, int index, Func<string, string> localize, ILogger log)
@@ -459,7 +459,7 @@ public static class Build
         }
         catch (Exception ex)
         {
-            log.LogException(string.Format(localize("Failed replacing animation file {0} in grp.bin with file '{1}'"), index, filePath), ex);
+            log.LogException(string.Format(localize("ErrorFailedReplacingAnimationFile"), index, filePath), ex);
         }
     }
 }

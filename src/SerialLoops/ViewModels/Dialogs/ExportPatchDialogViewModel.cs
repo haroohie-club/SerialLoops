@@ -109,7 +109,7 @@ public class ExportPatchDialogViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            _log.LogException(Strings.Failed_to_create_XDelta_patch_, ex);
+            _log.LogException(Strings.ErrorFailedCreatingXdelta, ex);
         }
 
         dialog.Close();

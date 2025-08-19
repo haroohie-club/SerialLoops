@@ -32,7 +32,7 @@
                 </ItemsRepeater>
             </HeaderedContentControl>
 
-            <HeaderedContentControl Grid.Row="1" Grid.Column="0" Header="{x:Static assets:Strings.Haruhi_Routes}"
+            <HeaderedContentControl Grid.Row="1" Grid.Column="0" Header="{x:Static assets:Strings.PuzzleEditorHaruhiRoutes}"
                            Margin="20, 10">
                 <ItemsRepeater ItemsSource="{Binding HaruhiRoutes}">
                     <ItemsRepeater.Layout>

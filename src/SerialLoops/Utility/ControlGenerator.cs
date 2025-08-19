@@ -74,7 +74,7 @@ public static class ControlGenerator
             ItemDescription.ItemType.Character_Sprite => Strings.ItemsPanelCharacterSprites,
             ItemDescription.ItemType.Chess_Puzzle => Strings.ItemsPanelChessPuzzles,
             ItemDescription.ItemType.Chibi => Strings.ItemsPanelChibis,
-            ItemDescription.ItemType.Group_Selection => Strings.Group_Selections,
+            ItemDescription.ItemType.Group_Selection => Strings.ItemsPanelGroupSelections,
             ItemDescription.ItemType.Item => Strings.Items,
             ItemDescription.ItemType.Layout => Strings.Layouts,
             ItemDescription.ItemType.Map => Strings.Maps,

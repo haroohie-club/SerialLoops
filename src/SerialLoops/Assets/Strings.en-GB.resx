@@ -682,9 +682,6 @@
   <data name="AnimationExportFramesButton" xml:space="preserve">
     <value>Export Frames</value>
   </data>
-  <data name="AnimationExportGifLabel" xml:space="preserve">
-    <value>Export GIF</value>
-  </data>
   <data name="MenuExportPatch" xml:space="preserve">
     <value>Export Patch</value>
   </data>
@@ -703,311 +700,267 @@
   <data name="UiMessage128Label" xml:space="preserve">
     <value>Extras unlocked message box</value>
   </data>
-  <data name="Fade In Percentage" xml:space="preserve">
+  <data name="ScriptParamFadeInPercentage" xml:space="preserve">
     <value>Fade In Percentage</value>
   </data>
-  <data name="Fade In Time (Frames)" xml:space="preserve">
+  <data name="ScriptParamFadeInTime" xml:space="preserve">
     <value>Fade In Time (Frames)</value>
   </data>
-  <data name="Fade Out Percentage" xml:space="preserve">
+  <data name="ScriptParamFadeOutPercentage" xml:space="preserve">
     <value>Fade Out Percentage</value>
   </data>
-  <data name="Fade Out Time (Frames)" xml:space="preserve">
+  <data name="ScriptParamFadeOutTime" xml:space="preserve">
     <value>Fade Out Time (Frames)</value>
   </data>
-  <data name="Fade Time (Frames)" xml:space="preserve">
+  <data name="ScriptParamFadeTime" xml:space="preserve">
     <value>Fade Time (Frames)</value>
   </data>
-  <data name="Failed attempting to cache audio file" xml:space="preserve">
+  <data name="ErrorFailedToCacheAudioFile" xml:space="preserve">
     <value>Failed attempting to cache audio file</value>
   </data>
-  <data name="Failed converting audio file to WAV." xml:space="preserve">
+  <data name="ErrorFailedConvertingAudioToWav" xml:space="preserve">
     <value>Failed converting audio file to WAV.</value>
   </data>
-  <data name="Failed copying file '{0}' to base and iterative directories at path '{1}'" xml:space="preserve">
+  <data name="ErrorFailedCopyingFile" xml:space="preserve">
     <value>Failed copying file '{0}' to base and iterative directories at path '{1}'</value>
   </data>
-  <data name="Failed downsampling audio file." xml:space="preserve">
+  <data name="ErrorFailedDownsamplingAudio" xml:space="preserve">
     <value>Failed downsampling audio file.</value>
   </data>
-  <data name="Failed encoding audio file to ADX." xml:space="preserve">
+  <data name="ErrorFailedEncodingAudioAdx" xml:space="preserve">
     <value>Failed encoding audio file to ADX.</value>
   </data>
-  <data name="Failed replacing animation file {0} in grp.bin with file '{1}'" xml:space="preserve">
+  <data name="ErrorFailedReplacingAnimationFile" xml:space="preserve">
     <value>Failed replacing animation file {0} in grp.bin with file '{1}'</value>
   </data>
-  <data name="Failed replacing file {0} in evt.bin with file '{1}'" xml:space="preserve">
+  <data name="ErrorFailedReplacingEvtFile" xml:space="preserve">
     <value>Failed replacing file {0} in evt.bin with file '{1}'</value>
   </data>
-  <data name="Failed replacing graphics file {0} with file '{1}'" xml:space="preserve">
+  <data name="ErrorFailedReplacingGraphicsFile" xml:space="preserve">
     <value>Failed replacing graphics file {0} with file '{1}'</value>
   </data>
-  <data name="Failed replacing source file {0} in dat.bin with file '{1}'" xml:space="preserve">
+  <data name="ErrorFailedReplacingDatFile" xml:space="preserve">
     <value>Failed replacing source file {0} in dat.bin with file '{1}'</value>
   </data>
-  <data name="Failed replacing source file {0} in evt.bin with file '{1}'" xml:space="preserve">
+  <data name="ErrorFailedReplacingEvtSourceFile" xml:space="preserve">
     <value>Failed replacing source file {0} in evt.bin with file '{1}'</value>
   </data>
-  <data name="Failed restoring BGM file." xml:space="preserve">
+  <data name="ErrorFailedRestoringBgmFile" xml:space="preserve">
     <value>Failed restoring BGM file.</value>
   </data>
-  <data name="Failed to add parameters for hack file {0} in hack {1}" xml:space="preserve">
+  <data name="ErrorFailedAddingParametersToHack" xml:space="preserve">
     <value>Failed to add parameters for hack file {0} in hack {1}</value>
   </data>
-  <data name="Failed to apply the following hacks to the ROM:\n{0}\n\nPlease check the log file for more information.\n\nIn order to preserve state, no hacks were applied." xml:space="preserve">
+  <data name="ErrorFailedToApplyHacks" xml:space="preserve">
     <value>Failed to apply the following hacks to the ROM:\n{0}\n\nPlease check the log file for more information.\n\nIn order to preserve state, no hacks were applied.</value>
   </data>
-  <data name="Failed to calculate graph edges!" xml:space="preserve">
+  <data name="ErrorFailedCalculatingScriptGraph" xml:space="preserve">
     <value>Failed to calculate graph edges!</value>
   </data>
-  <data name="Failed to check for updates! (Endpoint: {0})" xml:space="preserve">
+  <data name="ErrorFailedCheckingForUpdates" xml:space="preserve">
     <value>Failed to check for updates! (Endpoint: {0})</value>
   </data>
-  <data name="Failed to clean iterative directory" xml:space="preserve">
+  <data name="ErrorFailedCleanIterativeDir" xml:space="preserve">
     <value>Failed to clean iterative directory</value>
   </data>
-  <data name="Failed to copy newly built archives to the iterative originals directory" xml:space="preserve">
+  <data name="ErrorFailedCopyingArchivesToIterativeDir" xml:space="preserve">
     <value>Failed to copy newly built archives to the iterative originals directory</value>
   </data>
-  <data name="Failed to create directory on specified path!" xml:space="preserve">
+  <data name="ErrorFailedCreatingDir" xml:space="preserve">
     <value>Failed to create directory on specified path!</value>
   </data>
-  <data name="Failed to decode original file too, giving up!" xml:space="preserve">
+  <data name="ErrorFailedToDecodeOriginalAdx" xml:space="preserve">
     <value>Failed to decode original file too, giving up!</value>
   </data>
-  <data name="Failed to delete file '{0}'" xml:space="preserve">
+  <data name="ErrorFailedDeletingFile" xml:space="preserve">
     <value>Failed to delete file '{0}'</value>
   </data>
-  <data name="Failed to delete files for hack '{0}' -- this hack is likely applied in the ROM base and can't be disabled." xml:space="preserve">
+  <data name="ErrorFailedDeletingHackFiles" xml:space="preserve">
     <value>Failed to delete files for hack '{0}' -- this hack is likely applied in the ROM base and can't be disabled.</value>
   </data>
-  <data name="Failed to export background {0} to file {1}" xml:space="preserve">
+  <data name="ErrorFailedExportingBackground" xml:space="preserve">
     <value>Failed to export background {0} to file {1}</value>
   </data>
-  <data name="Failed to export chibi animation {0} for chibi {1} to file" xml:space="preserve">
+  <data name="ErrorFailedExportingChibiAnimation" xml:space="preserve">
     <value>Failed to export chibi animation {0} for chibi {1} to file</value>
   </data>
-  <data name="Failed to export eye animation {0} for sprite {1} to file" xml:space="preserve">
+  <data name="ErrorFailedExportingEyeAnimation" xml:space="preserve">
     <value>Failed to export eye animation {0} for sprite {1} to file</value>
   </data>
-  <data name="Failed to export item {0} to file {1}" xml:space="preserve">
-    <value>Failed to export item {0} to file {1}</value>
-  </data>
-  <data name="Failed to export layout for sprite {0} to file" xml:space="preserve">
+  <data name="ErrorFailedExportingSpriteLayout" xml:space="preserve">
     <value>Failed to export layout for sprite {0} to file</value>
   </data>
-  <data name="Failed to export system texture {0} to file {1}" xml:space="preserve">
+  <data name="ErrorFailedExportingSysTex" xml:space="preserve">
     <value>Failed to export system texture {0} to file {1}</value>
   </data>
-  <data name="Failed to find character item -- have you saved all of your changes to character names?" xml:space="preserve">
-    <value>Failed to find character item -- have you saved all of your changes to character names?</value>
-  </data>
-  <data name="Failed to insert ARM9 assembly hacks" xml:space="preserve">
+  <data name="ErrorFailedInsertingHacks" xml:space="preserve">
     <value>Failed to insert ARM9 assembly hacks</value>
   </data>
-  <data name="Failed to load BGM file: file invalid." xml:space="preserve">
+  <data name="ErrorInvalidBgmFile" xml:space="preserve">
     <value>Failed to load BGM file: file invalid.</value>
   </data>
-  <data name="Failed to load BGM file: file not found." xml:space="preserve">
+  <data name="ErrorBgmFileNotFound" xml:space="preserve">
     <value>Failed to load BGM file: file not found.</value>
   </data>
-  <data name="Failed to load cached data" xml:space="preserve">
+  <data name="ErrorFailedLoadingCachedData" xml:space="preserve">
     <value>Failed to load cached data</value>
   </data>
-  <data name="Failed to load character progress voice for {0}." xml:space="preserve">
+  <data name="ErrorFailedLoadingCharacterProgressVoice" xml:space="preserve">
     <value>Failed to load character progress voice for {0}.</value>
   </data>
-  <data name="Failed to load editor controls!" xml:space="preserve">
-    <value>Failed to load editor controls!</value>
-  </data>
-  <data name="Failed to load voice file: file invalid." xml:space="preserve">
+  <data name="ErrorInvalidVoiceFile" xml:space="preserve">
     <value>Failed to load voice file: file invalid.</value>
   </data>
-  <data name="Failed to load voice file: file not found." xml:space="preserve">
+  <data name="ErrorVoiceFileNotFound" xml:space="preserve">
     <value>Failed to load voice file: file not found.</value>
   </data>
-  <data name="Failed to read ARM9 from '{0}'" xml:space="preserve">
+  <data name="ErrorFailedReadingARM9" xml:space="preserve">
     <value>Failed to read ARM9 from '{0}'</value>
   </data>
-  <data name="Failed to read BGM file; falling back to original..." xml:space="preserve">
+  <data name="ErrorFailedReadingBgmFile" xml:space="preserve">
     <value>Failed to read BGM file; falling back to original…</value>
   </data>
-  <data name="Failed to replace background {0} with file {1}" xml:space="preserve">
+  <data name="ErrorFailedReplacingBackground" xml:space="preserve">
     <value>Failed to replace background {0} with file {1}</value>
   </data>
-  <data name="Failed to replace item {0} with file {1}" xml:space="preserve">
-    <value>Failed to replace item {0} with file {1}</value>
-  </data>
-  <data name="Failed to replace system texture {0} with file {1}" xml:space="preserve">
+  <data name="ErrorFailedReplacingSysTex" xml:space="preserve">
     <value>Failed to replace system texture {0} with file {1}</value>
   </data>
-  <data name="Failed to save Chokuretsu save file!" xml:space="preserve">
+  <data name="ErrorFailedSavingChokuSave" xml:space="preserve">
     <value>Failed to save Chokuretsu save file!</value>
   </data>
-  <data name="Failed to set script command list panel section content." xml:space="preserve">
-    <value>Failed to set script command list panel section content.</value>
-  </data>
-  <data name="Failed to set viewr contents for script command list panel." xml:space="preserve">
-    <value>Failed to set viewr contents for script command list panel.</value>
-  </data>
-  <data name="Failed to unpack ROM" xml:space="preserve">
+  <data name="ErrorFailedUnpackingRom" xml:space="preserve">
     <value>Failed to unpack ROM</value>
   </data>
-  <data name="Failed to update preview!" xml:space="preserve">
+  <data name="ErrorFailedUpdatingPreview" xml:space="preserve">
     <value>Failed to update preview!</value>
   </data>
-  <data name="Failed to write ARM9 to disk" xml:space="preserve">
+  <data name="ErrorFailedWritingArm9" xml:space="preserve">
     <value>Failed to write ARM9 to disk</value>
   </data>
-  <data name="Failed to write include files to disk." xml:space="preserve">
+  <data name="ErrorFailedWritingIncludeFiles" xml:space="preserve">
     <value>Failed to write include files to disk.</value>
   </data>
-  <data name="Failed to write NitroPacker NDS project file to disk" xml:space="preserve">
+  <data name="ErrorFailedWritingNPProjectFile" xml:space="preserve">
     <value>Failed to write NitroPacker NDS project file to disk</value>
   </data>
-  <data name="Fast Forward" xml:space="preserve">
+  <data name="SaveEditorFastForwardLabel" xml:space="preserve">
     <value>Fast Forward</value>
   </data>
-  <data name="File" xml:space="preserve">
-    <value>File</value>
-    <comment>Please make this the same as &amp;File, just without the ampersand</comment>
-  </data>
-  <data name="File {0}" xml:space="preserve">
+  <data name="SaveEditorSlotName" xml:space="preserve">
     <value>File {0}</value>
   </data>
-  <data name="Filter" xml:space="preserve">
+  <data name="SaveEditorFilterFlagsButton" xml:space="preserve">
     <value>Filter</value>
   </data>
-  <data name="Filter by Item" xml:space="preserve">
+  <data name="SearchDialogFilterByItem" xml:space="preserve">
     <value>Filter by Item</value>
   </data>
-  <data name="Filter by name" xml:space="preserve">
+  <data name="FilterByName" xml:space="preserve">
     <value>Filter by name</value>
   </data>
-  <data name="Find in Project" xml:space="preserve">
-    <value>Find in Project</value>
-  </data>
-  <data name="Find Orphaned Items..." xml:space="preserve">
-    <value>Find Orphaned Items…</value>
-  </data>
-  <data name="Find References..." xml:space="preserve">
+  <data name="ItemsPanelContextFindItems" xml:space="preserve">
     <value>Find References…</value>
   </data>
-  <data name="Finding orphaned items" xml:space="preserve">
-    <value>Finding orphaned items</value>
-  </data>
-  <data name="Finding orphaned items..." xml:space="preserve">
-    <value>Finding orphaned items…</value>
-  </data>
-  <data name="FLAC files" xml:space="preserve">
+  <data name="FiletypeFlac" xml:space="preserve">
     <value>FLAC files</value>
   </data>
-  <data name="Flag" xml:space="preserve">
+  <data name="ScriptParamFlag" xml:space="preserve">
     <value>Flag</value>
   </data>
-  <data name="Flag Description" xml:space="preserve">
+  <data name="SaveEditorFlagDescriptionLabel" xml:space="preserve">
     <value>Flag Description</value>
   </data>
-  <data name="Flag: {0}" xml:space="preserve">
+  <data name="EditorFlagIdLabel" xml:space="preserve">
     <value>Flag: {0}</value>
   </data>
-  <data name="Flags" xml:space="preserve">
+  <data name="SaveSlotEditorFlagsHeader" xml:space="preserve">
     <value>Flags</value>
   </data>
-  <data name="Frames" xml:space="preserve">
+  <data name="ChibiEditorFramesLabel" xml:space="preserve">
     <value>Frames</value>
   </data>
-  <data name="French" xml:space="preserve">
+  <data name="LanguageFrench" xml:space="preserve">
     <value>French</value>
   </data>
-  <data name="Future Description" xml:space="preserve">
+  <data name="GroupSelectionEditorFutureDescription" xml:space="preserve">
     <value>Future Description</value>
   </data>
-  <data name="Game Banner" xml:space="preserve">
+  <data name="ProjectSettingsGameBanner" xml:space="preserve">
     <value>Game Banner</value>
   </data>
-  <data name="Game banner can only contain up to three lines." xml:space="preserve">
+  <data name="ProjectSettingsGameBannerNameLimitMessages" xml:space="preserve">
     <value>Game banner can only contain up to three lines.</value>
   </data>
-  <data name="Game Investigation Phase (Options)" xml:space="preserve">
+  <data name="UiMessage65Label" xml:space="preserve">
     <value>Game Investigation Phase (Options)</value>
   </data>
-  <data name="Game Puzzle Phase (Options)" xml:space="preserve">
+  <data name="UiMessage66Label" xml:space="preserve">
     <value>Game Puzzle Phase (Options)</value>
   </data>
-  <data name="Game saved message box" xml:space="preserve">
+  <data name="UiMessage42Label" xml:space="preserve">
     <value>Game saved message box</value>
   </data>
-  <data name="Game Title" xml:space="preserve">
+  <data name="ProjectSettingsGameTitleLabel" xml:space="preserve">
     <value>Game Title</value>
   </data>
-  <data name="gcc exited with code {0}" xml:space="preserve">
-    <value>gcc exited with code {0}</value>
-  </data>
-  <data name="gcc not found at '{0}'" xml:space="preserve">
-    <value>gcc not found at '{0}'</value>
-  </data>
-  <data name="German" xml:space="preserve">
+  <data name="LanguageGerman" xml:space="preserve">
     <value>German</value>
   </data>
-  <data name="GIF exported!" xml:space="preserve">
+  <data name="AnimationExportedGifSuccessMessage" xml:space="preserve">
     <value>GIF exported!</value>
   </data>
-  <data name="GIF file" xml:space="preserve">
+  <data name="FiletypeGif" xml:space="preserve">
     <value>GIF file</value>
   </data>
-  <data name="Greek" xml:space="preserve">
+  <data name="LanguageGreek" xml:space="preserve">
     <value>Greek</value>
   </data>
-  <data name="Group selection impossible selection made ticker tape" xml:space="preserve">
+  <data name="UiMessage111Label" xml:space="preserve">
     <value>Group selection impossible selection made ticker tape</value>
   </data>
-  <data name="Groups" xml:space="preserve">
+  <data name="SfxEditorGroupsLabel" xml:space="preserve">
     <value>Groups</value>
     <comment>As in "Sound Groups"</comment>
   </data>
-  <data name="Groups: {0}" xml:space="preserve">
+  <data name="SfxEditorGroupsList" xml:space="preserve">
     <value>Groups: {0}</value>
     <comment>As in "Sound Groups"</comment>
   </data>
   <data name="Group_Selection" xml:space="preserve">
     <value>Group Selection</value>
   </data>
-  <data name="Group_Selections" xml:space="preserve">
+  <data name="ItemsPanelGroupSelections" xml:space="preserve">
     <value>Group Selections</value>
   </data>
-  <data name="Haroohie" xml:space="preserve">
+  <data name="ProjectRenameWatermark" xml:space="preserve">
     <value>Haroohie</value>
   </data>
-  <data name="Haruhi Present" xml:space="preserve">
+  <data name="GroupSelectionEditorHaruhiPresentLabel" xml:space="preserve">
     <value>Haruhi Present</value>
   </data>
-  <data name="Haruhi Routes" xml:space="preserve">
+  <data name="PuzzleEditorHaruhiRoutes" xml:space="preserve">
     <value>Haruhi Routes</value>
   </data>
-  <data name="Haruhi Suzumiya event unlocked message box" xml:space="preserve">
+  <data name="UiMessage116Label" xml:space="preserve">
     <value>Haruhi Suzumiya event unlocked message box</value>
   </data>
-  <data name="Haruhi Topic" xml:space="preserve">
+  <data name="UiMessage03Label" xml:space="preserve">
     <value>Haruhi Topic</value>
   </data>
-  <data name="Has Outline?" xml:space="preserve">
+  <data name="CharacterEditorHasOutlineLabel" xml:space="preserve">
     <value>Has Outline?</value>
   </data>
-  <data name="Hidden ID" xml:space="preserve">
+  <data name="TopicEditorHiddenID" xml:space="preserve">
     <value>Hidden ID</value>
   </data>
-  <data name="Hide Unset Flags" xml:space="preserve">
+  <data name="SaveEditorHideUnsetFlagsLabel" xml:space="preserve">
     <value>Hide Unset Flags</value>
   </data>
-  <data name="Highlight Space {0}" xml:space="preserve">
-    <value>Highlight Space {0}</value>
-    <comment>As on a chessboard</comment>
-  </data>
-  <data name="Hold Time (Frames)" xml:space="preserve">
+  <data name="ScriptParamHoldTime" xml:space="preserve">
     <value>Hold Time (Frames)</value>
   </data>
-  <data name="Horizontal Intensity" xml:space="preserve">
+  <data name="ScriptParamHorizontalIntensity" xml:space="preserve">
     <value>Horizontal Intensity</value>
   </data>
   <data name="ID" xml:space="preserve">
@@ -2218,14 +2171,11 @@
     <value>Start Read Flag</value>
     <comment>As in, the first read flag of the script file</comment>
   </data>
-  <data name="Failed to generate script template!" xml:space="preserve">
-    <value>Failed to generate script template!</value>
-  </data>
   <data name="ROM Hash Mismatch" xml:space="preserve">
     <value>ROM Hash Mismatch</value>
     <comment>Message box title when there is a mismatch between the expected ROM hash and the selected ROM hash on project import</comment>
   </data>
-  <data name="Failed to export project" xml:space="preserve">
+  <data name="ErrorExportProjectFailed" xml:space="preserve">
     <value>Failed to export project</value>
     <comment>Failed to export the Serial Loops project file to an slzip, basically</comment>
   </data>
@@ -2239,7 +2189,7 @@
   <data name="This script is not included in the event table." xml:space="preserve">
     <value>This script is not included in the event table.</value>
   </data>
-  <data name="Failed to import project" xml:space="preserve">
+  <data name="ErrorFailedImportingProject" xml:space="preserve">
     <value>Failed to import project</value>
     <comment>Failed to import slzip into Serial Loops project</comment>
   </data>
@@ -2294,7 +2244,7 @@
   <data name="The selected ROM's hash does not match the expected ROM hash. Please ensure you are using the correct base ROM.\n\nIf you wish to ignore this, please check the \&quot;Ignore Hash\&quot; checkbox." xml:space="preserve">
     <value>The selected ROM's hash does not match the expected ROM hash. Please ensure you are using the correct base ROM.\n\nIf you wish to ignore this, please check the \"Ignore Hash\" checkbox.</value>
   </data>
-  <data name="Generate Template" xml:space="preserve">
+  <data name="ScriptTemplateGenerateLabel" xml:space="preserve">
     <value>Generate Template</value>
     <comment>Template in question is a script template</comment>
   </data>
@@ -2309,7 +2259,7 @@
   <data name="Select an exported project to see expected ROM hash" xml:space="preserve">
     <value>Select an exported project to see expected ROM hash</value>
   </data>
-  <data name="Failed to parse script parameter {0} of type {1} with parameter '{2}'!" xml:space="preserve">
+  <data name="ErrorFailedParsingScriptParameter" xml:space="preserve">
     <value>Failed to parse script parameter {0} of type {1} with parameter '{2}'!</value>
   </data>
   <data name="{0} ({1}) Seen (F{2:D2})" xml:space="preserve">
@@ -2323,7 +2273,7 @@
     <value>Template Name</value>
     <comment>Template in question is a script template</comment>
   </data>
-  <data name="Failed to deserialize script template file '{0}'" xml:space="preserve">
+  <data name="ErrorFailedDeserializingScriptTemplate" xml:space="preserve">
     <value>Failed to deserialise script template file '{0}'</value>
     <comment>{0} is a script template file path.</comment>
   </data>
@@ -2356,5 +2306,8 @@
   </data>
   <data name="LanguageChineseSimplified" xml:space="preserve">
     <value>Chinese (Simplified)</value>
+  </data>
+  <data name="AnimationExportGifButton" xml:space="preserve">
+    <value>Export GIF</value>
   </data>
 </root>

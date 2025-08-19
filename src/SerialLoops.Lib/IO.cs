@@ -15,7 +15,7 @@ public static class IO
         public IODirectory[] Subdirectories { get; set; } = subdirectories;
         public IOFile[] Files { get; set; } = files;
 
-        public void Create(string basePath, ILogger log)
+        public void Create(string basePath, ILogger log, Func<string, string> localize)
         {
             try
             {
@@ -27,12 +27,12 @@ public static class IO
                 }
                 foreach (IODirectory subdirectory in Subdirectories)
                 {
-                    subdirectory.Create(dirPath, log);
+                    subdirectory.Create(dirPath, log, localize);
                 }
             }
             catch (Exception ex)
             {
-                log.LogException($"Failed to create directory on specified path!", ex);
+                log.LogException(localize("ErrorFailedCreatingDir"), ex);
                 log.LogWarning(basePath);
             }
         }
@@ -67,7 +67,7 @@ public static class IO
         }
         catch (Exception ex)
         {
-            log.LogException("Failed to unpack ROM", ex);
+            log.LogException(project.Localize("ErrorFailedUnpackingRom"), ex);
             return;
         }
         tracker.Finished += 2;
@@ -106,12 +106,12 @@ public static class IO
             new("scn", [], []),
         ], []);
 
-        originalDirectoryTree.Create(project.BaseDirectory, log);
-        originalDirectoryTree.Create(project.IterativeDirectory, log);
-        srcDirectoryTree.Create(project.BaseDirectory, log);
-        srcDirectoryTree.Create(project.IterativeDirectory, log);
-        assetsDirectoryTree.Create(project.BaseDirectory, log);
-        assetsDirectoryTree.Create(project.IterativeDirectory, log);
+        originalDirectoryTree.Create(project.BaseDirectory, log, project.Localize);
+        originalDirectoryTree.Create(project.IterativeDirectory, log, project.Localize);
+        srcDirectoryTree.Create(project.BaseDirectory, log, project.Localize);
+        srcDirectoryTree.Create(project.IterativeDirectory, log, project.Localize);
+        assetsDirectoryTree.Create(project.BaseDirectory, log, project.Localize);
+        assetsDirectoryTree.Create(project.IterativeDirectory, log, project.Localize);
         tracker.Finished += 6;
 
         // Copy out the files we need to build the ROM
@@ -174,7 +174,7 @@ public static class IO
         }
         catch (Exception ex)
         {
-            log.LogException(string.Format(project.Localize("Failed copying file '{0}' to base and iterative directories at path '{1}'"), sourceFile, relativePath), ex);
+            log.LogException(string.Format(project.Localize("ErrorFailedCopyingFile"), sourceFile, relativePath), ex);
         }
     }
 
@@ -189,7 +189,7 @@ public static class IO
             }
             catch (Exception ex)
             {
-                log.LogException(string.Format(project.Localize("Failed to delete file '{0}'"), file), ex);
+                log.LogException(string.Format(project.Localize("ErrorFailedDeletingFile"), file), ex);
             }
         }
     }

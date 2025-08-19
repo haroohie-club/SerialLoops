@@ -111,7 +111,7 @@ public class AsmHack : ReactiveObject
         // If there's at least one success, we assume that an older version of the hack was applied and we've now rolled it back
         if (!oneSuccess)
         {
-            log.LogError(string.Format(project.Localize("Failed to delete files for hack '{0}' -- this hack is likely applied in the ROM base and can't be disabled."), Name));
+            log.LogError(string.Format(project.Localize("ErrorFailedDeletingHackFiles"), Name));
             IsApplied = true;
         }
     }

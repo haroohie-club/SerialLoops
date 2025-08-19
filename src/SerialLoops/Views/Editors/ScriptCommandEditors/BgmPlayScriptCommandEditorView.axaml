@@ -23,7 +23,7 @@
                        FormatString="N0" Increment="1" ParsingNumberStyle="Integer" Minimum="0" Maximum="100"/>
 
         <StackPanel Grid.Column="0" Grid.Row="3" Orientation="Horizontal" Spacing="3">
-            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Fade_In_Time__Frames_}"/>
+            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptParamFadeInTime}"/>
             <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
                  ToolTip.Tip="{x:Static assets:Strings.FramesToSecondsHelp}"/>
         </StackPanel>
@@ -31,7 +31,7 @@
                        FormatString="N0" Increment="1" ParsingNumberStyle="Integer" Minimum="-1" Maximum="{Binding MaxShort}"/>
 
         <StackPanel Grid.Column="0" Grid.Row="4" Orientation="Horizontal" Spacing="3">
-            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Fade_Out_Time__Frames_}"/>
+            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptParamFadeOutTime}"/>
             <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
                  ToolTip.Tip="{x:Static assets:Strings.FramesToSecondsHelp}"/>
         </StackPanel>

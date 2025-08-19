@@ -85,7 +85,7 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
         [
             new(Strings.Supported_Audio_Files) { Patterns = Shared.SupportedAudioFiletypes },
             new(Strings.WAV_files) { Patterns = ["*.wav"] },
-            new(Strings.FLAC_files) { Patterns = ["*.flac"] },
+            new(Strings.FiletypeFlac) { Patterns = ["*.flac"] },
             new(Strings.MP3_files) { Patterns = ["*.mp3"] },
             new(Strings.OggFiles) { Patterns = ["*.ogg"] },
         ]);

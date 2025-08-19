@@ -10,7 +10,7 @@
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.ScreenFadeInScriptCommandEditorView">
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
         <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Spacing="3">
-            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Fade_Time__Frames_}"/>
+            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptParamFadeTime}"/>
             <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
                  ToolTip.Tip="{x:Static assets:Strings.FramesToSecondsHelp}"/>
         </StackPanel>
@@ -18,7 +18,7 @@
                        Value="{Binding FadeTime}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 
         <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Spacing="3">
-            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Fade_In_Percentage}"/>
+            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptParamFadeInPercentage}"/>
             <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
                  ToolTip.Tip="{x:Static assets:Strings.ScriptCommandParameterFadePercHelp}"/>
         </StackPanel>

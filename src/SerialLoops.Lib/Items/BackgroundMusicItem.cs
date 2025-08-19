@@ -16,6 +16,7 @@ namespace SerialLoops.Lib.Items;
 public class BackgroundMusicItem : Item, ISoundItem
 {
     private string _bgmFile;
+    private Project _project;
 
     public string BgmFile { get; set; }
     public int Index { get; set; }
@@ -26,10 +27,11 @@ public class BackgroundMusicItem : Item, ISoundItem
     public BackgroundMusicItem(string bgmFile, int index, Project project) : base(Path.GetFileNameWithoutExtension(bgmFile), ItemType.BGM)
     {
         _bgmFile = bgmFile;
+        _project = project;
         SetBgmFile(project);
         Index = index;
-        BgmName = project.Extra.Bgms.FirstOrDefault(b => b.Index == Index)?.Name?.GetSubstitutedString(project) ?? "";
-        Flag = project.Extra.Bgms.FirstOrDefault(b => b.Index == Index)?.Flag;
+        BgmName = _project.Extra.Bgms.FirstOrDefault(b => b.Index == Index)?.Name?.GetSubstitutedString(_project) ?? "";
+        Flag = _project.Extra.Bgms.FirstOrDefault(b => b.Index == Index)?.Flag;
         DisplayName = string.IsNullOrEmpty(BgmName) ? Name : $"{Name} - {BgmName}";
         CanRename = string.IsNullOrEmpty(BgmName);
     }
@@ -96,7 +98,7 @@ public class BackgroundMusicItem : Item, ISoundItem
         }
         catch (Exception ex)
         {
-            log.LogException("Failed converting audio file to WAV.", ex);
+            log.LogException(project.Localize("ErrorFailedConvertingAudioToWav"), ex);
             log.LogWarning(audioFile);
             return;
         }
@@ -122,16 +124,16 @@ public class BackgroundMusicItem : Item, ISoundItem
         if (audio.WaveFormat.SampleRate > SoundItem.MAX_SAMPLERATE)
         {
             tracker.Focus(project.Localize("BgmItemDownsamplingProgressMessage"), 1);
-            string newAudioFile = string.Empty;
+            string newAudioFile;
             try
             {
                 log.Log($"Downsampling audio from {audio.WaveFormat.SampleRate} to NDS max sample rate {SoundItem.MAX_SAMPLERATE}...");
-                newAudioFile = Path.Combine(Path.GetDirectoryName(bgmCachedFile), $"{Path.GetFileNameWithoutExtension(bgmCachedFile)}-downsampled.wav");
+                newAudioFile = Path.Combine(Path.GetDirectoryName(bgmCachedFile)!, $"{Path.GetFileNameWithoutExtension(bgmCachedFile)}-downsampled.wav");
                 WaveFileWriter.CreateWaveFile(newAudioFile, new WdlResamplingSampleProvider(audio.ToSampleProvider(), SoundItem.MAX_SAMPLERATE).ToWaveProvider16());
             }
             catch (Exception ex)
             {
-                log.LogException("Failed downsampling audio file.", ex);
+                log.LogException(project.Localize("ErrorFailedDownsamplingAudio"), ex);
                 return;
             }
             tracker.Finished++;
@@ -144,7 +146,7 @@ public class BackgroundMusicItem : Item, ISoundItem
             }
             catch (Exception ex)
             {
-                log.LogException("Failed encoding audio file to ADX.", ex);
+                log.LogException(project.Localize("ErrorFailedEncodingAudioAdx"), ex);
                 return;
             }
             tracker.Finished++;
@@ -159,7 +161,7 @@ public class BackgroundMusicItem : Item, ISoundItem
             }
             catch (Exception ex)
             {
-                log.LogException("Failed encoding audio file to ADX.", ex);
+                log.LogException(project.Localize("ErrorFailedEncodingAudioAdx"), ex);
                 return;
             }
             tracker.Finished++;
@@ -184,7 +186,7 @@ public class BackgroundMusicItem : Item, ISoundItem
             }
             catch (Exception ex)
             {
-                log.LogException("Failed attempting to cache audio file", ex);
+                log.LogException(project.Localize("ErrorFailedToCacheAudioFile"), ex);
             }
         }
         tracker.Finished++;
@@ -201,12 +203,12 @@ public class BackgroundMusicItem : Item, ISoundItem
         {
             if (!File.Exists(_bgmFile))
             {
-                log.LogError("Failed to load BGM file: file not found.");
+                log.LogError("ErrorBgmFileNotFound");
                 log.LogWarning(BgmFile);
             }
             else
             {
-                log.LogError("Failed to load BGM file: file invalid.");
+                log.LogError(_project.Localize("ErrorInvalidBgmFile"));
                 log.LogWarning(BgmFile);
             }
         }
@@ -218,7 +220,7 @@ public class BackgroundMusicItem : Item, ISoundItem
         }
         catch (Exception ex)
         {
-            log.LogException("Failed to read BGM file; falling back to original...", ex);
+            log.LogException(_project.Localize("ErrorFailedReadingBgmFile"), ex);
             log.LogWarning(BgmFile);
 
             try
@@ -228,7 +230,7 @@ public class BackgroundMusicItem : Item, ISoundItem
             }
             catch (Exception nestedException)
             {
-                log.LogException("Failed restoring BGM file.", nestedException);
+                log.LogException(_project.Localize("ErrorFailedRestoringBgmFile"), nestedException);
                 return null;
             }
             try
@@ -239,7 +241,7 @@ public class BackgroundMusicItem : Item, ISoundItem
             }
             catch (Exception nestedException)
             {
-                log.LogException("Failed to decode original file too, giving up!", nestedException);
+                log.LogException(_project.Localize("ErrorFailedToDecodeOriginalAdx"), nestedException);
                 return null;
             }
         }

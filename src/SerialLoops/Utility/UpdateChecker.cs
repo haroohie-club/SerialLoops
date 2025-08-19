@@ -62,7 +62,7 @@ internal class UpdateChecker(MainWindowViewModel mainWindowViewModel)
         }
         catch (Exception e)
         {
-            _logger.LogException(string.Format(Strings.Failed_to_check_for_updates___Endpoint___0__, GET_RELEASES), e);
+            _logger.LogException(string.Format(Strings.ErrorFailedCheckingForUpdates, GET_RELEASES), e);
         }
 
         return (currentVersion, "https://github.com/haroohie-club/SerialLoops/releases/latest", [], "N/A");

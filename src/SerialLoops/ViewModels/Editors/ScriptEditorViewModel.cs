@@ -339,7 +339,7 @@ public class ScriptEditorViewModel : EditorViewModel
         }
         catch (Exception ex)
         {
-            _log.LogException("Failed to update preview!", ex);
+            _log.LogException(Strings.ErrorFailedUpdatingPreview, ex);
         }
     }
 

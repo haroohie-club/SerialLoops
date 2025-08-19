@@ -65,7 +65,7 @@ public static class Shared
         ItemDescription id = project.Items.Find(i => i.Name.Equals("SYSTEX_SYS_CMN_B46"));
         if (id is not SystemTextureItem tex)
         {
-            log.LogError(string.Format(Strings.Failed_to_load_character_progress_voice_for__0__, character.DisplayName));
+            log.LogError(string.Format(Strings.ErrorFailedLoadingCharacterProgressVoice, character.DisplayName));
             return null;
         }
         SKBitmap bitmap = tex.GetTexture();

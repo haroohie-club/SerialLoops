@@ -467,7 +467,7 @@ public class TemplateScriptParameter
         }
         catch (Exception ex)
         {
-            log.LogException(string.Format(project.Localize("Failed to parse script parameter {0} of type {1} with parameter '{2}'!"), ParameterName, ParameterType, Value), ex);
+            log.LogException(string.Format(project.Localize("ErrorFailedParsingScriptParameter"), ParameterName, ParameterType, Value), ex);
             return null;
         }
     }

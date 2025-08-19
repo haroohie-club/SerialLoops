@@ -375,10 +375,10 @@
   <data name="ExtractButton" xml:space="preserve">
     <value>Estratto</value>
   </data>
-  <data name="Failed to load voice file: file invalid." xml:space="preserve">
+  <data name="ErrorInvalidVoiceFile" xml:space="preserve">
     <value>Errore nel caricare il file voce: Formato non valido.</value>
   </data>
-  <data name="Failed to delete file '{0}'" xml:space="preserve">
+  <data name="ErrorFailedDeletingFile" xml:space="preserve">
     <value>Errore nel cancellare il file '{0}'</value>
   </data>
   <data name="AnimationExportingGifProgressMessage" xml:space="preserve">
@@ -417,9 +417,6 @@
   <data name="BuildingIterativelyMessage" xml:space="preserve">
     <value>Compilare in modo iterativo</value>
   </data>
-  <data name="AnimationExportGifLabel" xml:space="preserve">
-    <value>Esporta GIF</value>
-  </data>
   <data name="ItemsPanelChessPuzzles" xml:space="preserve">
     <value>Scacchi</value>
   </data>
@@ -432,7 +429,7 @@
   <data name="BgmEditorExportingProgressMessage" xml:space="preserve">
     <value>Esporta BGM</value>
   </data>
-  <data name="Failed to load voice file: file not found." xml:space="preserve">
+  <data name="ErrorVoiceFileNotFound" xml:space="preserve">
     <value>Errore nel caricare il file voce: File non trovato.</value>
   </data>
   <data name="ErrorDuplicateHack" xml:space="preserve">
@@ -447,7 +444,7 @@
   <data name="AnimationExportFramesButton" xml:space="preserve">
     <value>Esporta frames</value>
   </data>
-  <data name="Failed to load BGM file: file not found." xml:space="preserve">
+  <data name="ErrorBgmFileNotFound" xml:space="preserve">
     <value>Errore caricare file BGM: File non trovato.</value>
   </data>
   <data name="ProjectExportButtonLabel" xml:space="preserve">
@@ -462,7 +459,7 @@
   <data name="VoicedLineEditorSubtitleWatermark" xml:space="preserve">
     <value>Inserisci testo per i sottotitoli…</value>
   </data>
-  <data name="Failed to load BGM file: file invalid." xml:space="preserve">
+  <data name="ErrorInvalidBgmFile" xml:space="preserve">
     <value>Errore caricare file BGM: formato non valido.</value>
   </data>
   <data name="BgmEditorCachingBGMMessage" xml:space="preserve">
@@ -480,44 +477,40 @@
   <data name="UiMessage19Label" xml:space="preserve">
     <value>Titolo del 3' episodio</value>
   </data>
-  <data name="File {0}" xml:space="preserve">
+  <data name="SaveEditorSlotName" xml:space="preserve">
     <value>File {0}</value>
   </data>
-  <data name="Failed to unpack ROM" xml:space="preserve">
+  <data name="ErrorFailedUnpackingRom" xml:space="preserve">
     <value>Impossibile spacchettare la ROM</value>
   </data>
-  <data name="File" xml:space="preserve">
-    <value>File</value>
-    <comment>Please make this the same as &amp;File, just without the ampersand</comment>
-  </data>
-  <data name="Failed to update preview!" xml:space="preserve">
+  <data name="ErrorFailedUpdatingPreview" xml:space="preserve">
     <value>Impossibile aggiornare l'anteprima!</value>
   </data>
-  <data name="Fast Forward" xml:space="preserve">
+  <data name="SaveEditorFastForwardLabel" xml:space="preserve">
     <value>Avanti Veloce</value>
   </data>
-  <data name="Filter" xml:space="preserve">
+  <data name="SaveEditorFilterFlagsButton" xml:space="preserve">
     <value>Filtra</value>
   </data>
-  <data name="Filter by name" xml:space="preserve">
+  <data name="FilterByName" xml:space="preserve">
     <value>Filtra per nome</value>
   </data>
-  <data name="Filter by Item" xml:space="preserve">
+  <data name="SearchDialogFilterByItem" xml:space="preserve">
     <value>Filtra per oggetti</value>
   </data>
-  <data name="French" xml:space="preserve">
+  <data name="LanguageFrench" xml:space="preserve">
     <value>Francese</value>
   </data>
-  <data name="GIF exported!" xml:space="preserve">
+  <data name="AnimationExportedGifSuccessMessage" xml:space="preserve">
     <value>GIF esportata!</value>
   </data>
-  <data name="GIF file" xml:space="preserve">
+  <data name="FiletypeGif" xml:space="preserve">
     <value>File GIF</value>
   </data>
-  <data name="German" xml:space="preserve">
+  <data name="LanguageGerman" xml:space="preserve">
     <value>Tedesco</value>
   </data>
-  <data name="Greek" xml:space="preserve">
+  <data name="LanguageGreek" xml:space="preserve">
     <value>Greco</value>
   </data>
   <data name="Confirm" xml:space="preserve">
@@ -532,15 +525,11 @@
   <data name="Replace" xml:space="preserve">
     <value>Sostituisci</value>
   </data>
-  <data name="Fade In Percentage" xml:space="preserve">
+  <data name="ScriptParamFadeInPercentage" xml:space="preserve">
     <value>Fade In Percentage</value>
   </data>
   <data name="Topic Stock Mode" xml:space="preserve">
     <value>Modalità Discussione generica</value>
-  </data>
-  <data name="Highlight Space {0}" xml:space="preserve">
-    <value>Seleziona spazio {0}</value>
-    <comment>As on a chessboard</comment>
   </data>
   <data name="Language Template" xml:space="preserve">
     <value>Template Lingua</value>
@@ -551,10 +540,10 @@
   <data name="Script Position" xml:space="preserve">
     <value>Posizione Script</value>
   </data>
-  <data name="Failed to insert ARM9 assembly hacks" xml:space="preserve">
+  <data name="ErrorFailedInsertingHacks" xml:space="preserve">
     <value>Impossibile inserire ARM9 assembly hacks</value>
   </data>
-  <data name="Game Puzzle Phase (Options)" xml:space="preserve">
+  <data name="UiMessage66Label" xml:space="preserve">
     <value>Fase Puzzle (Opzioni)</value>
   </data>
   <data name="Text Speed" xml:space="preserve">
@@ -572,10 +561,10 @@
   <data name="No hacks applied!" xml:space="preserve">
     <value>Nessun hack è stata applicata!</value>
   </data>
-  <data name="Game Title" xml:space="preserve">
+  <data name="ProjectSettingsGameTitleLabel" xml:space="preserve">
     <value>Titolo del Gioco</value>
   </data>
-  <data name="Failed to clean iterative directory" xml:space="preserve">
+  <data name="ErrorFailedCleanIterativeDir" xml:space="preserve">
     <value>Impossibile cancellare cartella iterativa</value>
   </data>
   <data name="UiMessage24Label" xml:space="preserve">
@@ -590,14 +579,11 @@
   <data name="Name '{0}' is already in use!" xml:space="preserve">
     <value>Nome '{0}' è già in uso!</value>
   </data>
-  <data name="Failed replacing file {0} in evt.bin with file '{1}'" xml:space="preserve">
+  <data name="ErrorFailedReplacingEvtFile" xml:space="preserve">
     <value>Impossibile sostituire il file {0} in evt.bin con il file '{1}'</value>
   </data>
   <data name="Recents" xml:space="preserve">
     <value>Recenti</value>
-  </data>
-  <data name="gcc not found at '{0}'" xml:space="preserve">
-    <value>gcc non trovato '{0}'</value>
   </data>
   <data name="Include lip flap animation?" xml:space="preserve">
     <value>Ha un'animazione del labbiale?</value>
@@ -608,16 +594,16 @@
   <data name="Select a Topic" xml:space="preserve">
     <value>Seleziona discussione</value>
   </data>
-  <data name="Hidden ID" xml:space="preserve">
+  <data name="TopicEditorHiddenID" xml:space="preserve">
     <value>ID Nascosto</value>
   </data>
-  <data name="Fade Out Percentage" xml:space="preserve">
+  <data name="ScriptParamFadeOutPercentage" xml:space="preserve">
     <value>Fade Out Percentage</value>
   </data>
   <data name="Patch Created!" xml:space="preserve">
     <value>Patch creata!</value>
   </data>
-  <data name="Failed replacing graphics file {0} with file '{1}'" xml:space="preserve">
+  <data name="ErrorFailedReplacingGraphicsFile" xml:space="preserve">
     <value>Impossibile sostituire il file grafico {0} con il file '{1}'</value>
   </data>
   <data name="Topic" xml:space="preserve">
@@ -629,7 +615,7 @@
   <data name="Select Icon" xml:space="preserve">
     <value>Scegli Icona</value>
   </data>
-  <data name="Failed encoding audio file to ADX." xml:space="preserve">
+  <data name="ErrorFailedEncodingAudioAdx" xml:space="preserve">
     <value>Errore nel decodificare file audio in ADX.</value>
   </data>
   <data name="Subtitle Text" xml:space="preserve">
@@ -648,20 +634,17 @@
   <data name="Image Files" xml:space="preserve">
     <value>File immagine</value>
   </data>
-  <data name="Has Outline?" xml:space="preserve">
+  <data name="CharacterEditorHasOutlineLabel" xml:space="preserve">
     <value>Ha dei bordi?</value>
   </data>
   <data name="Please select a ROM before creating the project." xml:space="preserve">
     <value>Seleziona una ROM prima di creare un progetto.</value>
   </data>
-  <data name="Failed to apply the following hacks to the ROM:\n{0}\n\nPlease check the log file for more information.\n\nIn order to preserve state, no hacks were applied." xml:space="preserve">
+  <data name="ErrorFailedToApplyHacks" xml:space="preserve">
     <value>Errore nell'applicare hacks alla ROM:\n{0}\n\nControlla il file log per ulteriori informazioni.\n\nIn per evitare di danneggiare la ROM, nessuna hack è stata applicata.</value>
   </data>
-  <data name="Haruhi Suzumiya event unlocked message box" xml:space="preserve">
+  <data name="UiMessage116Label" xml:space="preserve">
     <value>messaggio evento sbloccato di Haruhi Suzumiya</value>
-  </data>
-  <data name="Failed to load editor controls!" xml:space="preserve">
-    <value>Impossibile caricare controlli editor!</value>
   </data>
   <data name="Topic Set" xml:space="preserve">
     <value>Imposta discussione</value>
@@ -669,7 +652,7 @@
   <data name="UiMessage73Label" xml:space="preserve">
     <value>Messaggio opzioni cancella dati</value>
   </data>
-  <data name="Failed to load cached data" xml:space="preserve">
+  <data name="ErrorFailedLoadingCachedData" xml:space="preserve">
     <value>Impossibile caricare dati cache</value>
   </data>
   <data name="UiMessage74Label" xml:space="preserve">
@@ -678,7 +661,7 @@
   <data name="Replace..." xml:space="preserve">
     <value>Sostituisci…</value>
   </data>
-  <data name="Failed replacing animation file {0} in grp.bin with file '{1}'" xml:space="preserve">
+  <data name="ErrorFailedReplacingAnimationFile" xml:space="preserve">
     <value>Impossibile sostituire il file di animazione {0} in grp.bin con il file '{1}'</value>
   </data>
   <data name="Show" xml:space="preserve">
@@ -688,7 +671,7 @@
   <data name="Toggle Tsuruya's voice ticker tape" xml:space="preserve">
     <value>Pannello Info Attiva voce Tsuruya</value>
   </data>
-  <data name="Game banner can only contain up to three lines." xml:space="preserve">
+  <data name="ProjectSettingsGameBannerNameLimitMessages" xml:space="preserve">
     <value>Il Banner del Gioco può contenere massimo 3 linee.</value>
   </data>
   <data name="Target Number" xml:space="preserve">
@@ -700,13 +683,13 @@
   <data name="Remove Starting Chibis" xml:space="preserve">
     <value>Rimuovi Chibi iniziali</value>
   </data>
-  <data name="Failed restoring BGM file." xml:space="preserve">
+  <data name="ErrorFailedRestoringBgmFile" xml:space="preserve">
     <value>Impossibile ripristinare file BGM.</value>
   </data>
   <data name="UiMessage22Label" xml:space="preserve">
     <value>Pannello info Episodio 1</value>
   </data>
-  <data name="Future Description" xml:space="preserve">
+  <data name="GroupSelectionEditorFutureDescription" xml:space="preserve">
     <value>Nuova descrizione</value>
   </data>
   <data name="Patching Overlay {0}" xml:space="preserve">
@@ -742,7 +725,7 @@
   <data name="UiMessage08Label" xml:space="preserve">
     <value>Seleziona compagno</value>
   </data>
-  <data name="Game Investigation Phase (Options)" xml:space="preserve">
+  <data name="UiMessage65Label" xml:space="preserve">
     <value>Fase Investigazione (Opzioni)</value>
   </data>
   <data name="Success!" xml:space="preserve">
@@ -787,7 +770,7 @@
   <data name="Remove Chibi" xml:space="preserve">
     <value>Rimuovi Chibi</value>
   </data>
-  <data name="Haruhi Present" xml:space="preserve">
+  <data name="GroupSelectionEditorHaruhiPresentLabel" xml:space="preserve">
     <value>Haruhi è presente</value>
   </data>
   <data name="SFXs" xml:space="preserve">
@@ -808,7 +791,7 @@
   <data name="UiMessage95Label" xml:space="preserve">
     <value>Impostazioni salta dialoghi</value>
   </data>
-  <data name="Failed to replace background {0} with file {1}" xml:space="preserve">
+  <data name="ErrorFailedReplacingBackground" xml:space="preserve">
     <value>Impossibile sostituire sfondo {0} con file {1}</value>
   </data>
   <data name="Routes" xml:space="preserve">
@@ -841,7 +824,7 @@
   <data name="Replace voiced line" xml:space="preserve">
     <value>Sostituisci file audio</value>
   </data>
-  <data name="Failed to save Chokuretsu save file!" xml:space="preserve">
+  <data name="ErrorFailedSavingChokuSave" xml:space="preserve">
     <value>Impossibile sovrascrivere salvataggio di Chokuretsu!</value>
   </data>
   <data name="UiMessage26Label" xml:space="preserve">
@@ -855,9 +838,6 @@
   </data>
   <data name="Please select a template" xml:space="preserve">
     <value>Seleziona un template</value>
-  </data>
-  <data name="Failed to replace item {0} with file {1}" xml:space="preserve">
-    <value>Impossibile sostituire oggetto {0} con file {1}</value>
   </data>
   <data name="ScriptParameterDelay" xml:space="preserve">
     <value>Ritarda (Frames)</value>
@@ -883,7 +863,7 @@
   <data name="Please enter a value for the section name" xml:space="preserve">
     <value>Inserisci un nome per questa sezione</value>
   </data>
-  <data name="Flag: {0}" xml:space="preserve">
+  <data name="EditorFlagIdLabel" xml:space="preserve">
     <value>Flag: {0}</value>
   </data>
   <data name="Invalid search terms" xml:space="preserve">
@@ -934,7 +914,7 @@
   <data name="Number of Saves:" xml:space="preserve">
     <value>Numero di Salvataggi: </value>
   </data>
-  <data name="Flag" xml:space="preserve">
+  <data name="ScriptParamFlag" xml:space="preserve">
     <value>Flag</value>
   </data>
   <data name="Screen Position" xml:space="preserve">
@@ -997,7 +977,7 @@
   <data name="Rename" xml:space="preserve">
     <value>Rinomina</value>
   </data>
-  <data name="Failed downsampling audio file." xml:space="preserve">
+  <data name="ErrorFailedDownsamplingAudio" xml:space="preserve">
     <value>Errore nel downsampling file audio.</value>
   </data>
   <data name="Replace BGM track" xml:space="preserve">
@@ -1024,10 +1004,10 @@
   <data name="Invalid item type!" xml:space="preserve">
     <value>Tipo di oggetto non valido!</value>
   </data>
-  <data name="Failed to copy newly built archives to the iterative originals directory" xml:space="preserve">
+  <data name="ErrorFailedCopyingArchivesToIterativeDir" xml:space="preserve">
     <value>Impossibile copiare nuove cartelle in quella originale</value>
   </data>
-  <data name="Game Banner" xml:space="preserve">
+  <data name="ProjectSettingsGameBanner" xml:space="preserve">
     <value>Banner del Gioco</value>
   </data>
   <data name="Scripts" xml:space="preserve">
@@ -1057,7 +1037,7 @@
   <data name="Serial Loops Project" xml:space="preserve">
     <value>Progetto Serial Loops</value>
   </data>
-  <data name="Failed to load character progress voice for {0}." xml:space="preserve">
+  <data name="ErrorFailedLoadingCharacterProgressVoice" xml:space="preserve">
     <value>Impossibile caricare voce personaggio {0}.</value>
   </data>
   <data name="Pause menu Title ticker tape" xml:space="preserve">
@@ -1075,7 +1055,7 @@
   <data name="New Update Available: {0}" xml:space="preserve">
     <value>Nuovo Aggiornamento Disponibile: {0}</value>
   </data>
-  <data name="Fade Time (Frames)" xml:space="preserve">
+  <data name="ScriptParamFadeTime" xml:space="preserve">
     <value>Fade Time (Frames)</value>
   </data>
   <data name="ScriptParamDuration" xml:space="preserve">
@@ -1087,7 +1067,7 @@
   <data name="ErrorScriptItemPruningLabels" xml:space="preserve">
     <value>Errore pruning labels!</value>
   </data>
-  <data name="Haroohie" xml:space="preserve">
+  <data name="ProjectRenameWatermark" xml:space="preserve">
     <value>Haroohie</value>
   </data>
   <data name="SaveEditorCommonSaveDataEditButtonLabel" xml:space="preserve">
@@ -1096,7 +1076,7 @@
   <data name="Invalid or unavailable script command selected: {0}" xml:space="preserve">
     <value>è stato scelto uno script non disponibile o invalido: {0}</value>
   </data>
-  <data name="Failed to decode original file too, giving up!" xml:space="preserve">
+  <data name="ErrorFailedToDecodeOriginalAdx" xml:space="preserve">
     <value>Impossibile decriptare file originale, ci rinuncio!</value>
   </data>
   <data name="Russian" xml:space="preserve">
@@ -1117,10 +1097,10 @@
   <data name="Title" xml:space="preserve">
     <value>Titolo</value>
   </data>
-  <data name="Failed attempting to cache audio file" xml:space="preserve">
+  <data name="ErrorFailedToCacheAudioFile" xml:space="preserve">
     <value>Errore nel creare cache per file audio</value>
   </data>
-  <data name="Failed to read ARM9 from '{0}'" xml:space="preserve">
+  <data name="ErrorFailedReadingARM9" xml:space="preserve">
     <value>Impossibile leggere ARM9 da '{0}'</value>
   </data>
   <data name="Speaker_Name" xml:space="preserve">
@@ -1138,7 +1118,7 @@
   <data name="Toggle Nagato's voice ticker tape" xml:space="preserve">
     <value>Pannello Info Attiva voce Nagato</value>
   </data>
-  <data name="Haruhi Routes" xml:space="preserve">
+  <data name="PuzzleEditorHaruhiRoutes" xml:space="preserve">
     <value>Percorsi Haruhi</value>
   </data>
   <data name="UiMessage102Label" xml:space="preserve">
@@ -1162,13 +1142,13 @@
   <data name="ImageCropAndScale" xml:space="preserve">
     <value>Ridimensiona</value>
   </data>
-  <data name="Flag Description" xml:space="preserve">
+  <data name="SaveEditorFlagDescriptionLabel" xml:space="preserve">
     <value>Descrizione Flag</value>
   </data>
   <data name="ScriptParamChibiEnterExit" xml:space="preserve">
     <value>Entra/Esci</value>
   </data>
-  <data name="Failed to export system texture {0} to file {1}" xml:space="preserve">
+  <data name="ErrorFailedExportingSysTex" xml:space="preserve">
     <value>Impossibile esportare system texture {0} come file {1}</value>
   </data>
   <data name="SaveEditorCommonSaveDataLabel" xml:space="preserve">
@@ -1247,7 +1227,7 @@
   <data name="No preview available" xml:space="preserve">
     <value>Nessuna anteprima impossibile</value>
   </data>
-  <data name="Fade Out Time (Frames)" xml:space="preserve">
+  <data name="ScriptParamFadeOutTime" xml:space="preserve">
     <value>Fade Out Time (Frames)</value>
   </data>
   <data name="Patching ARM9" xml:space="preserve">
@@ -1258,9 +1238,6 @@
   </data>
   <data name="Number of Singularities" xml:space="preserve">
     <value>Numero di Anomalie</value>
-  </data>
-  <data name="Failed to export item {0} to file {1}" xml:space="preserve">
-    <value>Impossibile esportare oggetto {0} a file {1}</value>
   </data>
   <data name="New Section" xml:space="preserve">
     <value>Nuova Sezione</value>
@@ -1280,7 +1257,7 @@
   <data name="UiMessage25Label" xml:space="preserve">
     <value>Pannello info Episodio 4</value>
   </data>
-  <data name="Failed to export chibi animation {0} for chibi {1} to file" xml:space="preserve">
+  <data name="ErrorFailedExportingChibiAnimation" xml:space="preserve">
     <value>Impossibile esportare animazione {0} del chibi {1} come file</value>
   </data>
   <data name="Save Project" xml:space="preserve">
@@ -1313,13 +1290,13 @@
   <data name="Reset settings to default ticker tape" xml:space="preserve">
     <value>Pannello Info sulla formattazione delle impostazioni</value>
   </data>
-  <data name="Flags" xml:space="preserve">
+  <data name="SaveSlotEditorFlagsHeader" xml:space="preserve">
     <value>Flags</value>
   </data>
   <data name="Save data damaged &amp; reset message box" xml:space="preserve">
     <value>Pannello Info sul salvataggio danneggiato e ripristino</value>
   </data>
-  <data name="Failed replacing source file {0} in dat.bin with file '{1}'" xml:space="preserve">
+  <data name="ErrorFailedReplacingDatFile" xml:space="preserve">
     <value>Impossibile sostituire il file sorgente {0} in dat.bin con il file '{1}'</value>
   </data>
   <data name="Script:" xml:space="preserve">
@@ -1337,7 +1314,7 @@
   <data name="ScriptParamEmote" xml:space="preserve">
     <value>Emozione</value>
   </data>
-  <data name="Groups: {0}" xml:space="preserve">
+  <data name="SfxEditorGroupsList" xml:space="preserve">
     <value>Raccolte sonore: {0}</value>
     <comment>As in "Sound Groups"</comment>
   </data>
@@ -1353,16 +1330,13 @@
   <data name="Sound effect volume options ticker tape" xml:space="preserve">
     <value>Pannello Informazioni sull'opzione per aggiustare il volume</value>
   </data>
-  <data name="Find in Project" xml:space="preserve">
-    <value>Trova nel Progetto</value>
-  </data>
   <data name="UiMessage99Label" xml:space="preserve">
     <value>Pannello Info salta dialoghi</value>
   </data>
   <data name="Import a Hack" xml:space="preserve">
     <value>Importa un hack</value>
   </data>
-  <data name="Failed to export eye animation {0} for sprite {1} to file" xml:space="preserve">
+  <data name="ErrorFailedExportingEyeAnimation" xml:space="preserve">
     <value>Impossibile esportare animazione occhio {0} da sprite {1} a file</value>
   </data>
   <data name="Pause menu Config ticker tape" xml:space="preserve">
@@ -1373,9 +1347,6 @@
   </data>
   <data name="Project Settings" xml:space="preserve">
     <value>Impostazioni del progetto</value>
-  </data>
-  <data name="Find Orphaned Items..." xml:space="preserve">
-    <value>Cerca oggetto senza legami…</value>
   </data>
   <data name="Transitions" xml:space="preserve">
     <value>Transizioni</value>
@@ -1417,7 +1388,7 @@
   <data name="UiMessage78Label" xml:space="preserve">
     <value>Pannello Info attivazione voce personaggi</value>
   </data>
-  <data name="Failed to add parameters for hack file {0} in hack {1}" xml:space="preserve">
+  <data name="ErrorFailedAddingParametersToHack" xml:space="preserve">
     <value>Impossibile aggiungere parametri per file hack {0} nel hack {1}</value>
   </data>
   <data name="Save" xml:space="preserve">
@@ -1426,17 +1397,17 @@
   <data name="SaveEditorDialogueSkippingSetting" xml:space="preserve">
     <value>Saltare dialoghi</value>
   </data>
-  <data name="Failed to export layout for sprite {0} to file" xml:space="preserve">
+  <data name="ErrorFailedExportingSpriteLayout" xml:space="preserve">
     <value>Impossibile esportare layout da sprite {0} a file</value>
   </data>
   <data name="Select character sprite export folder" xml:space="preserve">
     <value>Scegli cartella dove esportare gli sprite dei personaggi</value>
   </data>
-  <data name="Groups" xml:space="preserve">
+  <data name="SfxEditorGroupsLabel" xml:space="preserve">
     <value>Raccolte sonore</value>
     <comment>As in "Sound Groups"</comment>
   </data>
-  <data name="Fade In Time (Frames)" xml:space="preserve">
+  <data name="ScriptParamFadeInTime" xml:space="preserve">
     <value>Fade In Time (Frame)</value>
   </data>
   <data name="sec" xml:space="preserve">
@@ -1449,10 +1420,7 @@
   <data name="Select ROM" xml:space="preserve">
     <value>Scegli ROM</value>
   </data>
-  <data name="Failed to find character item -- have you saved all of your changes to character names?" xml:space="preserve">
-    <value>Impossibile trovare personaggio -- Hai salvato tutte le modifiche ai nomi?</value>
-  </data>
-  <data name="Failed converting audio file to WAV." xml:space="preserve">
+  <data name="ErrorFailedConvertingAudioToWav" xml:space="preserve">
     <value>Errore nel convertire file audio in WAV.</value>
   </data>
   <data name="Spanish" xml:space="preserve">
@@ -1471,7 +1439,7 @@
     <value>Pedina 1</value>
     <comment>Chesspiece</comment>
   </data>
-  <data name="Frames" xml:space="preserve">
+  <data name="ChibiEditorFramesLabel" xml:space="preserve">
     <value>Frame</value>
   </data>
   <data name="Parameter Value" xml:space="preserve">
@@ -1480,17 +1448,14 @@
   <data name="Searching {0}..." xml:space="preserve">
     <value>Cercando {0}…</value>
   </data>
-  <data name="Failed to replace system texture {0} with file {1}" xml:space="preserve">
+  <data name="ErrorFailedReplacingSysTex" xml:space="preserve">
     <value>Impossibile sostituire system texture {0} con file {1}</value>
   </data>
   <data name="Italian" xml:space="preserve">
     <value>Italiano</value>
   </data>
-  <data name="Failed to check for updates! (Endpoint: {0})" xml:space="preserve">
+  <data name="ErrorFailedCheckingForUpdates" xml:space="preserve">
     <value>Ricerca di aggiornamenti fallita! (Endpoint: {0})</value>
-  </data>
-  <data name="gcc exited with code {0}" xml:space="preserve">
-    <value>gcc exited with code {0}</value>
   </data>
   <data name="UiMessage23Label" xml:space="preserve">
     <value>Pannello Info Episodio 2</value>
@@ -1504,7 +1469,7 @@
   <data name="Open Chokuretsu Save File" xml:space="preserve">
     <value>Apri Salvataggio di Chokuretsu</value>
   </data>
-  <data name="Failed to calculate graph edges!" xml:space="preserve">
+  <data name="ErrorFailedCalculatingScriptGraph" xml:space="preserve">
     <value>Impossibile calcolare limiti grafici!</value>
   </data>
   <data name="Template" xml:space="preserve">
@@ -1523,7 +1488,7 @@
   <data name="Search..." xml:space="preserve">
     <value>Cerca…</value>
   </data>
-  <data name="Failed to read BGM file; falling back to original..." xml:space="preserve">
+  <data name="ErrorFailedReadingBgmFile" xml:space="preserve">
     <value>Impossibile leggere file BGM; ripristinando originale…</value>
   </data>
   <data name="No valid maps found." xml:space="preserve">
@@ -1532,7 +1497,7 @@
   <data name="Skip Update" xml:space="preserve">
     <value>Ignora aggiornamento</value>
   </data>
-  <data name="Failed to delete files for hack '{0}' -- this hack is likely applied in the ROM base and can't be disabled." xml:space="preserve">
+  <data name="ErrorFailedDeletingHackFiles" xml:space="preserve">
     <value>Impossibile cancellare hack '{0}' -- è applicata sulla ROM e non si può disattivare.</value>
   </data>
   <data name="ScriptParamDisableLipFlap" xml:space="preserve">
@@ -1550,14 +1515,11 @@
   <data name="Size:" xml:space="preserve">
     <value>Dimensioni:</value>
   </data>
-  <data name="Game saved message box" xml:space="preserve">
+  <data name="UiMessage42Label" xml:space="preserve">
     <value>Messaggio sul salvataggio del gioco</value>
   </data>
   <data name="Puzzle" xml:space="preserve">
     <value>Puzzle</value>
-  </data>
-  <data name="Finding orphaned items..." xml:space="preserve">
-    <value>Cercando oggetti senza legami…</value>
   </data>
   <data name="Select Template to Apply" xml:space="preserve">
     <value>Scegli template da applicare</value>
@@ -1568,7 +1530,7 @@
   <data name="Toggle Koizumi's voice ticker tape" xml:space="preserve">
     <value>Pannello Info Attiva voce Koizumi</value>
   </data>
-  <data name="Failed to create directory on specified path!" xml:space="preserve">
+  <data name="ErrorFailedCreatingDir" xml:space="preserve">
     <value>Impossibile creare cartella in quel percorso!</value>
   </data>
   <data name="No Emulator Path" xml:space="preserve">
@@ -1622,13 +1584,13 @@
   <data name="BuildErrorCompiledFileNotExist" xml:space="preserve">
     <value>Il file compilato {0} non esiste!</value>
   </data>
-  <data name="Hide Unset Flags" xml:space="preserve">
+  <data name="SaveEditorHideUnsetFlagsLabel" xml:space="preserve">
     <value>Nascondi flags non impostate</value>
   </data>
-  <data name="Failed to export background {0} to file {1}" xml:space="preserve">
+  <data name="ErrorFailedExportingBackground" xml:space="preserve">
     <value>Impossibile esportare sfondo {0} come file {1}</value>
   </data>
-  <data name="FLAC files" xml:space="preserve">
+  <data name="FiletypeFlac" xml:space="preserve">
     <value>file FLAC</value>
   </data>
   <data name="Orphaned_Items" xml:space="preserve">
@@ -1640,7 +1602,7 @@
   <data name="Projects" xml:space="preserve">
     <value>Progetti</value>
   </data>
-  <data name="Haruhi Topic" xml:space="preserve">
+  <data name="UiMessage03Label" xml:space="preserve">
     <value>Discussione su Haruhi</value>
   </data>
   <data name="SoundEditorConvertingFromMp3Message" xml:space="preserve">
@@ -1689,13 +1651,13 @@
   <data name="Investigation Phase Results" xml:space="preserve">
     <value>Risultati fase investigazione</value>
   </data>
-  <data name="Failed replacing source file {0} in evt.bin with file '{1}'" xml:space="preserve">
+  <data name="ErrorFailedReplacingEvtSourceFile" xml:space="preserve">
     <value>Impossibile sostituire file {0} dentro evt.bin con il file '{1}'</value>
   </data>
   <data name="Mikuru Asahina event unlocked message box" xml:space="preserve">
     <value>Messaggio Mikuru Asahina sbloccata</value>
   </data>
-  <data name="Hold Time (Frames)" xml:space="preserve">
+  <data name="ScriptParamHoldTime" xml:space="preserve">
     <value>Hold Time (Frame)</value>
   </data>
   <data name="Loading Project" xml:space="preserve">
@@ -1704,10 +1666,10 @@
   <data name="Nagato Time Percentage" xml:space="preserve">
     <value>Percentuale Tempo Nagato</value>
   </data>
-  <data name="Failed to write NitroPacker NDS project file to disk" xml:space="preserve">
+  <data name="ErrorFailedWritingNPProjectFile" xml:space="preserve">
     <value>Impossibile salvare progetto NitroPacker NDS su disco</value>
   </data>
-  <data name="Failed to write ARM9 to disk" xml:space="preserve">
+  <data name="ErrorFailedWritingArm9" xml:space="preserve">
     <value>Impossibile sovrascrivere ARM9 sul disco</value>
   </data>
   <data name="Manage Loop" xml:space="preserve">
@@ -1740,13 +1702,13 @@
   <data name="Loading Archives (evt.bin)" xml:space="preserve">
     <value>Caricando archivio (evt.bin)</value>
   </data>
-  <data name="Group_Selections" xml:space="preserve">
+  <data name="ItemsPanelGroupSelections" xml:space="preserve">
     <value>Divisioni gruppi</value>
   </data>
   <data name="Power Character 1" xml:space="preserve">
     <value>Potere Personaggio 1</value>
   </data>
-  <data name="Group selection impossible selection made ticker tape" xml:space="preserve">
+  <data name="UiMessage111Label" xml:space="preserve">
     <value>Pannello Info Divisione gruppo impossibile</value>
   </data>
   <data name="objcopy not found at '{0}'" xml:space="preserve">
@@ -1757,9 +1719,6 @@
   </data>
   <data name="Miss Section" xml:space="preserve">
     <value>Sezione Persa</value>
-  </data>
-  <data name="Failed to set viewr contents for script command list panel." xml:space="preserve">
-    <value>Impossibile impostare i contenuti per il pannello script.</value>
   </data>
   <data name="One or more archives is null." xml:space="preserve">
     <value>Uno o più archivi non sono validi.</value>
@@ -1785,7 +1744,7 @@
   <data name="Load this save prompt" xml:space="preserve">
     <value>Carica prompt salvato</value>
   </data>
-  <data name="Failed copying file '{0}' to base and iterative directories at path '{1}'" xml:space="preserve">
+  <data name="ErrorFailedCopyingFile" xml:space="preserve">
     <value>Impossibile copiare file '{0}'nella cartella '{1}'</value>
   </data>
   <data name="Plate Color" xml:space="preserve">
@@ -1813,13 +1772,10 @@
   <data name="Investigation phase options ticker tape" xml:space="preserve">
     <value>Pannello Info opzioni fase investigazione</value>
   </data>
-  <data name="Finding orphaned items" xml:space="preserve">
-    <value>Trovando oggetti senza legami</value>
-  </data>
   <data name="Move Command Up" xml:space="preserve">
     <value>Sposta comando in alto</value>
   </data>
-  <data name="Find References..." xml:space="preserve">
+  <data name="ItemsPanelContextFindItems" xml:space="preserve">
     <value>Trova Impostazioni…</value>
   </data>
   <data name="Loading Archives (dat.bin)" xml:space="preserve">
@@ -1859,7 +1815,7 @@
   <data name="No saves Load Game menu ticker tape" xml:space="preserve">
     <value>Pannello Info Nessun dato salvato</value>
   </data>
-  <data name="Horizontal Intensity" xml:space="preserve">
+  <data name="ScriptParamHorizontalIntensity" xml:space="preserve">
     <value>Intensità Orizzontale</value>
   </data>
   <data name="On" xml:space="preserve">
@@ -1874,10 +1830,7 @@
   <data name="objcopy exited with code {0}" xml:space="preserve">
     <value>objcopy exited with code {0}</value>
   </data>
-  <data name="Failed to set script command list panel section content." xml:space="preserve">
-    <value>Impossibile impostare il contenuto nell'elenco script.</value>
-  </data>
-  <data name="Failed to write include files to disk." xml:space="preserve">
+  <data name="ErrorFailedWritingIncludeFiles" xml:space="preserve">
     <value>Impossibile scrivere file su disco.</value>
   </data>
   <data name="Unable to create command" xml:space="preserve">
@@ -2213,5 +2166,8 @@
   </data>
   <data name="LanguageChineseSimplified" xml:space="preserve">
     <value>Cinese (Semplificato)</value>
+  </data>
+  <data name="AnimationExportGifButton" xml:space="preserve">
+    <value>Esporta GIF</value>
   </data>
 </root>

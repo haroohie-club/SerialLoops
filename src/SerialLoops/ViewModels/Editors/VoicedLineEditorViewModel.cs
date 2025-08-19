@@ -203,7 +203,7 @@ public class VoicedLineEditorViewModel : EditorViewModel
     private async Task Replace(bool asAhx)
     {
         IStorageFile openFile = await Window.Window.ShowOpenFilePickerAsync(Strings.Replace_voiced_line, [new(Strings.Supported_Audio_Files) { Patterns = Shared.SupportedAudioFiletypes },
-            new(Strings.WAV_files) { Patterns = ["*.wav"] }, new(Strings.FLAC_files) { Patterns = ["*.flac"] },
+            new(Strings.WAV_files) { Patterns = ["*.wav"] }, new(Strings.FiletypeFlac) { Patterns = ["*.flac"] },
             new(Strings.MP3_files) { Patterns = ["*.mp3"] }, new(Strings.OggFiles) { Patterns = ["*.ogg"] }]);
         if (openFile is not null)
         {

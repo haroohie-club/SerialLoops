@@ -66,7 +66,7 @@ public class ItemEditorViewModel : EditorViewModel
                 }
                 catch (Exception ex)
                 {
-                    _log.LogException(string.Format(Strings.Failed_to_replace_background__0__with_file__1_, _item.DisplayName, importPath), ex);
+                    _log.LogException(string.Format(Strings.ErrorFailedReplacingItem, _item.DisplayName, importPath), ex);
                 }
             }
         }

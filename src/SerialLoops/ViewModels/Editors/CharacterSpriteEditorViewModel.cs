@@ -180,7 +180,7 @@ public partial class CharacterSpriteEditorViewModel : EditorViewModel
             }
             catch (Exception ex)
             {
-                _log.LogException(string.Format(Strings.Failed_to_export_layout_for_sprite__0__to_file, _sprite.DisplayName), ex);
+                _log.LogException(string.Format(Strings.ErrorFailedExportingSpriteLayout, _sprite.DisplayName), ex);
             }
 
             int i = 0;
@@ -193,7 +193,7 @@ public partial class CharacterSpriteEditorViewModel : EditorViewModel
                 }
                 catch (Exception ex)
                 {
-                    _log.LogException(string.Format(Strings.Failed_to_export_eye_animation__0__for_sprite__1__to_file, i, _sprite.DisplayName), ex);
+                    _log.LogException(string.Format(Strings.ErrorFailedExportingEyeAnimation, i, _sprite.DisplayName), ex);
                 }
             }
             i = 0;
@@ -206,7 +206,7 @@ public partial class CharacterSpriteEditorViewModel : EditorViewModel
                 }
                 catch (Exception ex)
                 {
-                    _log.LogException(string.Format(Strings.Failed_to_export_mouth_animation__0__for_sprite__1__to_file, i, _sprite.DisplayName), ex);
+                    _log.LogException(string.Format(Strings.ErrorFailedExportingMouthAnimation, i, _sprite.DisplayName), ex);
                 }
             }
             await Window.Window.ShowMessageBoxAsync(Strings.Success_, Strings.CharacterSpriteEditorFramesExportedMessage, MsBox.Avalonia.Enums.ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Success, _log);
@@ -225,7 +225,7 @@ public partial class CharacterSpriteEditorViewModel : EditorViewModel
             animationFrames = _sprite.GetClosedMouthAnimation(Window.OpenProject);
         }
 
-        IStorageFile saveFile = await Window.Window.ShowSaveFilePickerAsync(Strings.Save_character_sprite_GIF, [new(Strings.GIF_file) { Patterns = ["*.gif"] }]);
+        IStorageFile saveFile = await Window.Window.ShowSaveFilePickerAsync(Strings.Save_character_sprite_GIF, [new(Strings.FiletypeGif) { Patterns = ["*.gif"] }]);
         if (saveFile is not null)
         {
             List<SKBitmap> frames = [];
@@ -239,7 +239,7 @@ public partial class CharacterSpriteEditorViewModel : EditorViewModel
 
             ProgressDialogViewModel tracker = new(Strings.AnimationExportingGifProgressMessage);
             tracker.InitializeTasks(() => frames.SaveGif(saveFile.Path.LocalPath, tracker),
-                async void () => await Window.Window.ShowMessageBoxAsync(Strings.Success_, Strings.GIF_exported_, MsBox.Avalonia.Enums.ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Success, _log));
+                async void () => await Window.Window.ShowMessageBoxAsync(Strings.Success_, Strings.AnimationExportedGifSuccessMessage, MsBox.Avalonia.Enums.ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Success, _log));
             await new ProgressDialog { DataContext = tracker }.ShowDialog(Window.Window);
         }
     }

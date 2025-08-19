@@ -78,7 +78,7 @@
                     </StackPanel>
 
                     <StackPanel Orientation="Vertical" Spacing="5">
-                        <TextBlock Text="{x:Static assets:Strings.Future_Description}" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{x:Static assets:Strings.GroupSelectionEditorFutureDescription}" HorizontalAlignment="Center"/>
                         <TextBox Text="{Binding FutureDesc}" Width="350" Height="60" Name="FutureDescBox"
                                  AcceptsReturn="True">
                             <i:Interaction.Behaviors>

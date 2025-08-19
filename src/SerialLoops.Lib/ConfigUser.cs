@@ -121,7 +121,7 @@ public class ConfigUser
             }
             catch (Exception ex)
             {
-                log.LogException(string.Format(localize("Failed to deserialize script template file '{0}'"), scriptTemplateFile), ex);
+                log.LogException(string.Format(localize("ErrorFailedDeserializingScriptTemplate"), scriptTemplateFile), ex);
             }
         }
         ScriptTemplates = new(templates);

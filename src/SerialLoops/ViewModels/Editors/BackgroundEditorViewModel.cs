@@ -39,7 +39,7 @@ public class BackgroundEditorViewModel : EditorViewModel
     public ICommand ReplaceCommand { get; set; }
     public ICommand CgNameChangeCommand { get; set; }
     public bool ShowExtras => Bg.BackgroundType != BgType.TEX_BG && Bg.BackgroundType != BgType.KINETIC_SCREEN;
-    public string FlagDescription => string.Format(Strings.Flag___0_, Bg.Flag - 1);
+    public string FlagDescription => string.Format(Strings.EditorFlagIdLabel, Bg.Flag - 1);
     public string UnknownExtrasShortDescription => string.Format(Strings.Unknown_Extras_Short___0_, Bg.ExtrasShort);
     public string UnknownExtrasByteDescription => string.Format(Strings.Unknown_Extras_Byte___0_, Bg.ExtrasByte);
 
@@ -78,7 +78,7 @@ public class BackgroundEditorViewModel : EditorViewModel
             }
             catch (Exception ex)
             {
-                _log.LogException(string.Format(Strings.Failed_to_export_background__0__to_file__1_, Bg.DisplayName, savedFile.Path.LocalPath), ex);
+                _log.LogException(string.Format(Strings.ErrorFailedExportingBackground, Bg.DisplayName, savedFile.Path.LocalPath), ex);
             }
         }
     }
@@ -112,7 +112,7 @@ public class BackgroundEditorViewModel : EditorViewModel
                 }
                 catch (Exception ex)
                 {
-                    _log.LogException(string.Format(Strings.Failed_to_replace_background__0__with_file__1_, Bg.DisplayName, openFile.Path.LocalPath), ex);
+                    _log.LogException(string.Format(Strings.ErrorFailedReplacingBackground, Bg.DisplayName, openFile.Path.LocalPath), ex);
                 }
             }
         }

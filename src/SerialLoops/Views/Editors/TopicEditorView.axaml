@@ -25,7 +25,7 @@
 
         <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Spacing="3"
                     IsVisible="{Binding Topic.HiddenMainTopic, Converter={x:Static ObjectConverters.IsNotNull}}">
-            <TextBlock Text="{x:Static assets:Strings.Hidden_ID}" VerticalAlignment="Center"/>
+            <TextBlock Text="{x:Static assets:Strings.TopicEditorHiddenID}" VerticalAlignment="Center"/>
             <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center" ToolTip.Tip="{x:Static assets:Strings.TopicEditorHiddenIdHelp}"/>
         </StackPanel>
         <TextBlock Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" IsVisible="{Binding Topic.HiddenMainTopic, Converter={x:Static ObjectConverters.IsNotNull}}"

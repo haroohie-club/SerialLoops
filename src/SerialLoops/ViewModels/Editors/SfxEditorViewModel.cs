@@ -24,7 +24,7 @@ public class SfxEditorViewModel : EditorViewModel
 
     [Reactive]
     public SfxPlayerPanelViewModel SfxPlayerPanel { get; set; }
-    public string Groups => string.Format(Strings.Groups___0_, string.Join(", ", Sfx.AssociatedGroups));
+    public string Groups => string.Format(Strings.SfxEditorGroupsList, string.Join(", ", Sfx.AssociatedGroups));
 
     public ICommand ExtractCommand { get; }
 

@@ -128,7 +128,7 @@ public partial class ChibiEditorViewModel : EditorViewModel
             }
             catch (Exception ex)
             {
-                _log.LogException(string.Format(Strings.Failed_to_export_chibi_animation__0__for_chibi__1__to_file, i, _chibi.DisplayName), ex);
+                _log.LogException(string.Format(Strings.ErrorFailedExportingChibiAnimation, i, _chibi.DisplayName), ex);
             }
         }
         await Window.Window.ShowMessageBoxAsync(Strings.Success_, Strings.ChibiEditorFramesExportedMessage, ButtonEnum.Ok, Icon.Success, _log);
@@ -136,7 +136,7 @@ public partial class ChibiEditorViewModel : EditorViewModel
 
     private async Task ExportGif()
     {
-        string savedGif = (await Window.Window.ShowSaveFilePickerAsync(Strings.Save_chibi_GIF, [new(Strings.GIF_file) { Patterns = ["*.gif"] }]))?.TryGetLocalPath();
+        string savedGif = (await Window.Window.ShowSaveFilePickerAsync(Strings.Save_chibi_GIF, [new(Strings.FiletypeGif) { Patterns = ["*.gif"] }]))?.TryGetLocalPath();
         if (string.IsNullOrEmpty(savedGif))
         {
             return;
@@ -152,7 +152,7 @@ public partial class ChibiEditorViewModel : EditorViewModel
         }
 
         ProgressDialogViewModel tracker = new(Strings.AnimationExportingGifProgressMessage);
-        tracker.InitializeTasks(() => frames.SaveGif(savedGif, tracker), async void () => await Window.Window.ShowMessageBoxAsync(Strings.Success_, Strings.GIF_exported_, ButtonEnum.Ok, Icon.Success, _log));
+        tracker.InitializeTasks(() => frames.SaveGif(savedGif, tracker), async void () => await Window.Window.ShowMessageBoxAsync(Strings.Success_, Strings.AnimationExportedGifSuccessMessage, ButtonEnum.Ok, Icon.Success, _log));
         await new ProgressDialog { DataContext = tracker }.ShowDialog(Window.Window);
     }
 

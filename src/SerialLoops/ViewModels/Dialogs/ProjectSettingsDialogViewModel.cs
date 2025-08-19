@@ -80,7 +80,7 @@ public class ProjectSettingsDialogViewModel : ViewModelBase
 
         if (GameTitle.Split('\n').Length > 3)
         {
-            Log.LogError(Strings.Game_banner_can_only_contain_up_to_three_lines_);
+            Log.LogError(Strings.ProjectSettingsGameBannerNameLimitMessages);
             return;
         }
         _settings.Name = GameTitle;

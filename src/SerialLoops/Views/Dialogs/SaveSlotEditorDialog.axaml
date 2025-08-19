@@ -141,7 +141,7 @@
                             <HeaderedContentControl Grid.Row="3" Grid.Column="0" Header="{x:Static assets:Strings.SaveEditorDialogueSkippingSetting}" Margin="10"
                                            HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                                 <StackPanel Orientation="Vertical" Spacing="5">
-                                    <RadioButton GroupName="DialogueSkipping" Content="{x:Static assets:Strings.Fast_Forward}" IsChecked="True"/>
+                                    <RadioButton GroupName="DialogueSkipping" Content="{x:Static assets:Strings.SaveEditorFastForwardLabel}" IsChecked="True"/>
                                     <RadioButton GroupName="DialogueSkipping" Content="{x:Static assets:Strings.Skip_Already_Read}" IsChecked="{Binding DialogueSkipping}"/>
                                 </StackPanel>
                             </HeaderedContentControl>
@@ -224,7 +224,7 @@
                                                            HorizontalContentAlignment="Center">
                                                 <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto,Auto,Auto,Auto">
                                                     <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding FirstSelection}"
-                                                              Content="1" ToolTip.Tip="{x:Static assets:Strings.First_Selection}"/>
+                                                              Content="1" ToolTip.Tip="{x:Static assets:Strings.SaveEditorFirstSelectionLabel}"/>
                                                     <CheckBox Grid.Row="0" Grid.Column="3" IsChecked="{Binding SecondSelection}"
                                                               Content="2" ToolTip.Tip="{x:Static assets:Strings.Second_Selection}"/>
                                                     <CheckBox Grid.Row="1" Grid.Column="0" IsChecked="{Binding KyonPresent}"
@@ -232,7 +232,7 @@
                                                         <Image Source="{Binding $parent[dialogs:SaveSlotEditorDialog].((vm:SaveSlotEditorDialogViewModel)DataContext).KyonVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
                                                     </CheckBox>
                                                     <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding HaruhiPresent}"
-                                                              ToolTip.Tip="{x:Static assets:Strings.Haruhi_Present}" Margin="10,0">
+                                                              ToolTip.Tip="{x:Static assets:Strings.GroupSelectionEditorHaruhiPresentLabel}" Margin="10,0">
                                                         <Image Source="{Binding $parent[dialogs:SaveSlotEditorDialog].((vm:SaveSlotEditorDialogViewModel)DataContext).HaruhiVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
                                                     </CheckBox>
                                                     <CheckBox Grid.Row="1" Grid.Column="2" IsChecked="{Binding AsahinaPresent}"
@@ -254,7 +254,7 @@
                                 </ItemsRepeater>
                             </HeaderedContentControl>
 
-                            <HeaderedContentControl Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static assets:Strings.Friendship_Levels}" Margin="10"
+                            <HeaderedContentControl Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static assets:Strings.SaveEditorFriendshipLevelsHeader}" Margin="10"
                                            HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                                 <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
                                     <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5">
@@ -332,25 +332,25 @@
                         </Grid>
                     </ScrollViewer>
                 </TabItem>
-                <TabItem Header="{x:Static assets:Strings.Flags}">
+                <TabItem Header="{x:Static assets:Strings.SaveSlotEditorFlagsHeader}">
                     <ScrollViewer>
                         <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*">
                             <StackPanel Grid.Row="0" HorizontalAlignment="Center" Orientation="Horizontal" Spacing="3">
                                 <CheckBox IsChecked="{Binding HideUnsetFlags}"/>
-                                <TextBlock Text="{x:Static assets:Strings.Hide_Unset_Flags}" Margin="0,5,0,0"/>
-                                <TextBox UseLayoutRounding="True" Watermark="{x:Static assets:Strings.Filter_by_name}"
+                                <TextBlock Text="{x:Static assets:Strings.SaveEditorHideUnsetFlagsLabel}" Margin="0,5,0,0"/>
+                                <TextBox UseLayoutRounding="True" Watermark="{x:Static assets:Strings.FilterByName}"
                                          Text="{Binding FlagFilter}"/>
                                 <Button Command="{Binding FilterFlagsCommand}">
                                     <StackPanel Orientation="Horizontal" Spacing="6">
                                         <Svg Path="avares://SerialLoops/Assets/Icons/Search.svg" Width="16" Height="16"/>
-                                        <TextBlock Text="{x:Static assets:Strings.Filter}"/>
+                                        <TextBlock Text="{x:Static assets:Strings.SaveEditorFilterFlagsButton}"/>
                                     </StackPanel>
                                 </Button>
                             </StackPanel>
 
                             <StackPanel Grid.Row="1" Spacing="10" Orientation="Horizontal">
                                 <TextBlock Text="{x:Static assets:Strings.Value}" Margin="0,0,10,0" Classes="b"/>
-                                <TextBlock Text="{x:Static assets:Strings.Flag_Description}" Classes="b"/>
+                                <TextBlock Text="{x:Static assets:Strings.SaveEditorFlagDescriptionLabel}" Classes="b"/>
                             </StackPanel>
 
                             <ItemsRepeater Grid.Row="2" ItemsSource="{Binding VisibleFlags}">

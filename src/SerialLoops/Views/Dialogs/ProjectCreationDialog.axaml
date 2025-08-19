@@ -38,9 +38,9 @@
                                 <ComboBoxItem Tag="es" Content="{x:Static assets:Strings.Spanish}"/>
                                 <ComboBoxItem Tag="pt-BR" Content="{x:Static assets:Strings.Portuguese__Brazilian_}"/>
                                 <ComboBoxItem Tag="it" Content="{x:Static assets:Strings.Italian}"/>
-                                <ComboBoxItem Tag="fr" Content="{x:Static assets:Strings.French}"/>
-                                <ComboBoxItem Tag="de" Content="{x:Static assets:Strings.German}"/>
-                                <ComboBoxItem Tag="el" Content="{x:Static assets:Strings.Greek}"/>
+                                <ComboBoxItem Tag="fr" Content="{x:Static assets:Strings.LanguageFrench}"/>
+                                <ComboBoxItem Tag="de" Content="{x:Static assets:Strings.LanguageGerman}"/>
+                                <ComboBoxItem Tag="el" Content="{x:Static assets:Strings.LanguageGreek}"/>
                             </ComboBox.Items>
                         </ComboBox>
                     </StackPanel>

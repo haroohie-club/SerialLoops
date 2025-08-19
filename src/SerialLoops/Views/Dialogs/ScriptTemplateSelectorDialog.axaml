@@ -22,7 +22,7 @@
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="10 30" Spacing="10">
             <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
                 <TextBox Grid.Column="0" Grid.Row="0" Width="200"
-                         Watermark="{x:Static assets:Strings.Filter_by_name}"
+                         Watermark="{x:Static assets:Strings.FilterByName}"
                          Text="{Binding Filter}"/>
                 <ScrollViewer Grid.Column="0" Grid.Row="1">
                     <ListBox Width="200" Height="330" ItemsSource="{Binding ScriptTemplates}"

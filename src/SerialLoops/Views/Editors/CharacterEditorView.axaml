@@ -32,7 +32,7 @@
 
         <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Outline_Color}"/>
         <ColorPicker Grid.Row="3" Grid.Column="1" Color="{Binding OutlineColor, Converter={StaticResource ColorConverter}}"/>
-        <CheckBox Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" Content="{x:Static assets:Strings.Has_Outline_}"
+        <CheckBox Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" Content="{x:Static assets:Strings.CharacterEditorHasOutlineLabel}"
                   IsChecked="{Binding HasOutline}"/>
 
         <Image Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Stretch="None" Margin="15"

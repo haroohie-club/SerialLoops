@@ -1227,7 +1227,7 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException(Localize("Failed to export project"), ex);
+            log.LogException(Localize("ErrorExportProjectFailed"), ex);
         }
     }
 
@@ -1273,7 +1273,7 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException(localize("Failed to import project"), ex);
+            log.LogException(localize("ErrorFailedImportingProject"), ex);
             return (null, new() { State = LoadProjectState.FAILED });
         }
     }

@@ -701,9 +701,6 @@
   <data name="AnimationExportFramesButton" xml:space="preserve">
     <value>导出帧</value>
   </data>
-  <data name="AnimationExportGifLabel" xml:space="preserve">
-    <value>导出 GIF</value>
-  </data>
   <data name="MenuExportPatch" xml:space="preserve">
     <value>导出补丁</value>
   </data>
@@ -723,343 +720,293 @@
   <data name="AnimationExportingGifProgressMessage" xml:space="preserve">
     <value>正在导出 GIF…</value>
   </data>
-  <data name="Exporting Project" xml:space="preserve">
-    <value>导出项目</value>
-  </data>
   <data name="ExtractButton" xml:space="preserve">
     <value>提取</value>
   </data>
   <data name="UiMessage128Label" xml:space="preserve">
     <value>额外项目解锁消息框</value>
   </data>
-  <data name="Fade In Percentage" xml:space="preserve">
+  <data name="ScriptParamFadeInPercentage" xml:space="preserve">
     <value>淡入百分比</value>
   </data>
-  <data name="Fade In Time (Frames)" xml:space="preserve">
+  <data name="ScriptParamFadeInTime" xml:space="preserve">
     <value>淡入时间（帧数）</value>
   </data>
-  <data name="Fade Out Percentage" xml:space="preserve">
+  <data name="ScriptParamFadeOutPercentage" xml:space="preserve">
     <value>淡出百分比</value>
   </data>
-  <data name="Fade Out Time (Frames)" xml:space="preserve">
+  <data name="ScriptParamFadeOutTime" xml:space="preserve">
     <value>淡出时间（帧数）</value>
   </data>
-  <data name="Fade Time (Frames)" xml:space="preserve">
+  <data name="ScriptParamFadeTime" xml:space="preserve">
     <value>淡入淡出时间（帧数）</value>
   </data>
-  <data name="Failed attempting to cache audio file" xml:space="preserve">
+  <data name="ErrorFailedToCacheAudioFile" xml:space="preserve">
     <value>尝试缓存音频文件失败</value>
   </data>
-  <data name="Failed converting audio file to WAV." xml:space="preserve">
+  <data name="ErrorFailedConvertingAudioToWav" xml:space="preserve">
     <value>将音频文件转换为 WAV 失败。</value>
   </data>
-  <data name="Failed copying file '{0}' to base and iterative directories at path '{1}'" xml:space="preserve">
+  <data name="ErrorFailedCopyingFile" xml:space="preserve">
     <value>将文件“{0}”复制到路径“{1}”处的基目录和迭代目录失败</value>
   </data>
-  <data name="Failed downsampling audio file." xml:space="preserve">
+  <data name="ErrorFailedDownsamplingAudio" xml:space="preserve">
     <value>音频文件下采样失败。</value>
   </data>
-  <data name="Failed encoding audio file to ADX." xml:space="preserve">
+  <data name="ErrorFailedEncodingAudioAdx" xml:space="preserve">
     <value>将音频文件编码到 ADX 失败。</value>
   </data>
-  <data name="Failed replacing animation file {0} in grp.bin with file '{1}'" xml:space="preserve">
+  <data name="ErrorFailedReplacingAnimationFile" xml:space="preserve">
     <value>将 grp.bin 中的动画文件 {0} 替换为文件“｛1｝”失败</value>
   </data>
-  <data name="Failed replacing file {0} in evt.bin with file '{1}'" xml:space="preserve">
+  <data name="ErrorFailedReplacingEvtFile" xml:space="preserve">
     <value>将 evt.bin 中的文件 {0} 替换为文件“｛1｝”失败</value>
   </data>
-  <data name="Failed replacing graphics file {0} with file '{1}'" xml:space="preserve">
+  <data name="ErrorFailedReplacingGraphicsFile" xml:space="preserve">
     <value>将图形文件 {0} 替换为文件“{1}”失败</value>
   </data>
-  <data name="Failed replacing source file {0} in dat.bin with file '{1}'" xml:space="preserve">
+  <data name="ErrorFailedReplacingDatFile" xml:space="preserve">
     <value>将 dat.bin 中的源文件 {0} 替换为文件“｛1｝”失败</value>
   </data>
-  <data name="Failed replacing source file {0} in evt.bin with file '{1}'" xml:space="preserve">
+  <data name="ErrorFailedReplacingEvtSourceFile" xml:space="preserve">
     <value>将 evt.bin 中的源文件 {0} 替换为文件“｛1｝”失败</value>
   </data>
-  <data name="Failed restoring BGM file." xml:space="preserve">
+  <data name="ErrorFailedRestoringBgmFile" xml:space="preserve">
     <value>还原 BGM 文件失败。</value>
   </data>
-  <data name="Failed to add parameters for hack file {0} in hack {1}" xml:space="preserve">
+  <data name="ErrorFailedAddingParametersToHack" xml:space="preserve">
     <value>在修改 {1} 中为修改文件 {0} 添加参数失败</value>
   </data>
-  <data name="Failed to apply the following hacks to the ROM:\n{0}\n\nPlease check the log file for more information.\n\nIn order to preserve state, no hacks were applied." xml:space="preserve">
+  <data name="ErrorFailedToApplyHacks" xml:space="preserve">
     <value>未能对 ROM 应用以下修改：\n{0}\n\n有关详细信息，请检查日志文件。\n\n为了保持当前状态，没有应用任何修改。</value>
   </data>
-  <data name="Failed to calculate graph edges!" xml:space="preserve">
+  <data name="ErrorFailedCalculatingScriptGraph" xml:space="preserve">
     <value>计算图形边界失败！</value>
   </data>
-  <data name="Failed to check for updates! (Endpoint: {0})" xml:space="preserve">
+  <data name="ErrorFailedCheckingForUpdates" xml:space="preserve">
     <value>检查更新失败！（端点：{0}）</value>
   </data>
-  <data name="Failed to clean iterative directory" xml:space="preserve">
+  <data name="ErrorFailedCleanIterativeDir" xml:space="preserve">
     <value>清理迭代目录失败</value>
   </data>
-  <data name="Failed to copy newly built archives to the iterative originals directory" xml:space="preserve">
+  <data name="ErrorFailedCopyingArchivesToIterativeDir" xml:space="preserve">
     <value>将新建的归档文件复制到迭代原始目录失败</value>
   </data>
-  <data name="Failed to create directory on specified path!" xml:space="preserve">
+  <data name="ErrorFailedCreatingDir" xml:space="preserve">
     <value>在指定路径上创建目录失败！</value>
   </data>
-  <data name="Failed to decode original file too, giving up!" xml:space="preserve">
+  <data name="ErrorFailedToDecodeOriginalAdx" xml:space="preserve">
     <value>原始文件解码也失败，放弃！</value>
   </data>
-  <data name="Failed to delete file '{0}'" xml:space="preserve">
+  <data name="ErrorFailedDeletingFile" xml:space="preserve">
     <value>删除文件“{0}”失败</value>
   </data>
-  <data name="Failed to delete files for hack '{0}' -- this hack is likely applied in the ROM base and can't be disabled." xml:space="preserve">
+  <data name="ErrorFailedDeletingHackFiles" xml:space="preserve">
     <value>删除修改“{0}”的文件失败——此修改可能应用于 ROM 库，无法禁用。</value>
   </data>
-  <data name="Failed to deserialize script template file '{0}'" xml:space="preserve">
+  <data name="ErrorFailedDeserializingScriptTemplate" xml:space="preserve">
     <value>反序列化脚本模板文件“{0}”失败</value>
     <comment>{0} is a script template file path.</comment>
   </data>
-  <data name="Failed to export background {0} to file {1}" xml:space="preserve">
+  <data name="ErrorFailedExportingBackground" xml:space="preserve">
     <value>将背景 {0} 导出到文件 {1} 失败</value>
   </data>
-  <data name="Failed to export chibi animation {0} for chibi {1} to file" xml:space="preserve">
+  <data name="ErrorFailedExportingChibiAnimation" xml:space="preserve">
     <value>将 Q 版角色 {1} 的动画 {0} 导出到文件失败</value>
   </data>
-  <data name="Failed to export eye animation {0} for sprite {1} to file" xml:space="preserve">
+  <data name="ErrorFailedExportingEyeAnimation" xml:space="preserve">
     <value>将精灵图 {1} 的眼睛动画 {0} 导出到文件失败</value>
   </data>
-  <data name="Failed to export item {0} to file {1}" xml:space="preserve">
-    <value>将项 {0} 导出到文件 {1} 失败</value>
-  </data>
-  <data name="Failed to export layout for sprite {0} to file" xml:space="preserve">
+  <data name="ErrorFailedExportingSpriteLayout" xml:space="preserve">
     <value>将精灵图 {0} 的布局导出到文件失败</value>
   </data>
-  <data name="Failed to export project" xml:space="preserve">
+  <data name="ErrorExportProjectFailed" xml:space="preserve">
     <value>导出项目失败</value>
     <comment>Failed to export the Serial Loops project file to an slzip, basically</comment>
   </data>
-  <data name="Failed to export system texture {0} to file {1}" xml:space="preserve">
+  <data name="ErrorFailedExportingSysTex" xml:space="preserve">
     <value>将系统纹理 {0} 导出到文件 {1} 失败</value>
   </data>
-  <data name="Failed to find character item -- have you saved all of your changes to character names?" xml:space="preserve">
-    <value>找不到角色项——是否已保存对角色名称的所有更改？</value>
-  </data>
-  <data name="Failed to generate script template!" xml:space="preserve">
-    <value>生成脚本模板失败！</value>
-  </data>
-  <data name="Failed to import project" xml:space="preserve">
+  <data name="ErrorFailedImportingProject" xml:space="preserve">
     <value>导入项目失败</value>
     <comment>Failed to import slzip into Serial Loops project</comment>
   </data>
-  <data name="Failed to insert ARM9 assembly hacks" xml:space="preserve">
+  <data name="ErrorFailedInsertingHacks" xml:space="preserve">
     <value>插入 ARM9 程序集修改失败</value>
   </data>
-  <data name="Failed to load BGM file: file invalid." xml:space="preserve">
+  <data name="ErrorInvalidBgmFile" xml:space="preserve">
     <value>加载 BGM 文件失败：文件无效。</value>
   </data>
-  <data name="Failed to load BGM file: file not found." xml:space="preserve">
+  <data name="ErrorBgmFileNotFound" xml:space="preserve">
     <value>加载 BGM 文件失败：找不到文件。</value>
   </data>
-  <data name="Failed to load cached data" xml:space="preserve">
+  <data name="ErrorFailedLoadingCachedData" xml:space="preserve">
     <value>加载缓存数据失败</value>
   </data>
-  <data name="Failed to load character progress voice for {0}." xml:space="preserve">
+  <data name="ErrorFailedLoadingCharacterProgressVoice" xml:space="preserve">
     <value>加载 {0} 的角色进度语音失败。</value>
   </data>
-  <data name="Failed to load editor controls!" xml:space="preserve">
-    <value>加载编辑器控件失败！</value>
-  </data>
-  <data name="Failed to load voice file: file invalid." xml:space="preserve">
+  <data name="ErrorInvalidVoiceFile" xml:space="preserve">
     <value>加载语音文件失败：文件无效。</value>
   </data>
-  <data name="Failed to load voice file: file not found." xml:space="preserve">
+  <data name="ErrorVoiceFileNotFound" xml:space="preserve">
     <value>加载语音文件失败：找不到文件。</value>
   </data>
-  <data name="Failed to parse script parameter {0} of type {1} with parameter '{2}'!" xml:space="preserve">
+  <data name="ErrorFailedParsingScriptParameter" xml:space="preserve">
     <value>使用参数“{2}”解析类型为 {1} 的脚本参数 {0} 失败！</value>
   </data>
-  <data name="Failed to read ARM9 from '{0}'" xml:space="preserve">
+  <data name="ErrorFailedReadingARM9" xml:space="preserve">
     <value>从“{0}”读取 ARM9 失败</value>
   </data>
-  <data name="Failed to read BGM file; falling back to original..." xml:space="preserve">
+  <data name="ErrorFailedReadingBgmFile" xml:space="preserve">
     <value>读取 BGM 文件失败；回退到原始文件…</value>
   </data>
-  <data name="Failed to replace background {0} with file {1}" xml:space="preserve">
+  <data name="ErrorFailedReplacingBackground" xml:space="preserve">
     <value>用文件 {1} 替换背景 {0} 失败</value>
   </data>
-  <data name="Failed to replace item {0} with file {1}" xml:space="preserve">
-    <value>用文件 {1} 替换项 {0} 失败</value>
-  </data>
-  <data name="Failed to replace system texture {0} with file {1}" xml:space="preserve">
+  <data name="ErrorFailedReplacingSysTex" xml:space="preserve">
     <value>用文件 {1} 替换系统纹理 {0} 失败</value>
   </data>
-  <data name="Failed to save Chokuretsu save file!" xml:space="preserve">
+  <data name="ErrorFailedSavingChokuSave" xml:space="preserve">
     <value>保存《串联》存档文件失败！</value>
   </data>
-  <data name="Failed to set script command list panel section content." xml:space="preserve">
-    <value>设置脚本命令列表面板部分内容失败。</value>
-  </data>
-  <data name="Failed to set viewr contents for script command list panel." xml:space="preserve">
-    <value>为脚本命令列表面板设置查看器内容失败。</value>
-  </data>
-  <data name="Failed to unpack ROM" xml:space="preserve">
+  <data name="ErrorFailedUnpackingRom" xml:space="preserve">
     <value>解压缩 ROM失败</value>
   </data>
-  <data name="Failed to update preview!" xml:space="preserve">
+  <data name="ErrorFailedUpdatingPreview" xml:space="preserve">
     <value>更新预览失败！</value>
   </data>
-  <data name="Failed to write ARM9 to disk" xml:space="preserve">
+  <data name="ErrorFailedWritingArm9" xml:space="preserve">
     <value>将 ARM9 写入磁盘失败</value>
   </data>
-  <data name="Failed to write include files to disk." xml:space="preserve">
+  <data name="ErrorFailedWritingIncludeFiles" xml:space="preserve">
     <value>将包含文件写入磁盘失败。</value>
   </data>
-  <data name="Failed to write NitroPacker NDS project file to disk" xml:space="preserve">
+  <data name="ErrorFailedWritingNPProjectFile" xml:space="preserve">
     <value>将 NitroPacker NDS 项目文件写入磁盘失败</value>
   </data>
-  <data name="Fast Forward" xml:space="preserve">
+  <data name="SaveEditorFastForwardLabel" xml:space="preserve">
     <value>快进</value>
   </data>
-  <data name="File" xml:space="preserve">
-    <value>文件</value>
-    <comment>Please make this the same as &amp;File, just without the ampersand</comment>
-  </data>
-  <data name="File {0}" xml:space="preserve">
+  <data name="SaveEditorSlotName" xml:space="preserve">
     <value>文件 {0}</value>
   </data>
-  <data name="Filter" xml:space="preserve">
+  <data name="SaveEditorFilterFlagsButton" xml:space="preserve">
     <value>过滤器</value>
   </data>
-  <data name="Filter by Item" xml:space="preserve">
+  <data name="SearchDialogFilterByItem" xml:space="preserve">
     <value>按项目筛选</value>
   </data>
-  <data name="Filter by name" xml:space="preserve">
+  <data name="FilterByName" xml:space="preserve">
     <value>按名称筛选</value>
   </data>
-  <data name="Find in Project" xml:space="preserve">
-    <value>在项目中查找</value>
-  </data>
-  <data name="Find Orphaned Items..." xml:space="preserve">
-    <value>查找孤立项目…</value>
-  </data>
-  <data name="Find References..." xml:space="preserve">
+  <data name="ItemsPanelContextFindItems" xml:space="preserve">
     <value>查找引用…</value>
   </data>
-  <data name="Finding orphaned items" xml:space="preserve">
-    <value>查找孤立项目</value>
-  </data>
-  <data name="Finding orphaned items..." xml:space="preserve">
-    <value>正在查找孤立项目…</value>
-  </data>
-  <data name="FLAC files" xml:space="preserve">
+  <data name="FiletypeFlac" xml:space="preserve">
     <value>FLAC 文件</value>
   </data>
-  <data name="Flag" xml:space="preserve">
+  <data name="ScriptParamFlag" xml:space="preserve">
     <value>旗标</value>
   </data>
-  <data name="Flag Description" xml:space="preserve">
+  <data name="SaveEditorFlagDescriptionLabel" xml:space="preserve">
     <value>旗标说明</value>
   </data>
-  <data name="Flag: {0}" xml:space="preserve">
+  <data name="EditorFlagIdLabel" xml:space="preserve">
     <value>旗标：{0}</value>
     <comment>{0} is the ID of the flag</comment>
   </data>
-  <data name="Flags" xml:space="preserve">
+  <data name="SaveSlotEditorFlagsHeader" xml:space="preserve">
     <value>旗标</value>
   </data>
-  <data name="Frames" xml:space="preserve">
+  <data name="ChibiEditorFramesLabel" xml:space="preserve">
     <value>帧</value>
   </data>
-  <data name="French" xml:space="preserve">
+  <data name="LanguageFrench" xml:space="preserve">
     <value>法语</value>
   </data>
-  <data name="Future Description" xml:space="preserve">
+  <data name="GroupSelectionEditorFutureDescription" xml:space="preserve">
     <value>未来描述</value>
   </data>
-  <data name="Game Banner" xml:space="preserve">
+  <data name="ProjectSettingsGameBanner" xml:space="preserve">
     <value>游戏横幅</value>
   </data>
-  <data name="Game banner can only contain up to three lines." xml:space="preserve">
+  <data name="ProjectSettingsGameBannerNameLimitMessages" xml:space="preserve">
     <value>游戏横幅最多只能包含三行。</value>
   </data>
-  <data name="Game Investigation Phase (Options)" xml:space="preserve">
+  <data name="UiMessage65Label" xml:space="preserve">
     <value>游戏调查阶段（选项）</value>
   </data>
-  <data name="Game Puzzle Phase (Options)" xml:space="preserve">
+  <data name="UiMessage66Label" xml:space="preserve">
     <value>游戏解谜阶段（选项）</value>
   </data>
-  <data name="Game saved message box" xml:space="preserve">
+  <data name="UiMessage42Label" xml:space="preserve">
     <value>游戏保存消息框</value>
   </data>
-  <data name="Game Title" xml:space="preserve">
+  <data name="ProjectSettingsGameTitleLabel" xml:space="preserve">
     <value>游戏标题</value>
   </data>
-  <data name="gcc exited with code {0}" xml:space="preserve">
-    <value>gcc 退出，代码为 {0}</value>
-  </data>
-  <data name="gcc not found at '{0}'" xml:space="preserve">
-    <value>在“{0}”处找不到gcc</value>
-  </data>
-  <data name="Generate Template" xml:space="preserve">
+  <data name="ScriptTemplateGenerateLabel" xml:space="preserve">
     <value>生成模板</value>
     <comment>Template in question is a script template</comment>
   </data>
-  <data name="German" xml:space="preserve">
+  <data name="LanguageGerman" xml:space="preserve">
     <value>德语</value>
   </data>
-  <data name="GIF exported!" xml:space="preserve">
+  <data name="AnimationExportedGifSuccessMessage" xml:space="preserve">
     <value>GIF 已导出！</value>
   </data>
-  <data name="GIF file" xml:space="preserve">
+  <data name="FiletypeGif" xml:space="preserve">
     <value>GIF 文件</value>
   </data>
-  <data name="Greek" xml:space="preserve">
+  <data name="LanguageGreek" xml:space="preserve">
     <value>希腊语</value>
   </data>
-  <data name="Group selection impossible selection made ticker tape" xml:space="preserve">
+  <data name="UiMessage111Label" xml:space="preserve">
     <value>分组选择不合理滚动条</value>
   </data>
-  <data name="Groups" xml:space="preserve">
+  <data name="SfxEditorGroupsLabel" xml:space="preserve">
     <value>分组</value>
     <comment>As in "Sound Groups"</comment>
   </data>
-  <data name="Groups: {0}" xml:space="preserve">
+  <data name="SfxEditorGroupsList" xml:space="preserve">
     <value>分组：{0}</value>
     <comment>As in "Sound Groups"</comment>
   </data>
   <data name="Group_Selection" xml:space="preserve">
     <value>分组选择</value>
   </data>
-  <data name="Group_Selections" xml:space="preserve">
+  <data name="ItemsPanelGroupSelections" xml:space="preserve">
     <value>分组选择</value>
   </data>
-  <data name="Haroohie" xml:space="preserve">
+  <data name="ProjectRenameWatermark" xml:space="preserve">
     <value>Haroohie</value>
   </data>
-  <data name="Haruhi Present" xml:space="preserve">
+  <data name="GroupSelectionEditorHaruhiPresentLabel" xml:space="preserve">
     <value>春日在场</value>
   </data>
-  <data name="Haruhi Routes" xml:space="preserve">
+  <data name="PuzzleEditorHaruhiRoutes" xml:space="preserve">
     <value>春日路线</value>
   </data>
-  <data name="Haruhi Suzumiya event unlocked message box" xml:space="preserve">
+  <data name="UiMessage116Label" xml:space="preserve">
     <value>凉宫春日事件解锁消息框</value>
   </data>
-  <data name="Haruhi Topic" xml:space="preserve">
+  <data name="UiMessage03Label" xml:space="preserve">
     <value>春日话题</value>
   </data>
-  <data name="Has Outline?" xml:space="preserve">
+  <data name="CharacterEditorHasOutlineLabel" xml:space="preserve">
     <value>有大纲吗？</value>
   </data>
-  <data name="Hidden ID" xml:space="preserve">
+  <data name="TopicEditorHiddenID" xml:space="preserve">
     <value>隐藏 ID</value>
   </data>
-  <data name="Hide Unset Flags" xml:space="preserve">
+  <data name="SaveEditorHideUnsetFlagsLabel" xml:space="preserve">
     <value>隐藏未设置的旗标</value>
   </data>
-  <data name="Highlight Space {0}" xml:space="preserve">
-    <value>突出显示格 {0}</value>
-    <comment>As on a chessboard</comment>
-  </data>
-  <data name="Hold Time (Frames)" xml:space="preserve">
+  <data name="ScriptParamHoldTime" xml:space="preserve">
     <value>保持时间（帧数）</value>
   </data>
-  <data name="Horizontal Intensity" xml:space="preserve">
+  <data name="ScriptParamHorizontalIntensity" xml:space="preserve">
     <value>水平强度</value>
   </data>
   <data name="ID" xml:space="preserve">
@@ -2365,5 +2312,8 @@
   </data>
   <data name="LanguageChineseSimplified" xml:space="preserve">
     <value>简体中文</value>
+  </data>
+  <data name="AnimationExportGifButton" xml:space="preserve">
+    <value>导出 GIF</value>
   </data>
 </root>

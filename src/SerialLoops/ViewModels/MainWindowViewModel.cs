@@ -352,7 +352,7 @@ public partial class MainWindowViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            Log.LogException(Strings.Failed_to_load_cached_data, ex);
+            Log.LogException(Strings.ErrorFailedLoadingCachedData, ex);
             ProjectsCache.RecentWorkspaces.Remove(OpenProject.ProjectFile);
             ProjectsCache.RecentProjects.Remove(OpenProject.ProjectFile);
             ProjectsCache.Save(Log);
@@ -501,7 +501,7 @@ public partial class MainWindowViewModel : ViewModelBase
             using FileStream fs = File.Create(hackSaveFile);
             ZipFile.CreateFromDirectory(tempDir, fs);
 
-            await Window.ShowMessageBoxAsync(Strings.Hack_Created_Successfully_, Strings.The_hack_file_has_been_successfully_created__To_import_it__open_the_ASM_hacks_dialog_and_select__Import_Hack__,
+            await Window.ShowMessageBoxAsync(Strings.AsmHackCreatedSuccessfullyTitle, Strings.The_hack_file_has_been_successfully_created__To_import_it__open_the_ASM_hacks_dialog_and_select__Import_Hack__,
                 ButtonEnum.Ok, Icon.Success, Log);
         }
     }
@@ -1224,7 +1224,7 @@ public partial class MainWindowViewModel : ViewModelBase
                     }
                     catch (Exception ex)
                     {
-                        Log.LogException(Strings.Failed_to_save_Chokuretsu_save_file_, ex);
+                        Log.LogException(Strings.ErrorFailedSavingChokuSave, ex);
                     }
                     break;
                 default:
