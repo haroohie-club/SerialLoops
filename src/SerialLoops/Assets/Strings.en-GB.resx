@@ -534,145 +534,127 @@
   <data name="ScriptParamDisableLipFlap" xml:space="preserve">
     <value>Disable Lip Flap</value>
   </data>
-  <data name="Display Flag 1" xml:space="preserve">
-    <value>Display Flag 1</value>
-  </data>
-  <data name="Display Flag 2" xml:space="preserve">
-    <value>Display Flag 2</value>
-  </data>
-  <data name="Display Flag 3" xml:space="preserve">
-    <value>Display Flag 3</value>
-  </data>
-  <data name="Display Flag 4" xml:space="preserve">
-    <value>Display Flag 4</value>
-  </data>
-  <data name="Display from Bottom" xml:space="preserve">
+  <data name="ScriptParamDisplayFromBottom" xml:space="preserve">
     <value>Display from Bottom</value>
   </data>
-  <data name="Display?" xml:space="preserve">
+  <data name="ScriptParamDisplay" xml:space="preserve">
     <value>Display?</value>
   </data>
-  <data name="Don't Clear Text" xml:space="preserve">
+  <data name="ScriptParamDontClearText" xml:space="preserve">
     <value>Don't Clear Text</value>
   </data>
-  <data name="Download from GitHub" xml:space="preserve">
+  <data name="UpdaterDownloadFromGitHubLabel" xml:space="preserve">
     <value>Download from GitHub</value>
   </data>
-  <data name="Download release from GitHub" xml:space="preserve">
+  <data name="UpdaterDownloadReleaseFromGitHubTitle" xml:space="preserve">
     <value>Download release from GitHub</value>
   </data>
-  <data name="Downsampling..." xml:space="preserve">
+  <data name="BgmItemDownsamplingProgressMessage" xml:space="preserve">
     <value>Downsampling…</value>
   </data>
-  <data name="Draw Pathing Map" xml:space="preserve">
+  <data name="MapEditorDrawPathingMapLabel" xml:space="preserve">
     <value>Draw Pathing Map</value>
   </data>
-  <data name="Draw Starting Point" xml:space="preserve">
+  <data name="MapEditorDrawStartingPointLabel" xml:space="preserve">
     <value>Draw Starting Point</value>
   </data>
-  <data name="Drawing bottom screen texture..." xml:space="preserve">
+  <data name="BgItemBottomScreenProgressMessage" xml:space="preserve">
     <value>Drawing bottom screen texture…</value>
   </data>
-  <data name="Drawing textures..." xml:space="preserve">
+  <data name="BgItemDrawingTexturesProgressMessage" xml:space="preserve">
     <value>Drawing textures…</value>
   </data>
-  <data name="Drawing top screen tiles..." xml:space="preserve">
+  <data name="BgEditorTopScreenProgressMessage" xml:space="preserve">
     <value>Drawing top screen tiles…</value>
   </data>
-  <data name="Duration (Frames)" xml:space="preserve">
+  <data name="ScriptParamDuration" xml:space="preserve">
     <value>Duration (Frames)</value>
   </data>
-  <data name="Edit Save File" xml:space="preserve">
+  <data name="MenuEditSaveFile" xml:space="preserve">
     <value>Edit Save File</value>
   </data>
-  <data name="Edit Save File - {0} - {1}" xml:space="preserve">
+  <data name="SaveEditorSaveSlotEditTitle" xml:space="preserve">
     <value>Edit Save File - {0}</value>
   </data>
-  <data name="Edit Save File..." xml:space="preserve">
+  <data name="MenuEditSaveFileDetails" xml:space="preserve">
     <value>Edit Save File…</value>
   </data>
-  <data name="Edit Subtitle" xml:space="preserve">
+  <data name="VoicedLineEditorEditSubtitleHeader" xml:space="preserve">
     <value>Edit Subtitle</value>
   </data>
-  <data name="Edit Tutorial Mappings" xml:space="preserve">
+  <data name="EditTutorialMappingsTitle" xml:space="preserve">
     <value>Edit Tutorial Mappings</value>
   </data>
-  <data name="Edit Tutorial Mappings..." xml:space="preserve">
+  <data name="MenuEditTutorialMappings" xml:space="preserve">
     <value>Edit Tutorial Mappings…</value>
   </data>
-  <data name="Edit UI Text" xml:space="preserve">
+  <data name="EditUITextTitle" xml:space="preserve">
     <value>Edit UI Text</value>
   </data>
-  <data name="Edit UI Text..." xml:space="preserve">
+  <data name="MenuEditUIText" xml:space="preserve">
     <value>Edit UI Text…</value>
   </data>
-  <data name="Editor Tabs not provided to project creation dialog" xml:space="preserve">
-    <value>Editor Tabs not provided to project creation dialog</value>
-  </data>
-  <data name="Emote" xml:space="preserve">
+  <data name="ScriptParamEmote" xml:space="preserve">
     <value>Emote</value>
   </data>
-  <data name="Emulator Path" xml:space="preserve">
+  <data name="PreferencesEmulatorPathLabel" xml:space="preserve">
     <value>Emulator Path</value>
   </data>
-  <data name="Encoding" xml:space="preserve">
+  <data name="BgmItemEncodingProgressMessage" xml:space="preserve">
     <value>Encoding</value>
   </data>
-  <data name="End" xml:space="preserve">
+  <data name="EndPosition" xml:space="preserve">
     <value>End</value>
   </data>
-  <data name="End Script Section" xml:space="preserve">
+  <data name="ScriptParamEndScriptSection" xml:space="preserve">
     <value>End Script Section</value>
   </data>
-  <data name="English" xml:space="preserve">
+  <data name="LanguageEnglish" xml:space="preserve">
     <value>English</value>
   </data>
-  <data name="Enter subtitle text..." xml:space="preserve">
+  <data name="VoicedLineEditorSubtitleWatermark" xml:space="preserve">
     <value>Enter subtitle text…</value>
   </data>
-  <data name="Enter/Exit" xml:space="preserve">
+  <data name="ScriptParamChibiEnterExit" xml:space="preserve">
     <value>Enter/Exit</value>
   </data>
-  <data name="Episode 1 ticker tape" xml:space="preserve">
+  <data name="UiMessage22Label" xml:space="preserve">
     <value>Episode 1 ticker tape</value>
   </data>
-  <data name="Episode 1 title" xml:space="preserve">
+  <data name="UiMessage17Label" xml:space="preserve">
     <value>Episode 1 title</value>
   </data>
-  <data name="Episode 2 ticker tape" xml:space="preserve">
+  <data name="UiMessage23Label" xml:space="preserve">
     <value>Episode 2 ticker tape</value>
   </data>
-  <data name="Episode 2 title" xml:space="preserve">
+  <data name="UiMessage18Lbael" xml:space="preserve">
     <value>Episode 2 title</value>
   </data>
-  <data name="Episode 3 ticker tape" xml:space="preserve">
+  <data name="UiMessage24Label" xml:space="preserve">
     <value>Episode 3 ticker tape</value>
   </data>
-  <data name="Episode 3 title" xml:space="preserve">
+  <data name="UiMessage19Label" xml:space="preserve">
     <value>Episode 3 title</value>
   </data>
-  <data name="Episode 4 ticker tape" xml:space="preserve">
+  <data name="UiMessage25Label" xml:space="preserve">
     <value>Episode 4 ticker tape</value>
   </data>
-  <data name="Episode 4 title" xml:space="preserve">
+  <data name="UiMessage20Label" xml:space="preserve">
     <value>Episode 4 title</value>
   </data>
-  <data name="Episode 5 ticker tape" xml:space="preserve">
+  <data name="UiMessage26Label" xml:space="preserve">
     <value>Episode 5 ticker tape</value>
   </data>
-  <data name="Episode 5 title" xml:space="preserve">
+  <data name="UiMessage21Label" xml:space="preserve">
     <value>Episode 5 title</value>
   </data>
-  <data name="Episode Group" xml:space="preserve">
+  <data name="TopicEditorEpisodeGroup" xml:space="preserve">
     <value>Episode Group</value>
   </data>
-  <data name="Episode Header" xml:space="preserve">
+  <data name="ScriptParamEpisodeHeader" xml:space="preserve">
     <value>Episode Header</value>
   </data>
-  <data name="Episode:" xml:space="preserve">
-    <value>Episode: </value>
-  </data>
-  <data name="EPISODE: {0}" xml:space="preserve">
+  <data name="SaveFilePreviewText" xml:space="preserve">
     <value>EPISODE: {0}</value>
     <comment>Should match the game's translation for this (e.g. for Japanese this should still be EPISODE: {0})</comment>
   </data>
@@ -682,58 +664,43 @@
   <data name="Episode_Unique" xml:space="preserve">
     <value>Episode Unique</value>
   </data>
-  <data name="Erase data options ticker tape" xml:space="preserve">
+  <data name="UiMessage73Label" xml:space="preserve">
     <value>Erase data options ticker tape</value>
   </data>
-  <data name="Erase data options title" xml:space="preserve">
+  <data name="UiMessage68Label" xml:space="preserve">
     <value>Erase data options title</value>
   </data>
-  <data name="Error pruning labels!" xml:space="preserve">
+  <data name="ErrorScriptItemPruningLabels" xml:space="preserve">
     <value>Error pruning labels!</value>
   </data>
-  <data name="Error reading save file." xml:space="preserve">
-    <value>Error reading save file.</value>
-  </data>
-  <data name="Error: duplicate hack detected! A file with the same name as a file in this hack has already been imported." xml:space="preserve">
+  <data name="ErrorDuplicateHack" xml:space="preserve">
     <value>Error: duplicate hack detected! A file with the same name as a file in this hack has already been imported.</value>
   </data>
-  <data name="Error: duplicate hack detected! A hack with the same name has already been imported." xml:space="preserve">
-    <value>Error: duplicate hack detected! A hack with the same name has already been imported.</value>
-  </data>
-  <data name="Exception occurred while parsing projects_cache.json!" xml:space="preserve">
-    <value>Exception occurred while parsing projects_cache.json!</value>
-  </data>
-  <data name="Export" xml:space="preserve">
+  <data name="ProjectExportButtonLabel" xml:space="preserve">
     <value>Export</value>
   </data>
-  <data name="Export Frames" xml:space="preserve">
+  <data name="AnimationExportFramesButton" xml:space="preserve">
     <value>Export Frames</value>
   </data>
-  <data name="Export GIF" xml:space="preserve">
+  <data name="AnimationExportGifLabel" xml:space="preserve">
     <value>Export GIF</value>
   </data>
-  <data name="Export Item Names" xml:space="preserve">
-    <value>Export Item Names</value>
-  </data>
-  <data name="Export Patch" xml:space="preserve">
+  <data name="MenuExportPatch" xml:space="preserve">
     <value>Export Patch</value>
   </data>
-  <data name="Export SFX" xml:space="preserve">
+  <data name="SfxEditorExportButton" xml:space="preserve">
     <value>Export SFX</value>
   </data>
-  <data name="Export Sprites" xml:space="preserve">
-    <value>Export Sprites</value>
-  </data>
-  <data name="Exporting BGM" xml:space="preserve">
+  <data name="BgmEditorExportingProgressMessage" xml:space="preserve">
     <value>Exporting BGM</value>
   </data>
-  <data name="Exporting GIF..." xml:space="preserve">
+  <data name="AnimationExportingGifProgressMessage" xml:space="preserve">
     <value>Exporting GIF…</value>
   </data>
-  <data name="Extract" xml:space="preserve">
+  <data name="ExtractButton" xml:space="preserve">
     <value>Extract</value>
   </data>
-  <data name="Extras unlocked message box" xml:space="preserve">
+  <data name="UiMessage128Label" xml:space="preserve">
     <value>Extras unlocked message box</value>
   </data>
   <data name="Fade In Percentage" xml:space="preserve">
@@ -2289,9 +2256,6 @@
   <data name="The base ROM hash does not match the expected hash! Please check the \&quot;Ignore Hash\&quot; checkbox if you wish to override this." xml:space="preserve">
     <value>The base ROM hash does not match the expected hash! Please check the \"Ignore Hash\" checkbox if you wish to override this.</value>
   </data>
-  <data name="Export Project..." xml:space="preserve">
-    <value>Export Project...</value>
-  </data>
   <data name="Import Project..." xml:space="preserve">
     <value>Import Project...</value>
   </data>
@@ -2321,7 +2285,7 @@
     <value>Serial Loops Exported Project</value>
     <comment>Refers to the "slzip" archive that is the exported project format</comment>
   </data>
-  <data name="Exception occurred while parsing config.json!" xml:space="preserve">
+  <data name="ErrorParsingConfigJson" xml:space="preserve">
     <value>Exception occurred while parsing config.json!</value>
   </data>
   <data name="No ROM Hash Recorded!" xml:space="preserve">
@@ -2352,7 +2316,7 @@
     <value>{0} ({1}) Seen</value>
     <comment>{0} is the internal name and {1} is the display name of a CG that has been encountered during the game</comment>
   </data>
-  <data name="Export Project" xml:space="preserve">
+  <data name="MenuExportProject" xml:space="preserve">
     <value>Export Project</value>
   </data>
   <data name="Template Name" xml:space="preserve">
@@ -2362,9 +2326,6 @@
   <data name="Failed to deserialize script template file '{0}'" xml:space="preserve">
     <value>Failed to deserialise script template file '{0}'</value>
     <comment>{0} is a script template file path.</comment>
-  </data>
-  <data name="Exporting Project" xml:space="preserve">
-    <value>Exporting Project</value>
   </data>
   <data name="Script {0} Section {1} Completed (F{2:D2})" xml:space="preserve">
     <value>Script {0} Section {1} Completed</value>
@@ -2376,11 +2337,11 @@
   <data name="Importing Project" xml:space="preserve">
     <value>Importing Project</value>
   </data>
-  <data name="Exported Project" xml:space="preserve">
+  <data name="FiletypeExportedProject" xml:space="preserve">
     <value>Exported Project</value>
     <comment>Past tense verb as in "project has been exported"</comment>
   </data>
-  <data name="Expected ROM SHA-1 Hash: {0}" xml:space="preserve">
+  <data name="ExpectedRomHashLabel" xml:space="preserve">
     <value>Expected ROM SHA-1 Hash: {0}</value>
     <comment>{0} is the SHA-1 hash of the ROM that is expected when importing a project</comment>
   </data>

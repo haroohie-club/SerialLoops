@@ -14,7 +14,7 @@
         x:DataType="vm:EditTutorialMappingsDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.EditTutorialMappingsDialog"
         Icon="/Assets/serial-loops.ico"
-        Title="{x:Static assets:Strings.Edit_Tutorial_Mappings}"
+        Title="{x:Static assets:Strings.EditTutorialMappingsTitle}"
         Name="Dialog">
     <Panel>
         <controls:AcrylicBorderHandler/>

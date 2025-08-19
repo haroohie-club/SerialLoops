@@ -80,7 +80,7 @@ public partial class MainWindow : Window
                 new NativeMenuItemSeparator(),
                 new NativeMenuItem
                 {
-                    Header = Strings.Edit_Save_File,
+                    Header = Strings.MenuEditSaveFile,
                     Icon = ControlGenerator.GetIcon("Edit_Save", ViewModel.Log),
                     Command = ViewModel.EditSaveCommand,
                 },

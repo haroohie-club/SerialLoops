@@ -237,7 +237,7 @@ public partial class CharacterSpriteEditorViewModel : EditorViewModel
                 }
             }
 
-            ProgressDialogViewModel tracker = new(Strings.Exporting_GIF___);
+            ProgressDialogViewModel tracker = new(Strings.AnimationExportingGifProgressMessage);
             tracker.InitializeTasks(() => frames.SaveGif(saveFile.Path.LocalPath, tracker),
                 async void () => await Window.Window.ShowMessageBoxAsync(Strings.Success_, Strings.GIF_exported_, MsBox.Avalonia.Enums.ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Success, _log));
             await new ProgressDialog { DataContext = tracker }.ShowDialog(Window.Window);

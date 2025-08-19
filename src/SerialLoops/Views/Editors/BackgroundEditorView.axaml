@@ -20,7 +20,7 @@
                      VerticalAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Spacing="3">
-                <Button Content="{x:Static assets:Strings.Export}" Command="{Binding ExportCommand}"/>
+                <Button Content="{x:Static assets:Strings.ExportButtonLabel}" Command="{Binding ExportCommand}"/>
                 <Button Content="{x:Static assets:Strings.Replace}" Command="{Binding ReplaceCommand}"/>
             </StackPanel>
             <StackPanel Name="CgPanel" IsVisible="{Binding ShowExtras}" Orientation="Vertical"

@@ -53,8 +53,8 @@
         </Canvas>
 
         <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Vertical" Spacing="3" VerticalAlignment="Center">
-            <Button Content="{x:Static assets:Strings.Export_Layout_Preview}" Command="{Binding ExportLayoutCommand}"/>
-            <Button Content="{x:Static assets:Strings.Export_Source_Preview}" Command="{Binding ExportSourceCommand}"
+            <Button Content="{x:Static assets:Strings.LayoutEditorExportPreviewButton}" Command="{Binding ExportLayoutCommand}"/>
+            <Button Content="{x:Static assets:Strings.LayoutEditorExportSourcePreviewButton}" Command="{Binding ExportSourceCommand}"
                     IsEnabled="{Binding SelectedLayoutEntry, Converter={x:Static ObjectConverters.IsNotNull}}"/>
         </StackPanel>
 

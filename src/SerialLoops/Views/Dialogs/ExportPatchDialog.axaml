@@ -13,7 +13,7 @@
         Icon="avares://SerialLoops/Assets/serial-loops.ico"
         x:DataType="vm:ExportPatchDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.ExportPatchDialog"
-        Title="{x:Static assets:Strings.Export_Patch}"
+        Title="{x:Static assets:Strings.MenuExportPatch}"
         Name="Dialog">
     <Panel>
         <controls:AcrylicBorderHandler/>
@@ -42,7 +42,7 @@
             <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
                 <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
                         CommandParameter="{Binding #Dialog}" IsCancel="True"/>
-                <Button Content="{x:Static assets:Strings.Export}" Command="{Binding CreateCommand}"
+                <Button Content="{x:Static assets:Strings.ExportButtonLabel}" Command="{Binding CreateCommand}"
                         CommandParameter="{Binding #Dialog}" IsDefault="True"/>
             </StackPanel>
         </StackPanel>

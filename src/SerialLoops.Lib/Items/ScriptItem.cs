@@ -59,7 +59,7 @@ public class ScriptItem : Item
         catch (Exception ex)
         {
             log.LogException(
-                string.Format(project.Localize("Error getting script command tree for script {0} ({1}): {2} {3}"),
+                string.Format(project.Localize("ErrorScriptCommandTree"),
                     DisplayName, Name, currentCommand?.Command.Mnemonic ?? "NULL_COMMAND", string.Join(", ", currentCommand?.Parameters ?? [])), ex);
             return null;
         }
@@ -1144,7 +1144,7 @@ public class ScriptItem : Item
                     SKBitmap dualScreenBg = preview.Background.GetBackground();
                     if (preview.BgScrollCommand is not null &&
                         ((BgScrollDirectionScriptParameter)preview.BgScrollCommand.Parameters[0]).ScrollDirection ==
-                        BgScrollDirectionScriptParameter.BgScrollDirection.DOWN)
+                        BgScrollDirectionScriptParameter.BgScrollDirection.BgScrollDown)
                     {
                         canvas.DrawBitmap(dualScreenBg,
                             new(0, preview.Background.Graphic2.Height - 192, 256,
@@ -1167,7 +1167,7 @@ public class ScriptItem : Item
                     if (preview.BgPositionBool || (preview.BgScrollCommand is not null &&
                                                    ((BgScrollDirectionScriptParameter)preview.BgScrollCommand
                                                        .Parameters[0]).ScrollDirection ==
-                                                   BgScrollDirectionScriptParameter.BgScrollDirection.DOWN))
+                                                   BgScrollDirectionScriptParameter.BgScrollDirection.BgScrollDown))
                     {
                         SKBitmap bgBitmap = preview.Background.GetBackground();
                         canvas.DrawBitmap(bgBitmap,
@@ -1184,7 +1184,7 @@ public class ScriptItem : Item
                 case BgType.TEX_CG_WIDE:
                     if (preview.BgScrollCommand is not null &&
                         ((BgScrollDirectionScriptParameter)preview.BgScrollCommand.Parameters[0]).ScrollDirection ==
-                        BgScrollDirectionScriptParameter.BgScrollDirection.RIGHT)
+                        BgScrollDirectionScriptParameter.BgScrollDirection.BgScrollRight)
                     {
                         SKBitmap bgBitmap = preview.Background.GetBackground();
                         canvas.DrawBitmap(bgBitmap, new(bgBitmap.Width - 256, 0, bgBitmap.Width, 192),
@@ -1328,11 +1328,11 @@ public class ScriptItem : Item
             }
         }
 
-            if (preview.HaruhiMeterVisible)
-            {
-                SKBitmap haruhiMeterBitmap = ((SystemTextureItem)project.Items.First(i => i.Name == "SYSTEX_SYS_CMN_B14")).GetTexture();
-                canvas.DrawBitmap(haruhiMeterBitmap, 0, 192);
-            }
+        if (preview.HaruhiMeterVisible)
+        {
+            SKBitmap haruhiMeterBitmap = ((SystemTextureItem)project.Items.First(i => i.Name == "SYSTEX_SYS_CMN_B14")).GetTexture();
+            canvas.DrawBitmap(haruhiMeterBitmap, 0, 192);
+        }
 
         canvas.Flush();
         return (previewBitmap, null);
@@ -1383,7 +1383,7 @@ public class ScriptItem : Item
             }
             catch (Exception ex)
             {
-                log.LogException("Error pruning labels!", ex);
+                log.LogException(_localize("ErrorScriptItemPruningLabels"), ex);
                 log.LogWarning($"Script: {Name}, DisplayName: {DisplayName}");
             }
         }

@@ -121,7 +121,7 @@ public class BackgroundMusicItem : Item, ISoundItem
         }
         if (audio.WaveFormat.SampleRate > SoundItem.MAX_SAMPLERATE)
         {
-            tracker.Focus("Downsampling...", 1);
+            tracker.Focus(project.Localize("BgmItemDownsamplingProgressMessage"), 1);
             string newAudioFile = string.Empty;
             try
             {
@@ -135,7 +135,7 @@ public class BackgroundMusicItem : Item, ISoundItem
                 return;
             }
             tracker.Finished++;
-            tracker.Focus("Encoding", 1);
+            tracker.Focus(project.Localize("BgmItemEncodingProgressMessage"), 1);
             try
             {
                 log.Log($"Encoding audio to ADX...");
@@ -151,7 +151,7 @@ public class BackgroundMusicItem : Item, ISoundItem
         }
         else
         {
-            tracker.Focus("Encoding", 1);
+            tracker.Focus(project.Localize("BgmItemEncodingProgressMessage"), 1);
             try
             {
                 log.Log($"Encoding audio to ADX...");

@@ -42,7 +42,7 @@ public class ImportProjectDialogViewModel : ViewModelBase
     {
         _log = log;
 
-        RomHashString = string.Format(Strings.Expected_ROM_SHA_1_Hash___0_,
+        RomHashString = string.Format(Strings.ExpectedRomHashLabel,
             Strings.Select_an_exported_project_to_see_expected_ROM_hash);
         SlzipPath = string.IsNullOrEmpty(slzipPath) ? Strings.No_exported_project_selected : slzipPath;
         if (!string.IsNullOrEmpty(slzipPath))
@@ -62,7 +62,7 @@ public class ImportProjectDialogViewModel : ViewModelBase
     private async Task SelectExportedProject(ImportProjectDialog dialog)
     {
         string slzipPath = (await dialog.ShowOpenFilePickerAsync(Strings.Import_Project,
-            [new(Strings.Exported_Project) { Patterns = ["*.slzip"] }]))?.TryGetLocalPath();
+            [new(Strings.FiletypeExportedProject) { Patterns = ["*.slzip"] }]))?.TryGetLocalPath();
         if (!string.IsNullOrEmpty(slzipPath))
         {
             SlzipPath = slzipPath;
@@ -76,7 +76,7 @@ public class ImportProjectDialogViewModel : ViewModelBase
         using FileStream slzipFs = File.OpenRead(SlzipPath);
         using ZipArchive slzip = new(slzipFs);
         _expectedRomHash = slzip.Comment;
-        RomHashString = string.Format(Strings.Expected_ROM_SHA_1_Hash___0_, _expectedRomHash);
+        RomHashString = string.Format(Strings.ExpectedRomHashLabel, _expectedRomHash);
     }
 
     private async Task OpenRom(ImportProjectDialog dialog)

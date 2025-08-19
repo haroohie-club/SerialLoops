@@ -68,7 +68,7 @@ public class BackgroundEditorViewModel : EditorViewModel
                 new(Strings.PNG_Image) { Patterns = ["*.png"] }
             ]
         };
-        IStorageFile savedFile = await Window.Window.ShowSaveFilePickerAsync(Strings.Export_Background_Image, [new(Strings.PNG_Image) { Patterns = ["*.png"] }], $"{Bg.Name}.png");
+        IStorageFile savedFile = await Window.Window.ShowSaveFilePickerAsync(Strings.BackgroundEditorExportFileDialogTitle, [new(Strings.PNG_Image) { Patterns = ["*.png"] }], $"{Bg.Name}.png");
         if (savedFile is not null)
         {
             try

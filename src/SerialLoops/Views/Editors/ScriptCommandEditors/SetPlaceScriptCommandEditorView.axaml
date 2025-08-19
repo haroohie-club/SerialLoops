@@ -9,7 +9,7 @@
              x:DataType="vm:SetPlaceScriptCommandEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.SetPlaceScriptCommandEditorView">
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto">
-        <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Display_}"/>
+        <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptParamDisplay}"/>
         <CheckBox Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" IsChecked="{Binding Display}" />
 
         <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Text="{x:Static assets:Strings.Place}"/>

@@ -43,7 +43,7 @@
             <controls:ItemLink Item="{Binding AssociatedScript}" Tabs="{Binding Tabs}"/>
         </StackPanel>
 
-        <TextBlock Grid.Column="0" Grid.Row="5" VerticalAlignment="Center" Text="{x:Static assets:Strings.Episode_Group}"/>
+        <TextBlock Grid.Column="0" Grid.Row="5" VerticalAlignment="Center" Text="{x:Static assets:Strings.TopicEditorEpisodeGroup}"/>
         <ComboBox Grid.Column="1" Grid.Row="5" ItemsSource="{Binding EpisodeGroups}" SelectedIndex="{Binding EpisodeGroup}" Margin="10,0,0,0"/>
 
         <TextBlock Grid.Column="0" Grid.Row="6" VerticalAlignment="Center" Text="{x:Static assets:Strings.Puzzle_Phase_Group}"/>

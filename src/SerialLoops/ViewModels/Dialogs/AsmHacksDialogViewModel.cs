@@ -124,7 +124,7 @@ public class AsmHacksDialogViewModel : ViewModelBase
 
             if (Configuration.Hacks.Any(h => h.Files.Any(f => hack.Files.Contains(f))))
             {
-                _log.LogError(Strings.Error__duplicate_hack_detected__A_file_with_the_same_name_as_a_file_in_this_hack_has_already_been_imported_);
+                _log.LogError(Strings.ErrorDuplicateHack);
                 return;
             }
             else if (Configuration.Hacks.Contains(hack))

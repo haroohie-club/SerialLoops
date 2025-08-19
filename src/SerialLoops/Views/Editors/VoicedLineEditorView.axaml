@@ -25,15 +25,15 @@
                          VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
-            <Button Content="{x:Static assets:Strings.Export}" Command="{Binding ExportCommand}"/>
+            <Button Content="{x:Static assets:Strings.ExportButtonLabel}" Command="{Binding ExportCommand}"/>
             <Button Content="{x:Static assets:Strings.Restore}" Command="{Binding RestoreCommand}"/>
         </StackPanel>
-        <HeaderedContentControl Header="{x:Static assets:Strings.Edit_Subtitle}" Margin="5"
+        <HeaderedContentControl Header="{x:Static assets:Strings.VoicedLineEditorEditSubtitleHeader}" Margin="5"
                        IsVisible="{Binding SubsEnabled}" Grid.Row="2" Grid.Column="0">
             <StackPanel Spacing="5" Orientation="Vertical">
                 <StackPanel Spacing="3" Orientation="Horizontal">
                     <TextBlock Text="{x:Static assets:Strings.Subtitle_Text}" VerticalAlignment="Center"/>
-                    <TextBox Text="{Binding Subtitle, Mode=TwoWay}" Watermark="{x:Static assets:Strings.Enter_subtitle_text___}" Width="400"/>
+                    <TextBox Text="{Binding Subtitle, Mode=TwoWay}" Watermark="{x:Static assets:Strings.VoicedLineEditorSubtitleWatermark}" Width="400"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="20">
                     <ColorView Palette="{Binding DialogueColorPalette}" SelectedIndex="1" IsColorPaletteVisible="True"

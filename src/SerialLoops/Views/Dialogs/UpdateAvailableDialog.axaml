@@ -38,10 +38,10 @@
                     </md:MdAvPlugins>
                 </md:MarkdownScrollViewer.Plugins>
             </md:MarkdownScrollViewer>
-            <controls:LinkButton Text="{x:Static assets:Strings.Download_release_from_GitHub}"
+            <controls:LinkButton Text="{x:Static assets:Strings.UpdaterDownloadReleaseFromGitHubTitle}"
                         Grid.Row="3" Grid.Column="0" Command="{Binding OpenReleaseLinkCommand}"/>
             <StackPanel Grid.Row="5" Grid.Column="0" Orientation="Horizontal" Spacing="20">
-                <Button Content="{x:Static assets:Strings.Download_from_GitHub}" Command="{Binding OpenReleaseLinkCommand}"/>
+                <Button Content="{x:Static assets:Strings.UpdaterDownloadFromGitHubLabel}" Command="{Binding OpenReleaseLinkCommand}"/>
                 <Button Content="{x:Static assets:Strings.Skip_Update}" Command="{Binding CloseCommand}"
                         CommandParameter="{Binding #Dialog}" IsCancel="True"/>
                 <CheckBox Content="{x:Static assets:Strings.MenuOptionCheckForUpdates}" IsChecked="{Binding CheckForUpdates}"/>

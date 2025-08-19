@@ -24,12 +24,12 @@ public class BgScrollDirectionScriptParameter : ScriptParameter
 
     public enum BgScrollDirection : short
     {
-        DOWN = 1,
-        UP = 2,
-        RIGHT = 3,
-        LEFT = 4,
-        DIAGONAL_RIGHT_DOWN = 5,
-        DIAGONAL_LEFT_UP = 6,
+        BgScrollDown = 1,
+        BgScrollUp = 2,
+        BgScrollRight = 3,
+        BgScrollLeft = 4,
+        BgScrollDiagonalRightUp = 5,
+        BgScrollDiagonalLeftUp = 6,
     }
 
 }

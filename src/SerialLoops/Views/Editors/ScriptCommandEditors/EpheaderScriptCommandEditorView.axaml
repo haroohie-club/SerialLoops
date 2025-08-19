@@ -8,7 +8,7 @@
              x:DataType="vm:EpheaderScriptCommandEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.EpheaderScriptCommandEditorView">
     <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,Auto">
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.Episode_Header}" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.ScriptParamEpisodeHeader}" VerticalAlignment="Center"/>
         <ComboBox Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" ItemsSource="{Binding Episodes}"
                   SelectedItem="{Binding SelectedEpisode}">
             <ComboBox.ItemTemplate>

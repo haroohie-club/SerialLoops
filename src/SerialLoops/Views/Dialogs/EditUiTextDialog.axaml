@@ -14,7 +14,7 @@
         x:DataType="vm:EditUiTextDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.EditUiTextDialog"
         Icon="/Assets/serial-loops.ico"
-        Title="{x:Static assets:Strings.Edit_UI_Text}"
+        Title="{x:Static assets:Strings.EditUITextTitle}"
         Name="Dialog">
     <Panel>
         <controls:AcrylicBorderHandler/>

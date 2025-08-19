@@ -12,7 +12,7 @@
         <Image Grid.Row="0" Source="{Binding ItemBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="3">
-            <Button Content="{x:Static assets:Strings.Export}" Command="{Binding ExportCommand}"/>
+            <Button Content="{x:Static assets:Strings.ExportButtonLabel}" Command="{Binding ExportCommand}"/>
             <Button Content="{x:Static assets:Strings.Import}" Command="{Binding ImportCommand}"/>
         </StackPanel>
     </Grid>

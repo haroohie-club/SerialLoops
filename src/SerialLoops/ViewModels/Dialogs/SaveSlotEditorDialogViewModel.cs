@@ -61,7 +61,7 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
     {
         _save = save;
         _log = log;
-        Title = string.Format(Strings.Edit_Save_File____0_____1_, saveName, slotName);
+        Title = string.Format(Strings.SaveEditorSaveSlotEditTitle, saveName, slotName);
         SaveSection = saveSection;
         SlotName = slotName;
         _project = project;

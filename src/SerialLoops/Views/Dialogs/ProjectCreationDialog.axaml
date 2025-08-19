@@ -31,7 +31,7 @@
                         <ComboBox SelectedItem="{Binding LanguageTemplateItem, Mode=OneWayToSource}" SelectedIndex="0"
                                   Name="LanguageComboBox">
                             <ComboBox.Items>
-                                <ComboBoxItem Tag="en" Content="{x:Static assets:Strings.English}"/>
+                                <ComboBoxItem Tag="en" Content="{x:Static assets:Strings.LanguageEnglish}"/>
                                 <ComboBoxItem Tag="ja" Content="{x:Static assets:Strings.Japanese}"/>
                                 <ComboBoxItem Tag="zh-Hans" Content="{x:Static assets:Strings.LanguageChineseSimplified}"/>
                                 <ComboBoxItem Tag="ru" Content="{x:Static assets:Strings.Russian}"/>

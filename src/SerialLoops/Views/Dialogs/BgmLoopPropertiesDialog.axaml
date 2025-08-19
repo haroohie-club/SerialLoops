@@ -37,7 +37,7 @@
                 </NumericUpDown.Value>
             </NumericUpDown>
 
-            <TextBlock Grid.Row="3" Grid.Column="0" Text="{x:Static assets:Strings.End}" VerticalAlignment="Center"/>
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="{x:Static assets:Strings.EndPosition}" VerticalAlignment="Center"/>
             <NumericUpDown Grid.Row="3" Grid.Column="1" Name="EndSampleBox" FormatString="0.0000"
                            VerticalAlignment="Center" ValueChanged="EndSampleBox_OnValueChanged">
                 <NumericUpDown.Maximum>

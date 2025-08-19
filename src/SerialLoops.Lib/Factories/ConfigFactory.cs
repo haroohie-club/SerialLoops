@@ -83,7 +83,7 @@ public class ConfigFactory : IConfigFactory
         }
         catch (JsonException exc)
         {
-            log.LogException(localize("Exception occurred while parsing config.json!"), exc);
+            log.LogException(localize("ErrorParsingConfigJson"), exc);
             ConfigUser defaultConfigUser = GetDefault(sysConfig, log);
             defaultConfigUser.ValidateConfig(localize, log);
             IO.WriteStringFile(configJson, JsonSerializer.Serialize(defaultConfigUser), log);

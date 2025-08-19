@@ -234,7 +234,7 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
                             SKBitmap dualScreenBg = _preview.Background.GetBackground();
                             if (_preview.BgScrollCommand is not null &&
                                 ((BgScrollDirectionScriptParameter)_preview.BgScrollCommand.Parameters[0]).ScrollDirection ==
-                                BgScrollDirectionScriptParameter.BgScrollDirection.DOWN)
+                                BgScrollDirectionScriptParameter.BgScrollDirection.BgScrollDown)
                             {
 
                                 dualScreenBg.ExtractSubset(topScreenBitmap, new(0, _preview.Background.Graphic2.Height - 192, 256, _preview.Background.Graphic2.Height));
@@ -255,7 +255,7 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
                             if (_preview.BgPositionBool || (_preview.BgScrollCommand is not null &&
                                                            ((BgScrollDirectionScriptParameter)_preview.BgScrollCommand
                                                                .Parameters[0]).ScrollDirection ==
-                                                           BgScrollDirectionScriptParameter.BgScrollDirection.DOWN))
+                                                           BgScrollDirectionScriptParameter.BgScrollDirection.BgScrollDown))
                             {
                                 SKBitmap bgBitmap = _preview.Background.GetBackground();
                                 bgBitmap.ExtractSubset(bottomScreenBitmap,
@@ -273,7 +273,7 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
                             TopScreenCg = null;
                             if (_preview.BgScrollCommand is not null &&
                                 ((BgScrollDirectionScriptParameter)_preview.BgScrollCommand.Parameters[0]).ScrollDirection ==
-                                BgScrollDirectionScriptParameter.BgScrollDirection.RIGHT)
+                                BgScrollDirectionScriptParameter.BgScrollDirection.BgScrollRight)
                             {
                                 SKBitmap bgBitmap = _preview.Background.GetBackground();
                                 bgBitmap.ExtractSubset(bottomScreenBitmap,

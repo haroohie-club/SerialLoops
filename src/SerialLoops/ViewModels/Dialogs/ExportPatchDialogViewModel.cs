@@ -31,7 +31,7 @@ public class ExportPatchDialogViewModel : ViewModelBase
     [Reactive]
     public string XDeltaPath { get; set; }
 
-    public string ExpectedRomHashString { get; } = string.Format(Strings.Expected_ROM_SHA_1_Hash___0_, EXPECTED_HASH);
+    public string ExpectedRomHashString { get; } = string.Format(Strings.ExpectedRomHashLabel, EXPECTED_HASH);
 
     public ICommand OpenRomCommand { get; }
     public ICommand SelectXdeltaPathCommand { get; }

@@ -52,7 +52,7 @@ public class PreferencesDialogViewModel : ViewModelBase
             },
             new FileOption(_preferencesDialog)
             {
-                OptionName = Strings.Emulator_Path,
+                OptionName = Strings.PreferencesEmulatorPathLabel,
                 Path = Configuration.SysConfig.EmulatorPath,
                 OnChange = path =>
                 {
@@ -70,7 +70,7 @@ public class PreferencesDialogViewModel : ViewModelBase
             },
             new TextOption
             {
-                OptionName = Strings.Emulator_Flatpak,
+                OptionName = Strings.PreferencesEmulatorFlatpakLabel,
                 Value = Configuration.SysConfig.EmulatorFlatpak,
                 OnChange = flatpak =>
                 {

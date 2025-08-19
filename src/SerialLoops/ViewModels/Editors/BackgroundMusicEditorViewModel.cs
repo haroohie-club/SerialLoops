@@ -71,7 +71,7 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
         IStorageFile file = await Window.Window.ShowSaveFilePickerAsync(Strings.Save_BGM_as_WAV, [new(Strings.WAV_File) { Patterns = ["*.wav"] }]);
         if (file is not null)
         {
-            ProgressDialogViewModel tracker = new(Strings.Exporting_BGM);
+            ProgressDialogViewModel tracker = new(Strings.BgmEditorExportingProgressMessage);
             tracker.InitializeTasks(
                 () => WaveFileWriter.CreateWaveFile(file.Path.LocalPath, Bgm.GetWaveProvider(_log, false)),
                 () => { });

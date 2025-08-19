@@ -32,7 +32,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Spacing="5">
                     <Svg Path="avares://SerialLoops/Assets/Icons/Edit_Save.svg" Width="16"/>
-                    <controls:LinkButton Command="{Binding MainWindow.EditSaveCommand}" Text="{x:Static assets:Strings.Edit_Save_File}"/>
+                    <controls:LinkButton Command="{Binding MainWindow.EditSaveCommand}" Text="{x:Static assets:Strings.MenuEditSaveFile}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Spacing="5">
                     <Svg Path="avares://SerialLoops/Assets/Icons/Options.svg" Width="16"/>

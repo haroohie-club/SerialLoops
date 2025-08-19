@@ -129,7 +129,7 @@ public class BackgroundItem : Item, IPreviewableGraphic
                 SKBitmap newTileBitmap = new(64, Graphic2.Height * Graphic2.Width / 64);
                 SKBitmap tileSource = new(image.Width, image.Height - Graphic1.Height);
 
-                tracker.Focus(localize("Drawing bottom screen texture..."), 1);
+                tracker.Focus(localize("BgItemBottomScreenProgressMessage"), 1);
                 using SKCanvas textureCanvas = new(newTextureBitmap);
                 textureCanvas.DrawBitmap(image, new(0, image.Height - newTextureBitmap.Height, newTextureBitmap.Width, image.Height), new SKRect(0, 0, newTextureBitmap.Width, newTextureBitmap.Height));
                 textureCanvas.Flush();
@@ -139,7 +139,7 @@ public class BackgroundItem : Item, IPreviewableGraphic
                 tileSourceCanvas.DrawBitmap(image, 0, 0);
                 tileSourceCanvas.Flush();
 
-                tracker.Focus(localize("Drawing top screen tiles..."), newTileBitmap.Height / 64 * newTileBitmap.Width / 64);
+                tracker.Focus(localize("BgEditorTopScreenProgressMessage"), newTileBitmap.Height / 64 * newTileBitmap.Width / 64);
                 using SKCanvas tileCanvas = new(newTileBitmap);
                 int currentTile = 0;
                 for (int y = 0; y < tileSource.Height; y += 64)
@@ -178,7 +178,7 @@ public class BackgroundItem : Item, IPreviewableGraphic
                 SKBitmap newGraphic1 = new(Graphic1.Width, Graphic1.Height);
                 SKBitmap newGraphic2 = new(Graphic2.Width, Graphic2.Height);
 
-                tracker.Focus(localize("Drawing textures..."), 2);
+                tracker.Focus(localize("BgItemDrawingTexturesProgressMessage"), 2);
                 using SKCanvas canvas1 = new(newGraphic1);
                 canvas1.DrawBitmap(image, new(0, 0, newGraphic1.Width, newGraphic1.Height),
                     new SKRect(0, 0, newGraphic1.Width, newGraphic1.Height));

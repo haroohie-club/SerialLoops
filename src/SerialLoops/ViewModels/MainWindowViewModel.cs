@@ -484,7 +484,7 @@ public partial class MainWindowViewModel : ViewModelBase
             InjectionSites = [.. hackFiles.SelectMany(f => f.InjectionSites)],
         };
 
-        string hackSaveFile = (await Window.ShowSaveFilePickerAsync(Strings.Export_Hack,
+        string hackSaveFile = (await Window.ShowSaveFilePickerAsync(Strings.AsmHackExportDialogTitle,
             [new(Strings.Serial_Loops_ASM_Hack) { Patterns = ["*.slhack"] }],
             $"{asmHack.Name}.slhack"))?.TryGetLocalPath();
         if (!string.IsNullOrEmpty(hackSaveFile))
@@ -558,8 +558,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private async Task ExportProjectCommand_Executed()
     {
-        string exportPath = (await Window.ShowSaveFilePickerAsync(Strings.Export_Project,
-            [new(Strings.Exported_Project) { Patterns = ["*.slzip"] }], $"{OpenProject.Name}.slzip"))?.TryGetLocalPath();
+        string exportPath = (await Window.ShowSaveFilePickerAsync(Strings.MenuExportProject,
+            [new(Strings.FiletypeExportedProject) { Patterns = ["*.slzip"] }], $"{OpenProject.Name}.slzip"))?.TryGetLocalPath();
         if (!string.IsNullOrEmpty(exportPath))
         {
             OpenProject.Export(exportPath, Log);
@@ -1466,13 +1466,13 @@ public partial class MainWindowViewModel : ViewModelBase
             },
             new NativeMenuItem
             {
-                Header = Strings.Export_Project,
+                Header = Strings.MenuExportProject,
                 Command = ExportProjectCommand,
                 Icon = ControlGenerator.GetIcon("Export_Project", Log),
             },
             new NativeMenuItem
             {
-                Header = Strings.Export_Patch,
+                Header = Strings.MenuExportPatch,
                 Command = ExportPatchCommand,
                 Icon = ControlGenerator.GetIcon("Export_Patch", Log),
             },
@@ -1501,7 +1501,7 @@ public partial class MainWindowViewModel : ViewModelBase
             },
             new NativeMenuItem
             {
-                Header = Strings.Edit_UI_Text___,
+                Header = Strings.MenuEditUIText,
                 Command = EditUiTextCommand,
                 Icon = ControlGenerator.GetIcon("Edit_UI_Text", Log),
             },
@@ -1512,7 +1512,7 @@ public partial class MainWindowViewModel : ViewModelBase
             },
             new NativeMenuItem
             {
-                Header = Strings.Edit_Tutorial_Mappings___,
+                Header = Strings.MenuEditTutorialMappings,
                 Command = EditTutorialMappingsCommand,
                 Icon = ControlGenerator.GetIcon("Tutorial", Log),
             },

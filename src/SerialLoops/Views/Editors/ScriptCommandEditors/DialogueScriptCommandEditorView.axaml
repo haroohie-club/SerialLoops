@@ -68,7 +68,7 @@
                        Margin="10,5,0,0" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 
         <StackPanel Grid.Column="0" Grid.Row="10" Orientation="Horizontal" Spacing="3">
-            <TextBlock Text="{x:Static assets:Strings.Don_t_Clear_Text}" VerticalAlignment="Center"/>
+            <TextBlock Text="{x:Static assets:Strings.ScriptParamDontClearText}" VerticalAlignment="Center"/>
             <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
                  ToolTip.Tip="{x:Static assets:Strings.ScriptCommandParameterHelpDontClearText}"/>
         </StackPanel>

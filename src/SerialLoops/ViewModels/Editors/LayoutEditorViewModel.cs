@@ -69,7 +69,7 @@ public class LayoutEditorViewModel : EditorViewModel
 
     private async Task ExportLayout()
     {
-        IStorageFile savePng = await _mainWindow.Window.ShowSaveFilePickerAsync(Strings.Export_Layout_Preview,
+        IStorageFile savePng = await _mainWindow.Window.ShowSaveFilePickerAsync(Strings.LayoutEditorExportPreviewButton,
             [new(Strings.PNG_Image) { Patterns = ["*.png"] }], $"{_layout.DisplayName}.png");
         string path = savePng?.TryGetLocalPath();
         if (!string.IsNullOrEmpty(path))
@@ -85,7 +85,7 @@ public class LayoutEditorViewModel : EditorViewModel
         {
             return;
         }
-        IStorageFile savePng = await _mainWindow.Window.ShowSaveFilePickerAsync(Strings.Export_Source_Preview,
+        IStorageFile savePng = await _mainWindow.Window.ShowSaveFilePickerAsync(Strings.LayoutEditorExportSourcePreviewButton,
             [new(Strings.PNG_Image) { Patterns = ["*.png"] }]);
         string path = savePng?.TryGetLocalPath();
         if (!string.IsNullOrEmpty(path))

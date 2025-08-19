@@ -25,7 +25,7 @@ public class ProjectRenameDuplicateDialogViewModel : ViewModelBase
     public ProjectRenameDuplicateDialogViewModel(bool rename, string project, ConfigUser configUser, ILogger log)
     {
         Title = rename ? Strings.ProjectRenameText : Strings.ProjectDuplicateText;
-        SubmitText = rename ? Strings.Rename : Strings.Duplicate;
+        SubmitText = rename ? Strings.Rename : Strings.ProjectDuplicateButtonLabel;
 
         CancelCommand = ReactiveCommand.Create<ProjectRenameDuplicateDialog>(dialog => dialog.Close());
         SubmitCommand = ReactiveCommand.CreateFromTask<ProjectRenameDuplicateDialog>(async dialog =>

@@ -51,13 +51,13 @@
                           HorizontalAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
-                <CheckBox IsChecked="{Binding DrawPathingMap}" Content="{x:Static assets:Strings.Draw_Pathing_Map}"
+                <CheckBox IsChecked="{Binding DrawPathingMap}" Content="{x:Static assets:Strings.MapEditorDrawPathingMapLabel}"
                           HorizontalAlignment="Center"/>
-                <CheckBox IsChecked="{Binding DrawStartingPoint}" Content="{x:Static assets:Strings.Draw_Starting_Point}"
+                <CheckBox IsChecked="{Binding DrawStartingPoint}" Content="{x:Static assets:Strings.MapEditorDrawStartingPointLabel}"
                           HorizontalAlignment="Center"/>
-                <CheckBox IsChecked="{Binding DrawOrigin}" Content="{x:Static assets:Strings.Draw_Origin}"
+                <CheckBox IsChecked="{Binding DrawOrigin}" Content="{x:Static assets:Strings.MapEditorDrawOriginLabel}"
                           HorizontalAlignment="Center"/>
-                <CheckBox IsChecked="{Binding DrawBoundary}" Content="{x:Static assets:Strings.Draw_Boundary}"
+                <CheckBox IsChecked="{Binding DrawBoundary}" Content="{x:Static assets:Strings.MapEditorDrawBoundaryLabel}"
                           HorizontalAlignment="Center"/>
             </StackPanel>
         </StackPanel>

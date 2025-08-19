@@ -32,7 +32,7 @@ public class ItemEditorViewModel : EditorViewModel
 
     private async Task Export()
     {
-        string exportPath = (await Window.Window.ShowSaveFilePickerAsync(Strings.Export_Item_Image,
+        string exportPath = (await Window.Window.ShowSaveFilePickerAsync(Strings.ItemEditorExportFileDialogTitle,
             [new(Strings.PNG_Image) { Patterns = ["*.png"] }]))?.TryGetLocalPath();
         if (!string.IsNullOrEmpty(exportPath))
         {

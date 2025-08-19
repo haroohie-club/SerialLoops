@@ -274,6 +274,33 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export Frames.
+        /// </summary>
+        public static string AnimationExportFramesButton {
+            get {
+                return ResourceManager.GetString("AnimationExportFramesButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export GIF.
+        /// </summary>
+        public static string AnimationExportGifButton {
+            get {
+                return ResourceManager.GetString("AnimationExportGifButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exporting GIF….
+        /// </summary>
+        public static string AnimationExportingGifProgressMessage {
+            get {
+                return ResourceManager.GetString("AnimationExportingGifProgressMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apply.
         /// </summary>
         public static string Apply {
@@ -297,6 +324,15 @@ namespace SerialLoops.Assets {
         public static string Archive_Index {
             get {
                 return ResourceManager.GetString("Archive_Index", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Hack.
+        /// </summary>
+        public static string AsmHackExportDialogTitle {
+            get {
+                return ResourceManager.GetString("AsmHackExportDialogTitle", resourceCulture);
             }
         }
         
@@ -342,6 +378,15 @@ namespace SerialLoops.Assets {
         public static string Background_Type {
             get {
                 return ResourceManager.GetString("Background_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Background Image.
+        /// </summary>
+        public static string BackgroundEditorExportFileDialogTitle {
+            get {
+                return ResourceManager.GetString("BackgroundEditorExportFileDialogTitle", resourceCulture);
             }
         }
         
@@ -418,6 +463,33 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Drawing top screen tiles….
+        /// </summary>
+        public static string BgEditorTopScreenProgressMessage {
+            get {
+                return ResourceManager.GetString("BgEditorTopScreenProgressMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drawing bottom screen texture….
+        /// </summary>
+        public static string BgItemBottomScreenProgressMessage {
+            get {
+                return ResourceManager.GetString("BgItemBottomScreenProgressMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drawing textures….
+        /// </summary>
+        public static string BgItemDrawingTexturesProgressMessage {
+            get {
+                return ResourceManager.GetString("BgItemDrawingTexturesProgressMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to BGM.
         /// </summary>
         public static string BGM {
@@ -450,6 +522,15 @@ namespace SerialLoops.Assets {
         public static string BgmEditorCachingBGMMessage {
             get {
                 return ResourceManager.GetString("BgmEditorCachingBGMMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exporting BGM.
+        /// </summary>
+        public static string BgmEditorExportingProgressMessage {
+            get {
+                return ResourceManager.GetString("BgmEditorExportingProgressMessage", resourceCulture);
             }
         }
         
@@ -499,6 +580,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Downsampling….
+        /// </summary>
+        public static string BgmItemDownsamplingProgressMessage {
+            get {
+                return ResourceManager.GetString("BgmItemDownsamplingProgressMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Encoding.
+        /// </summary>
+        public static string BgmItemEncodingProgressMessage {
+            get {
+                return ResourceManager.GetString("BgmItemEncodingProgressMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Once this position is reached, the BGM will loop back to the start loop position if looping is enabled..
         /// </summary>
         public static string BgmLoopEndHelp {
@@ -531,6 +630,15 @@ namespace SerialLoops.Assets {
         public static string BgmVolumeNormalizeHelp {
             get {
                 return ResourceManager.GetString("BgmVolumeNormalizeHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Down.
+        /// </summary>
+        public static string BgScrollDown {
+            get {
+                return ResourceManager.GetString("BgScrollDown", resourceCulture);
             }
         }
         
@@ -1192,281 +1300,11 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Display?.
-        /// </summary>
-        public static string Display_ {
-            get {
-                return ResourceManager.GetString("Display?", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Display Flag 1.
-        /// </summary>
-        public static string Display_Flag_1 {
-            get {
-                return ResourceManager.GetString("Display Flag 1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Display Flag 2.
-        /// </summary>
-        public static string Display_Flag_2 {
-            get {
-                return ResourceManager.GetString("Display Flag 2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Display Flag 3.
-        /// </summary>
-        public static string Display_Flag_3 {
-            get {
-                return ResourceManager.GetString("Display Flag 3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Display Flag 4.
-        /// </summary>
-        public static string Display_Flag_4 {
-            get {
-                return ResourceManager.GetString("Display Flag 4", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Display from Bottom.
-        /// </summary>
-        public static string Display_from_Bottom {
-            get {
-                return ResourceManager.GetString("Display from Bottom", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Don&apos;t Clear Text.
-        /// </summary>
-        public static string Don_t_Clear_Text {
-            get {
-                return ResourceManager.GetString("Don\'t Clear Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Down.
-        /// </summary>
-        public static string DOWN {
-            get {
-                return ResourceManager.GetString("DOWN", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Download from GitHub.
-        /// </summary>
-        public static string Download_from_GitHub {
-            get {
-                return ResourceManager.GetString("Download from GitHub", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Download release from GitHub.
-        /// </summary>
-        public static string Download_release_from_GitHub {
-            get {
-                return ResourceManager.GetString("Download release from GitHub", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Downsampling….
-        /// </summary>
-        public static string Downsampling___ {
-            get {
-                return ResourceManager.GetString("Downsampling...", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Draw Boundary.
-        /// </summary>
-        public static string Draw_Boundary {
-            get {
-                return ResourceManager.GetString("Draw Boundary", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Draw Origin.
-        /// </summary>
-        public static string Draw_Origin {
-            get {
-                return ResourceManager.GetString("Draw Origin", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Draw Pathing Map.
-        /// </summary>
-        public static string Draw_Pathing_Map {
-            get {
-                return ResourceManager.GetString("Draw Pathing Map", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Draw Starting Point.
-        /// </summary>
-        public static string Draw_Starting_Point {
-            get {
-                return ResourceManager.GetString("Draw Starting Point", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Drawing bottom screen texture….
-        /// </summary>
-        public static string Drawing_bottom_screen_texture___ {
-            get {
-                return ResourceManager.GetString("Drawing bottom screen texture...", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Drawing textures….
-        /// </summary>
-        public static string Drawing_textures___ {
-            get {
-                return ResourceManager.GetString("Drawing textures...", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Drawing top screen tiles….
-        /// </summary>
-        public static string Drawing_top_screen_tiles___ {
-            get {
-                return ResourceManager.GetString("Drawing top screen tiles...", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Duplicate.
-        /// </summary>
-        public static string Duplicate {
-            get {
-                return ResourceManager.GetString("Duplicate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Duplicate Section Name.
-        /// </summary>
-        public static string Duplicate_Section_Name {
-            get {
-                return ResourceManager.GetString("Duplicate Section Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Duration (Frames).
-        /// </summary>
-        public static string Duration__Frames_ {
-            get {
-                return ResourceManager.GetString("Duration (Frames)", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Edit Save File.
-        /// </summary>
-        public static string Edit_Save_File {
-            get {
-                return ResourceManager.GetString("Edit Save File", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Edit Save File….
-        /// </summary>
-        public static string Edit_Save_File___ {
-            get {
-                return ResourceManager.GetString("Edit Save File...", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Edit Save File - {0} - {1}.
-        /// </summary>
-        public static string Edit_Save_File____0_____1_ {
-            get {
-                return ResourceManager.GetString("Edit Save File - {0} - {1}", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Edit Subtitle.
-        /// </summary>
-        public static string Edit_Subtitle {
-            get {
-                return ResourceManager.GetString("Edit Subtitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Edit Tutorial Mappings.
-        /// </summary>
-        public static string Edit_Tutorial_Mappings {
-            get {
-                return ResourceManager.GetString("Edit Tutorial Mappings", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Edit Tutorial Mappings….
-        /// </summary>
-        public static string Edit_Tutorial_Mappings___ {
-            get {
-                return ResourceManager.GetString("Edit Tutorial Mappings...", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Edit UI Text.
-        /// </summary>
-        public static string Edit_UI_Text {
-            get {
-                return ResourceManager.GetString("Edit UI Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Edit UI Text….
-        /// </summary>
-        public static string Edit_UI_Text___ {
-            get {
-                return ResourceManager.GetString("Edit UI Text...", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Edit Dialogue Colors.
         /// </summary>
         public static string EditDialogueColorsDialogTitle {
             get {
                 return ResourceManager.GetString("EditDialogueColorsDialogTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Editor Tabs not provided to project creation dialog.
-        /// </summary>
-        public static string Editor_Tabs_not_provided_to_project_creation_dialog {
-            get {
-                return ResourceManager.GetString("Editor Tabs not provided to project creation dialog", resourceCulture);
             }
         }
         
@@ -1516,29 +1354,20 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Emote.
+        ///   Looks up a localized string similar to Edit Tutorial Mappings.
         /// </summary>
-        public static string Emote {
+        public static string EditTutorialMappingsTitle {
             get {
-                return ResourceManager.GetString("Emote", resourceCulture);
+                return ResourceManager.GetString("EditTutorialMappingsTitle", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Emulator Flatpak.
+        ///   Looks up a localized string similar to Edit UI Text.
         /// </summary>
-        public static string Emulator_Flatpak {
+        public static string EditUITextTitle {
             get {
-                return ResourceManager.GetString("Emulator Flatpak", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Emulator Path.
-        /// </summary>
-        public static string Emulator_Path {
-            get {
-                return ResourceManager.GetString("Emulator Path", resourceCulture);
+                return ResourceManager.GetString("EditUITextTitle", resourceCulture);
             }
         }
         
@@ -1552,65 +1381,11 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Encoding.
-        /// </summary>
-        public static string Encoding {
-            get {
-                return ResourceManager.GetString("Encoding", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to End.
         /// </summary>
-        public static string End {
+        public static string EndPosition {
             get {
-                return ResourceManager.GetString("End", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to End Script Section.
-        /// </summary>
-        public static string End_Script_Section {
-            get {
-                return ResourceManager.GetString("End Script Section", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to English.
-        /// </summary>
-        public static string English {
-            get {
-                return ResourceManager.GetString("English", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Enter.
-        /// </summary>
-        public static string Enter {
-            get {
-                return ResourceManager.GetString("Enter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Enter/Exit.
-        /// </summary>
-        public static string Enter_Exit {
-            get {
-                return ResourceManager.GetString("Enter/Exit", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Enter subtitle text….
-        /// </summary>
-        public static string Enter_subtitle_text___ {
-            get {
-                return ResourceManager.GetString("Enter subtitle text...", resourceCulture);
+                return ResourceManager.GetString("EndPosition", resourceCulture);
             }
         }
         
@@ -1633,38 +1408,11 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to EPISODE: {0}.
-        /// </summary>
-        public static string EPISODE___0_ {
-            get {
-                return ResourceManager.GetString("EPISODE: {0}", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Episode 1.
         /// </summary>
         public static string EPISODE_1 {
             get {
                 return ResourceManager.GetString("EPISODE_1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Episode 1 ticker tape.
-        /// </summary>
-        public static string Episode_1_ticker_tape {
-            get {
-                return ResourceManager.GetString("Episode 1 ticker tape", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Episode 1 title.
-        /// </summary>
-        public static string Episode_1_title {
-            get {
-                return ResourceManager.GetString("Episode 1 title", resourceCulture);
             }
         }
         
@@ -1678,47 +1426,11 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Episode 2 ticker tape.
-        /// </summary>
-        public static string Episode_2_ticker_tape {
-            get {
-                return ResourceManager.GetString("Episode 2 ticker tape", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Episode 2 title.
-        /// </summary>
-        public static string Episode_2_title {
-            get {
-                return ResourceManager.GetString("Episode 2 title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Episode 3.
         /// </summary>
         public static string EPISODE_3 {
             get {
                 return ResourceManager.GetString("EPISODE_3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Episode 3 ticker tape.
-        /// </summary>
-        public static string Episode_3_ticker_tape {
-            get {
-                return ResourceManager.GetString("Episode 3 ticker tape", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Episode 3 title.
-        /// </summary>
-        public static string Episode_3_title {
-            get {
-                return ResourceManager.GetString("Episode 3 title", resourceCulture);
             }
         }
         
@@ -1732,65 +1444,11 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Episode 4 ticker tape.
-        /// </summary>
-        public static string Episode_4_ticker_tape {
-            get {
-                return ResourceManager.GetString("Episode 4 ticker tape", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Episode 4 title.
-        /// </summary>
-        public static string Episode_4_title {
-            get {
-                return ResourceManager.GetString("Episode 4 title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Episode 5.
         /// </summary>
         public static string EPISODE_5 {
             get {
                 return ResourceManager.GetString("EPISODE_5", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Episode 5 ticker tape.
-        /// </summary>
-        public static string Episode_5_ticker_tape {
-            get {
-                return ResourceManager.GetString("Episode 5 ticker tape", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Episode 5 title.
-        /// </summary>
-        public static string Episode_5_title {
-            get {
-                return ResourceManager.GetString("Episode 5 title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Episode Group.
-        /// </summary>
-        public static string Episode_Group {
-            get {
-                return ResourceManager.GetString("Episode Group", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Episode Header.
-        /// </summary>
-        public static string Episode_Header {
-            get {
-                return ResourceManager.GetString("Episode Header", resourceCulture);
             }
         }
         
@@ -1809,24 +1467,6 @@ namespace SerialLoops.Assets {
         public static string Episode_Unique {
             get {
                 return ResourceManager.GetString("Episode_Unique", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Erase data options ticker tape.
-        /// </summary>
-        public static string Erase_data_options_ticker_tape {
-            get {
-                return ResourceManager.GetString("Erase data options ticker tape", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Erase data options title.
-        /// </summary>
-        public static string Erase_data_options_title {
-            get {
-                return ResourceManager.GetString("Erase data options title", resourceCulture);
             }
         }
         
@@ -1851,83 +1491,45 @@ namespace SerialLoops.Assets {
         /// <summary>
         ///   Looks up a localized string similar to Error: duplicate hack detected! A file with the same name as a file in this hack has already been imported..
         /// </summary>
-        public static string Error__duplicate_hack_detected__A_file_with_the_same_name_as_a_file_in_this_hack_has_already_been_imported_ {
+        public static string ErrorDuplicateHack {
             get {
-                return ResourceManager.GetString("Error: duplicate hack detected! A file with the same name as a file in this hack " +
-                        "has already been imported.", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error: duplicate hack detected! A hack with the same name has already been imported..
-        /// </summary>
-        public static string Error__duplicate_hack_detected__A_hack_with_the_same_name_has_already_been_imported_ {
-            get {
-                return ResourceManager.GetString("Error: duplicate hack detected! A hack with the same name has already been import" +
-                        "ed.", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error getting script command tree for script {0} ({1}): {2} {3}.
-        /// </summary>
-        public static string Error_getting_script_command_tree_for_script__0____1__ {
-            get {
-                return ResourceManager.GetString("Error getting script command tree for script {0} ({1})", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error getting script command tree for script {0} ({1}): {2} {3}.
-        /// </summary>
-        public static string Error_getting_script_command_tree_for_script__0____1_____2___3_ {
-            get {
-                return ResourceManager.GetString("Error getting script command tree for script {0} ({1}): {2} {3}", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error pruning labels!.
-        /// </summary>
-        public static string Error_pruning_labels_ {
-            get {
-                return ResourceManager.GetString("Error pruning labels!", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error reading save file..
-        /// </summary>
-        public static string Error_reading_save_file_ {
-            get {
-                return ResourceManager.GetString("Error reading save file.", resourceCulture);
+                return ResourceManager.GetString("ErrorDuplicateHack", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Error while loading project.
         /// </summary>
-        public static string Error_while_loading_project {
+        public static string ErrorLoadingProject {
             get {
-                return ResourceManager.GetString("Error while loading project", resourceCulture);
+                return ResourceManager.GetString("ErrorLoadingProject", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Exception occurred while parsing config.json!.
         /// </summary>
-        public static string Exception_occurred_while_parsing_config_json_ {
+        public static string ErrorParsingConfigJson {
             get {
-                return ResourceManager.GetString("Exception occurred while parsing config.json!", resourceCulture);
+                return ResourceManager.GetString("ErrorParsingConfigJson", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Exception occurred while parsing projects_cache.json!.
+        ///   Looks up a localized string similar to Error getting script command tree for script {0} ({1}): {2} {3}.
         /// </summary>
-        public static string Exception_occurred_while_parsing_projects_cache_json_ {
+        public static string ErrorScriptCommandTree {
             get {
-                return ResourceManager.GetString("Exception occurred while parsing projects_cache.json!", resourceCulture);
+                return ResourceManager.GetString("ErrorScriptCommandTree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error pruning labels!.
+        /// </summary>
+        public static string ErrorScriptItemPruningLabels {
+            get {
+                return ResourceManager.GetString("ErrorScriptItemPruningLabels", resourceCulture);
             }
         }
         
@@ -1952,180 +1554,18 @@ namespace SerialLoops.Assets {
         /// <summary>
         ///   Looks up a localized string similar to Expected ROM SHA-1 Hash: {0}.
         /// </summary>
-        public static string Expected_ROM_SHA_1_Hash___0_ {
+        public static string ExpectedRomHashLabel {
             get {
-                return ResourceManager.GetString("Expected ROM SHA-1 Hash: {0}", resourceCulture);
+                return ResourceManager.GetString("ExpectedRomHashLabel", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Export.
         /// </summary>
-        public static string Export {
+        public static string ExportButtonLabel {
             get {
-                return ResourceManager.GetString("Export", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Export Background Image.
-        /// </summary>
-        public static string Export_Background_Image {
-            get {
-                return ResourceManager.GetString("Export Background Image", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Export Frames.
-        /// </summary>
-        public static string Export_Frames {
-            get {
-                return ResourceManager.GetString("Export Frames", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Export GIF.
-        /// </summary>
-        public static string Export_GIF {
-            get {
-                return ResourceManager.GetString("Export GIF", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Export Hack.
-        /// </summary>
-        public static string Export_Hack {
-            get {
-                return ResourceManager.GetString("Export Hack", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Export Item Image.
-        /// </summary>
-        public static string Export_Item_Image {
-            get {
-                return ResourceManager.GetString("Export Item Image", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Export Item Names.
-        /// </summary>
-        public static string Export_Item_Names {
-            get {
-                return ResourceManager.GetString("Export Item Names", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Export Layout Preview.
-        /// </summary>
-        public static string Export_Layout_Preview {
-            get {
-                return ResourceManager.GetString("Export Layout Preview", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Export Patch.
-        /// </summary>
-        public static string Export_Patch {
-            get {
-                return ResourceManager.GetString("Export Patch", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Export Project.
-        /// </summary>
-        public static string Export_Project {
-            get {
-                return ResourceManager.GetString("Export Project", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Export Project....
-        /// </summary>
-        public static string Export_Project___ {
-            get {
-                return ResourceManager.GetString("Export Project...", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Export SFX.
-        /// </summary>
-        public static string Export_SFX {
-            get {
-                return ResourceManager.GetString("Export SFX", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Export Source Preview.
-        /// </summary>
-        public static string Export_Source_Preview {
-            get {
-                return ResourceManager.GetString("Export Source Preview", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Export Sprites.
-        /// </summary>
-        public static string Export_Sprites {
-            get {
-                return ResourceManager.GetString("Export Sprites", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Export System Texture.
-        /// </summary>
-        public static string Export_System_Texture {
-            get {
-                return ResourceManager.GetString("Export System Texture", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Exported Project.
-        /// </summary>
-        public static string Exported_Project {
-            get {
-                return ResourceManager.GetString("Exported Project", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Exporting BGM.
-        /// </summary>
-        public static string Exporting_BGM {
-            get {
-                return ResourceManager.GetString("Exporting BGM", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Exporting GIF….
-        /// </summary>
-        public static string Exporting_GIF___ {
-            get {
-                return ResourceManager.GetString("Exporting GIF...", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Exporting Project.
-        /// </summary>
-        public static string Exporting_Project {
-            get {
-                return ResourceManager.GetString("Exporting Project", resourceCulture);
+                return ResourceManager.GetString("ExportButtonLabel", resourceCulture);
             }
         }
         
@@ -2141,18 +1581,9 @@ namespace SerialLoops.Assets {
         /// <summary>
         ///   Looks up a localized string similar to Extract.
         /// </summary>
-        public static string Extract {
+        public static string ExtractButton {
             get {
-                return ResourceManager.GetString("Extract", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Extras unlocked message box.
-        /// </summary>
-        public static string Extras_unlocked_message_box {
-            get {
-                return ResourceManager.GetString("Extras unlocked message box", resourceCulture);
+                return ResourceManager.GetString("ExtractButton", resourceCulture);
             }
         }
         
@@ -2837,6 +2268,15 @@ namespace SerialLoops.Assets {
         public static string FiletypeChokuretsuSave {
             get {
                 return ResourceManager.GetString("FiletypeChokuretsuSave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exported Project.
+        /// </summary>
+        public static string FiletypeExportedProject {
+            get {
+                return ResourceManager.GetString("FiletypeExportedProject", resourceCulture);
             }
         }
         
@@ -3658,6 +3098,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export Item Image.
+        /// </summary>
+        public static string ItemEditorExportFileDialogTitle {
+            get {
+                return ResourceManager.GetString("ItemEditorExportFileDialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Center.
         /// </summary>
         public static string ItemLocationCenter {
@@ -3892,6 +3341,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to English.
+        /// </summary>
+        public static string LanguageEnglish {
+            get {
+                return ResourceManager.GetString("LanguageEnglish", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lavender.
         /// </summary>
         public static string LAVENDER {
@@ -3906,6 +3364,24 @@ namespace SerialLoops.Assets {
         public static string Layout {
             get {
                 return ResourceManager.GetString("Layout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Layout Preview.
+        /// </summary>
+        public static string LayoutEditorExportPreviewButton {
+            get {
+                return ResourceManager.GetString("LayoutEditorExportPreviewButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Source Preview.
+        /// </summary>
+        public static string LayoutEditorExportSourcePreviewButton {
+            get {
+                return ResourceManager.GetString("LayoutEditorExportSourcePreviewButton", resourceCulture);
             }
         }
         
@@ -4198,6 +3674,42 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Draw Boundary.
+        /// </summary>
+        public static string MapEditorDrawBoundaryLabel {
+            get {
+                return ResourceManager.GetString("MapEditorDrawBoundaryLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Draw Origin.
+        /// </summary>
+        public static string MapEditorDrawOriginLabel {
+            get {
+                return ResourceManager.GetString("MapEditorDrawOriginLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Draw Pathing Map.
+        /// </summary>
+        public static string MapEditorDrawPathingMapLabel {
+            get {
+                return ResourceManager.GetString("MapEditorDrawPathingMapLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Draw Starting Point.
+        /// </summary>
+        public static string MapEditorDrawStartingPointLabel {
+            get {
+                return ResourceManager.GetString("MapEditorDrawStartingPointLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Maps.
         /// </summary>
         public static string Maps {
@@ -4212,6 +3724,60 @@ namespace SerialLoops.Assets {
         public static string MenuCreateAsmHackLabel {
             get {
                 return ResourceManager.GetString("MenuCreateAsmHackLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Save File.
+        /// </summary>
+        public static string MenuEditSaveFile {
+            get {
+                return ResourceManager.GetString("MenuEditSaveFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Save File….
+        /// </summary>
+        public static string MenuEditSaveFileDetails {
+            get {
+                return ResourceManager.GetString("MenuEditSaveFileDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Tutorial Mappings….
+        /// </summary>
+        public static string MenuEditTutorialMappings {
+            get {
+                return ResourceManager.GetString("MenuEditTutorialMappings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit UI Text….
+        /// </summary>
+        public static string MenuEditUIText {
+            get {
+                return ResourceManager.GetString("MenuEditUIText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Patch.
+        /// </summary>
+        public static string MenuExportPatch {
+            get {
+                return ResourceManager.GetString("MenuExportPatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Project.
+        /// </summary>
+        public static string MenuExportProject {
+            get {
+                return ResourceManager.GetString("MenuExportProject", resourceCulture);
             }
         }
         
@@ -5451,6 +5017,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Emulator Flatpak.
+        /// </summary>
+        public static string PreferencesEmulatorFlatpakLabel {
+            get {
+                return ResourceManager.GetString("PreferencesEmulatorFlatpakLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Emulator Path.
+        /// </summary>
+        public static string PreferencesEmulatorPathLabel {
+            get {
+                return ResourceManager.GetString("PreferencesEmulatorPathLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preserve Aspect Ratio:.
         /// </summary>
         public static string Preserve_Aspect_Ratio_ {
@@ -5627,6 +5211,15 @@ namespace SerialLoops.Assets {
         public static string ProjectDeleteText {
             get {
                 return ResourceManager.GetString("ProjectDeleteText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate.
+        /// </summary>
+        public static string ProjectDuplicateButtonLabel {
+            get {
+                return ResourceManager.GetString("ProjectDuplicateButtonLabel", resourceCulture);
             }
         }
         
@@ -6655,6 +6248,24 @@ namespace SerialLoops.Assets {
         public static string SaveEditorOptionBatchDialogueDisplay {
             get {
                 return ResourceManager.GetString("SaveEditorOptionBatchDialogueDisplay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Save File - {0} - {1}.
+        /// </summary>
+        public static string SaveEditorSaveSlotEditTitle {
+            get {
+                return ResourceManager.GetString("SaveEditorSaveSlotEditTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to EPISODE: {0}.
+        /// </summary>
+        public static string SaveFilePreviewText {
+            get {
+                return ResourceManager.GetString("SaveFilePreviewText", resourceCulture);
             }
         }
         
@@ -7880,6 +7491,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Duplicate Section Name.
+        /// </summary>
+        public static string ScriptEditorDupeSectionNameErrorTitle {
+            get {
+                return ResourceManager.GetString("ScriptEditorDupeSectionNameErrorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move Down.
         /// </summary>
         public static string ScriptEditorMoveDownTip {
@@ -7925,6 +7545,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter/Exit.
+        /// </summary>
+        public static string ScriptParamChibiEnterExit {
+            get {
+                return ResourceManager.GetString("ScriptParamChibiEnterExit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dialogue.
         /// </summary>
         public static string ScriptParamDialogue {
@@ -7939,6 +7568,69 @@ namespace SerialLoops.Assets {
         public static string ScriptParamDisableLipFlap {
             get {
                 return ResourceManager.GetString("ScriptParamDisableLipFlap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display?.
+        /// </summary>
+        public static string ScriptParamDisplay {
+            get {
+                return ResourceManager.GetString("ScriptParamDisplay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display from Bottom.
+        /// </summary>
+        public static string ScriptParamDisplayFromBottom {
+            get {
+                return ResourceManager.GetString("ScriptParamDisplayFromBottom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Don&apos;t Clear Text.
+        /// </summary>
+        public static string ScriptParamDontClearText {
+            get {
+                return ResourceManager.GetString("ScriptParamDontClearText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duration (Frames).
+        /// </summary>
+        public static string ScriptParamDuration {
+            get {
+                return ResourceManager.GetString("ScriptParamDuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Emote.
+        /// </summary>
+        public static string ScriptParamEmote {
+            get {
+                return ResourceManager.GetString("ScriptParamEmote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End Script Section.
+        /// </summary>
+        public static string ScriptParamEndScriptSection {
+            get {
+                return ResourceManager.GetString("ScriptParamEndScriptSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Episode Header.
+        /// </summary>
+        public static string ScriptParamEpisodeHeader {
+            get {
+                return ResourceManager.GetString("ScriptParamEpisodeHeader", resourceCulture);
             }
         }
         
@@ -8425,6 +8117,15 @@ namespace SerialLoops.Assets {
         public static string SfxEditorBank {
             get {
                 return ResourceManager.GetString("SfxEditorBank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export SFX.
+        /// </summary>
+        public static string SfxEditorExportButton {
+            get {
+                return ResourceManager.GetString("SfxEditorExportButton", resourceCulture);
             }
         }
         
@@ -8939,6 +8640,15 @@ namespace SerialLoops.Assets {
         public static string Systems_architect___reverse_engineering_work {
             get {
                 return ResourceManager.GetString("Systems architect & reverse engineering work", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export System Texture.
+        /// </summary>
+        public static string SystemTextureEditorExportFileDialogTitle {
+            get {
+                return ResourceManager.GetString("SystemTextureEditorExportFileDialogTitle", resourceCulture);
             }
         }
         
@@ -9521,6 +9231,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Episode Group.
+        /// </summary>
+        public static string TopicEditorEpisodeGroup {
+            get {
+                return ResourceManager.GetString("TopicEditorEpisodeGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All main topics have a second &quot;hidden&quot; ID in addition to their main one. This is displayed for internal accounting and is generally not interesting to you as a user..
         /// </summary>
         public static string TopicEditorHiddenIdHelp {
@@ -9810,6 +9529,105 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Extras unlocked message box.
+        /// </summary>
+        public static string UiMessage128Label {
+            get {
+                return ResourceManager.GetString("UiMessage128Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Episode 1 title.
+        /// </summary>
+        public static string UiMessage17Label {
+            get {
+                return ResourceManager.GetString("UiMessage17Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Episode 2 title.
+        /// </summary>
+        public static string UiMessage18Label {
+            get {
+                return ResourceManager.GetString("UiMessage18Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Episode 3 title.
+        /// </summary>
+        public static string UiMessage19Label {
+            get {
+                return ResourceManager.GetString("UiMessage19Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Episode 4 title.
+        /// </summary>
+        public static string UiMessage20Label {
+            get {
+                return ResourceManager.GetString("UiMessage20Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Episode 5 title.
+        /// </summary>
+        public static string UiMessage21Label {
+            get {
+                return ResourceManager.GetString("UiMessage21Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Episode 1 ticker tape.
+        /// </summary>
+        public static string UiMessage22Label {
+            get {
+                return ResourceManager.GetString("UiMessage22Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Episode 2 ticker tape.
+        /// </summary>
+        public static string UiMessage23Label {
+            get {
+                return ResourceManager.GetString("UiMessage23Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Episode 3 ticker tape.
+        /// </summary>
+        public static string UiMessage24Label {
+            get {
+                return ResourceManager.GetString("UiMessage24Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Episode 4 ticker tape.
+        /// </summary>
+        public static string UiMessage25Label {
+            get {
+                return ResourceManager.GetString("UiMessage25Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Episode 5 ticker tape.
+        /// </summary>
+        public static string UiMessage26Label {
+            get {
+                return ResourceManager.GetString("UiMessage26Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Accessing save data prompt message box.
         /// </summary>
         public static string UiMessage40Label {
@@ -9851,6 +9669,24 @@ namespace SerialLoops.Assets {
         public static string UiMessage61Label {
             get {
                 return ResourceManager.GetString("UiMessage61Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Erase data options title.
+        /// </summary>
+        public static string UiMessage68Label {
+            get {
+                return ResourceManager.GetString("UiMessage68Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Erase data options ticker tape.
+        /// </summary>
+        public static string UiMessage73Label {
+            get {
+                return ResourceManager.GetString("UiMessage73Label", resourceCulture);
             }
         }
         
@@ -10126,6 +9962,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download from GitHub.
+        /// </summary>
+        public static string UpdaterDownloadFromGitHubLabel {
+            get {
+                return ResourceManager.GetString("UpdaterDownloadFromGitHubLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download release from GitHub.
+        /// </summary>
+        public static string UpdaterDownloadReleaseFromGitHubTitle {
+            get {
+                return ResourceManager.GetString("UpdaterDownloadReleaseFromGitHubTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A new update for Serial Loops is available!.
         /// </summary>
         public static string UpdaterTitleMessage {
@@ -10266,6 +10120,24 @@ namespace SerialLoops.Assets {
         public static string Voiced_dialogue_volume_options_ticker_tape {
             get {
                 return ResourceManager.GetString("Voiced dialogue volume options ticker tape", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Subtitle.
+        /// </summary>
+        public static string VoicedLineEditorEditSubtitleHeader {
+            get {
+                return ResourceManager.GetString("VoicedLineEditorEditSubtitleHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter subtitle text….
+        /// </summary>
+        public static string VoicedLineEditorSubtitleWatermark {
+            get {
+                return ResourceManager.GetString("VoicedLineEditorSubtitleWatermark", resourceCulture);
             }
         }
         

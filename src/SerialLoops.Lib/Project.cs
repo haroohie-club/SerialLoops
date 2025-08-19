@@ -1159,7 +1159,7 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException(localize("Error while loading project"), ex);
+            log.LogException(localize("ErrorLoadingProject"), ex);
             return (null, new(LoadProjectState.FAILED));
         }
     }

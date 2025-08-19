@@ -9,7 +9,7 @@
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.ScreenShakeScriptCommandEditorView">
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto">
         <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Spacing="3">
-            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Duration__Frames_}"/>
+            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptParamDuration}"/>
             <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
                  ToolTip.Tip="{x:Static assets:Strings.ScriptCommandParameterHelpShakeDuration}"/>
         </StackPanel>

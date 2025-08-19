@@ -151,7 +151,7 @@ public partial class ChibiEditorViewModel : EditorViewModel
             }
         }
 
-        ProgressDialogViewModel tracker = new(Strings.Exporting_GIF___);
+        ProgressDialogViewModel tracker = new(Strings.AnimationExportingGifProgressMessage);
         tracker.InitializeTasks(() => frames.SaveGif(savedGif, tracker), async void () => await Window.Window.ShowMessageBoxAsync(Strings.Success_, Strings.GIF_exported_, ButtonEnum.Ok, Icon.Success, _log));
         await new ProgressDialog { DataContext = tracker }.ShowDialog(Window.Window);
     }

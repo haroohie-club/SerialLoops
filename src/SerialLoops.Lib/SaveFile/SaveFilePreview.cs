@@ -74,7 +74,7 @@ public class SaveFilePreview(SaveSlotData slotData, Project project)
         if (project.Items.Find(item => item.Type == ItemDescription.ItemType.System_Texture
                                         && item.Name == "SYSTEX_SYS_CMN_B38") is not SystemTextureItem graphic)
         {
-            DrawText(canvas, string.Format(project.Localize("EPISODE: {0}"), number));
+            DrawText(canvas, string.Format(project.Localize("SaveFilePreviewText"), number));
             return;
         }
 

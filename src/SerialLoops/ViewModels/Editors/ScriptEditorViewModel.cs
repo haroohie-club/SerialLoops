@@ -527,7 +527,7 @@ public class ScriptEditorViewModel : EditorViewModel
         sectionName = $"NONE{sectionName}";
         if (ScriptSections.Any(s => s.Name.Equals(sectionName)))
         {
-            await Window.Window.ShowMessageBoxAsync(Strings.Duplicate_Section_Name,
+            await Window.Window.ShowMessageBoxAsync(Strings.ScriptEditorDupeSectionNameErrorTitle,
                 Strings.Section_name_already_exists__Please_pick_a_different_name_for_this_section_,
                 ButtonEnum.Ok, Icon.Warning, _log);
             return;
