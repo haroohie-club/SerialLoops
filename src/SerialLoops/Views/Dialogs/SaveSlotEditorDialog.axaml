@@ -35,7 +35,7 @@
                         <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
                             <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center"
                                         Orientation="Horizontal" Spacing="3">
-                                <TextBlock Text="{x:Static assets:Strings.Number_of_Saves_}" />
+                                <TextBlock Text="{x:Static assets:Strings.SaveEditorNumSavesLabel}" />
                                 <NumericUpDown Value="{Binding NumSaves}" Minimum="0"
                                                FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
                             </StackPanel>
@@ -43,7 +43,7 @@
                             <HeaderedContentControl Grid.Row="1" Grid.Column="0" Header="{x:Static assets:Strings.Volume_Config}" Margin="10"
                                            HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                                 <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto" VerticalAlignment="Center">
-                                    <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Music_}" />
+                                    <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.SaveEditorQuicksaveMusic}" />
                                     <NumericUpDown Grid.Column="1" Grid.Row="0" Margin="10,0,0,0"
                                                    Value="{Binding BgmVolume}" Minimum="0"
                                                    Maximum="100" FormatString="N0" Increment="1"
@@ -123,7 +123,7 @@
                                     </StackPanel>
                                 </Grid>
                             </HeaderedContentControl>
-                            <HeaderedContentControl Grid.Row="2" Grid.Column="0" Header="{x:Static assets:Strings.Puzzle_Interrupt_Scenes}" Margin="10"
+                            <HeaderedContentControl Grid.Row="2" Grid.Column="0" Header="{x:Static assets:Strings.SaveSlotEditorPuzzleInterruptScenes}" Margin="10"
                                            HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                                 <StackPanel Orientation="Vertical" Spacing="5">
                                     <RadioButton GroupName="PuzzleInterruptScenes" Content="{x:Static assets:Strings.Off}" IsChecked="{Binding PuzzleInterruptScenesOff}"/>
@@ -165,7 +165,7 @@
                                                            HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                                                 <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto">
                                                     <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5">
-                                                        <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Level}"/>
+                                                        <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.SaveEditorCharacterPowerLevel}"/>
                                                         <NumericUpDown Value="{Binding Level}" Minimum="1"
                                                                        Maximum="5" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
                                                     </StackPanel>
@@ -212,7 +212,7 @@
                             <NumericUpDown Grid.Row="2" Grid.Column="1" Margin="10,0,0,0" Value="{Binding Episode}" Minimum="1"
                                            Maximum="5" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
 
-                            <HeaderedContentControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static assets:Strings.Most_Recent_Objectives}" Margin="10"
+                            <HeaderedContentControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static assets:Strings.SaveEditorMostRecentObjectives}" Margin="10"
                                            HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                                 <ItemsRepeater ItemsSource="{Binding RecentObjectives}">
                                     <ItemsRepeater.Layout>
@@ -228,7 +228,7 @@
                                                     <CheckBox Grid.Row="0" Grid.Column="3" IsChecked="{Binding SecondSelection}"
                                                               Content="2" ToolTip.Tip="{x:Static assets:Strings.Second_Selection}"/>
                                                     <CheckBox Grid.Row="1" Grid.Column="0" IsChecked="{Binding KyonPresent}"
-                                                              ToolTip.Tip="{x:Static assets:Strings.Kyon_Present}" Margin="10,0">
+                                                              ToolTip.Tip="{x:Static assets:Strings.SaveEditorKyonPresentLabel}" Margin="10,0">
                                                         <Image Source="{Binding $parent[dialogs:SaveSlotEditorDialog].((vm:SaveSlotEditorDialogViewModel)DataContext).KyonVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
                                                     </CheckBox>
                                                     <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding HaruhiPresent}"
@@ -240,11 +240,11 @@
                                                         <Image Source="{Binding $parent[dialogs:SaveSlotEditorDialog].((vm:SaveSlotEditorDialogViewModel)DataContext).AsahinaVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
                                                     </CheckBox>
                                                     <CheckBox Grid.Row="1" Grid.Column="3" IsChecked="{Binding NagatoPresent}"
-                                                              ToolTip.Tip="{x:Static assets:Strings.Nagato_Present}" Margin="10,0">
+                                                              ToolTip.Tip="{x:Static assets:Strings.SaveEditorNagatoPresentLabel}" Margin="10,0">
                                                         <Image Source="{Binding $parent[dialogs:SaveSlotEditorDialog].((vm:SaveSlotEditorDialogViewModel)DataContext).NagatoVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
                                                     </CheckBox>
                                                     <CheckBox Grid.Row="1" Grid.Column="4" IsChecked="{Binding KoizumiPresent}"
-                                                              ToolTip.Tip="{x:Static assets:Strings.Koizumi_Present}" Margin="10,0">
+                                                              ToolTip.Tip="{x:Static assets:Strings.SaveEditorKoizumiPresentLabel}" Margin="10,0">
                                                         <Image Source="{Binding $parent[dialogs:SaveSlotEditorDialog].((vm:SaveSlotEditorDialogViewModel)DataContext).KoizumiVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
                                                     </CheckBox>
                                                 </Grid>

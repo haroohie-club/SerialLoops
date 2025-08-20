@@ -20,24 +20,24 @@
         <controls:AcrylicBorderHandler/>
 
         <StackPanel Spacing="10" HorizontalAlignment="Center" Margin="10 30">
-            <HeaderedContentControl Header="{x:Static assets:Strings.Project_Options}" MinWidth="300" MinHeight="100">
+            <HeaderedContentControl Header="{x:Static assets:Strings.ProjectOptions}" MinWidth="300" MinHeight="100">
                 <StackPanel Spacing="10" VerticalAlignment="Center" Orientation="Vertical">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Spacing="10" IsVisible="{Binding !Migrate}">
-                        <TextBlock Text="{x:Static assets:Strings.Name}" VerticalAlignment="Center"/>
+                        <TextBlock Text="{x:Static assets:Strings.ProjectOrHackName}" VerticalAlignment="Center"/>
                         <TextBox Name="NameBox" Watermark="Haroohie" Width="150" Text="{Binding ProjectName}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Spacing="10">
-                        <TextBlock Text="{x:Static assets:Strings.Language_Template}" VerticalAlignment="Center"/>
+                        <TextBlock Text="{x:Static assets:Strings.ProjectCreationLanguageTemplate}" VerticalAlignment="Center"/>
                         <ComboBox SelectedItem="{Binding LanguageTemplateItem, Mode=OneWayToSource}" SelectedIndex="0"
                                   Name="LanguageComboBox">
                             <ComboBox.Items>
                                 <ComboBoxItem Tag="en" Content="{x:Static assets:Strings.LanguageEnglish}"/>
-                                <ComboBoxItem Tag="ja" Content="{x:Static assets:Strings.Japanese}"/>
+                                <ComboBoxItem Tag="ja" Content="{x:Static assets:Strings.LanguageJapanese}"/>
                                 <ComboBoxItem Tag="zh-Hans" Content="{x:Static assets:Strings.LanguageChineseSimplified}"/>
                                 <ComboBoxItem Tag="ru" Content="{x:Static assets:Strings.Russian}"/>
                                 <ComboBoxItem Tag="es" Content="{x:Static assets:Strings.Spanish}"/>
-                                <ComboBoxItem Tag="pt-BR" Content="{x:Static assets:Strings.Portuguese__Brazilian_}"/>
-                                <ComboBoxItem Tag="it" Content="{x:Static assets:Strings.Italian}"/>
+                                <ComboBoxItem Tag="pt-BR" Content="{x:Static assets:Strings.LanguagePtBr}"/>
+                                <ComboBoxItem Tag="it" Content="{x:Static assets:Strings.LanguageItalian}"/>
                                 <ComboBoxItem Tag="fr" Content="{x:Static assets:Strings.LanguageFrench}"/>
                                 <ComboBoxItem Tag="de" Content="{x:Static assets:Strings.LanguageGerman}"/>
                                 <ComboBoxItem Tag="el" Content="{x:Static assets:Strings.LanguageGreek}"/>
@@ -48,7 +48,7 @@
             </HeaderedContentControl>
             <HeaderedContentControl Header="{x:Static assets:Strings.Select_ROM}" Padding="5" MinWidth="300" MinHeight="80">
                 <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
-                    <Button Content="{x:Static assets:Strings.Open_ROM}" Command="{Binding PickRomCommand}"
+                    <Button Content="{x:Static assets:Strings.RomOpenFileDialogTitle}" Command="{Binding PickRomCommand}"
                             Name="OpenRomButton"/>
                     <TextBlock Text="{Binding RomPath}" VerticalAlignment="Center"/>
                 </StackPanel>

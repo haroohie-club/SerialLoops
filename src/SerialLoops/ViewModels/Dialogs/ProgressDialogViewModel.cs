@@ -35,7 +35,7 @@ public class ProgressDialogViewModel : ViewModelBase, IProgressTracker
 
         if (string.IsNullOrEmpty(processVerb))
         {
-            processVerb = Strings.Loading_;
+            processVerb = Strings.ProjectLoadProgressPrefix;
         }
         ProcessVerb = processVerb;
     }

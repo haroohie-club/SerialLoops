@@ -19,7 +19,7 @@ public class SaveSlotPreviewViewModel : ViewModelBase
 
     [Reactive]
     public SKBitmap SaveSlotPreview { get; set; }
-    public string SlotName => _slotNum == 3 ? Strings.Quick_Save : string.Format(Strings.SaveEditorSlotName, _slotNum);
+    public string SlotName => _slotNum == 3 ? Strings.SaveEditorQuickSaveTab : string.Format(Strings.SaveEditorSlotName, _slotNum);
 
     private MainWindowViewModel _window;
 

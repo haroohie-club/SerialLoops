@@ -10,5 +10,5 @@ public class CharacterFilter(CharacterItem character)
 
     public override string ToString() =>
         (Character?.MessageInfo.Character == Speaker.UNKNOWN ? Strings.CharacterFilterAnyCharacter : Character?.DisplayName[4..]) ??
-        Strings.No_Character;
+        Strings.CharacterEditorNoCharacter;
 }

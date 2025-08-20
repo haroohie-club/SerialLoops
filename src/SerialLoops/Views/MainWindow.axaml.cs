@@ -41,20 +41,20 @@ public partial class MainWindow : Window
             [
                 new NativeMenuItem
                 {
-                    Header = Strings.New_Project___,
+                    Header = Strings.MenuNewProject,
                     Icon = ControlGenerator.GetIcon("New", ViewModel.Log),
                     Command = ViewModel.NewProjectCommand,
                 },
                 new NativeMenuItem
                 {
-                    Header = Strings.Open_Project,
+                    Header = Strings.MenuProjectOpen,
                     Icon = ControlGenerator.GetIcon("Open", ViewModel.Log),
                     Command = ViewModel.OpenProjectCommand,
                 },
                 ViewModel.RecentProjectsMenu,
                 new NativeMenuItem
                 {
-                    Header = Strings.Import_Project,
+                    Header = Strings.MenuImportProjectLabel,
                     Icon = ControlGenerator.GetIcon("Import_Project", ViewModel.Log),
                     Command = ViewModel.ImportProjectCommand,
                 },

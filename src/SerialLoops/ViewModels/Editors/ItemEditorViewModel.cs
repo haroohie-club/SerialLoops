@@ -33,7 +33,7 @@ public class ItemEditorViewModel : EditorViewModel
     private async Task Export()
     {
         string exportPath = (await Window.Window.ShowSaveFilePickerAsync(Strings.ItemEditorExportFileDialogTitle,
-            [new(Strings.PNG_Image) { Patterns = ["*.png"] }]))?.TryGetLocalPath();
+            [new(Strings.FiletypePng) { Patterns = ["*.png"] }]))?.TryGetLocalPath();
         if (!string.IsNullOrEmpty(exportPath))
         {
             await using FileStream fs = File.Create(exportPath);
@@ -43,7 +43,7 @@ public class ItemEditorViewModel : EditorViewModel
 
     private async Task Import()
     {
-        string importPath = (await Window.Window.ShowOpenFilePickerAsync(Strings.Import_Item_Image,
+        string importPath = (await Window.Window.ShowOpenFilePickerAsync(Strings.ItemEditorImportImage,
             [new(Strings.Supported_Images) { Patterns = Shared.SupportedImageFiletypes }]))?.TryGetLocalPath();
         if (!string.IsNullOrEmpty(importPath))
         {

@@ -13,7 +13,7 @@
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="3">
             <Button Content="{x:Static assets:Strings.ExportButtonLabel}" Command="{Binding ExportCommand}"/>
-            <Button Content="{x:Static assets:Strings.Import}" Command="{Binding ImportCommand}"/>
+            <Button Content="{x:Static assets:Strings.ProjectImportImportLabel}" Command="{Binding ImportCommand}"/>
         </StackPanel>
     </Grid>
 </UserControl>

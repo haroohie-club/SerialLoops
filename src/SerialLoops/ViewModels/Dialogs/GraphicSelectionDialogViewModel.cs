@@ -31,7 +31,7 @@ public class GraphicSelectionDialogViewModel : ViewModelBase
         set
         {
             this.RaiseAndSetIfChanged(ref _currentSelection, value);
-            PreviewLabel = _currentSelection is null ? Strings.No_preview_available : ((ItemDescription)_currentSelection).DisplayName;
+            PreviewLabel = _currentSelection is null ? Strings.GraphicSelectionNoPreviewAvailable : ((ItemDescription)_currentSelection).DisplayName;
             if (_currentSelection is null)
             {
                 Preview = null;

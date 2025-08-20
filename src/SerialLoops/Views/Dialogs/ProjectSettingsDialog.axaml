@@ -15,7 +15,7 @@
         Background="{DynamicResource FallbackBackgroundColor}"
         ExtendClientAreaToDecorationsHint="True"
         Icon="/Assets/serial-loops.ico"
-        Title="{x:Static assets:Strings.Project_Settings}">
+        Title="{x:Static assets:Strings.ProjectSettings}">
     <Panel>
         <controls:AcrylicBorderHandler/>
 

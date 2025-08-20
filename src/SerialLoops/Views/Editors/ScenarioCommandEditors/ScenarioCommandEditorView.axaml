@@ -16,7 +16,7 @@
             <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
                  ToolTip.Tip="{Binding SelectedScenarioCommand.Verb, Converter={x:Static utility:SLConverters.ScenarioVerbHelpConverter}}"/>
         </StackPanel>
-        <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" Text="{x:Static assets:Strings.Parameter_Value}"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" Text="{x:Static assets:Strings.AsmHackParameterValue}"/>
         <NumericUpDown Minimum="0" Maximum="{Binding MaxValue}" ClipValueToMinMax="True" FormatString="0"
                        Value="{Binding Parameter}" Grid.Row="1" Grid.Column="1" Margin="5"/>
     </Grid>

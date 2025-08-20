@@ -63,7 +63,7 @@
             </ItemsControl.Styles>
         </ItemsControl>
         <Grid Grid.Column="1" Grid.Row="0" ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto,Auto,Auto">
-            <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Number_of_Moves}"/>
+            <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.ChessPuzzleEditorNumMoves}"/>
             <NumericUpDown Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Value="{Binding NumMoves}"
                            Minimum="0" Maximum="{Binding NumMovesLimit}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
             <StackPanel Grid.Column="2" Grid.Row="0" Orientation="Horizontal" Spacing="3" Margin="5 0 0 0">

@@ -26,7 +26,7 @@
                        Value="{Binding FadePercentage}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 
         <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal" Spacing="3">
-            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Location}"/>
+            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptParamScreenFadeLocation}"/>
             <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
                  ToolTip.Tip="{x:Static assets:Strings.ScriptCommandScreenParamFadeInLocationHelp}"/>
         </StackPanel>

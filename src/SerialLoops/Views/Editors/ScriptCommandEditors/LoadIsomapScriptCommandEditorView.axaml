@@ -9,7 +9,7 @@
              x:DataType="vm:LoadIsomapScriptCommandEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.LoadIsomapScriptCommandEditorView">
     <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,Auto">
-        <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Map}"/>
+        <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptParamMap}"/>
         <StackPanel Grid.Column="1" Margin="10,0,0,0" Orientation="Horizontal" Spacing="5">
             <ComboBox ItemsSource="{Binding Maps}" SelectedItem="{Binding SelectedMap}"/>
             <controls:ItemLink Tabs="{Binding ScriptEditor.Window.EditorTabs}" Item="{Binding SelectedMap}"/>

@@ -13,7 +13,7 @@
                Source="{Binding Preview, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
                HorizontalAlignment="Left"/>
         <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="3">
-            <TextBlock Text="{x:Static assets:Strings.Place_Name}" VerticalAlignment="Center"/>
+            <TextBlock Text="{x:Static assets:Strings.PlaceEditorPlaceName}" VerticalAlignment="Center"/>
             <TextBox Text="{Binding PlaceName}"/>
         </StackPanel>
     </Grid>

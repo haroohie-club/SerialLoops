@@ -179,11 +179,11 @@
                         </ScrollViewer>
                     </TabItem>
 
-                    <TabItem Header="{x:Static assets:Strings.Map_Characters}">
+                    <TabItem Header="{x:Static assets:Strings.ScriptEditorMapCharactersLabel}">
                         <controls:MapCharactersSubEditor DataContext="{Binding MapCharactersSubEditorVm}" Margin="0 0 0 10"/>
                     </TabItem>
 
-                    <TabItem Header="{x:Static assets:Strings.Interactable_Objects}">
+                    <TabItem Header="{x:Static assets:Strings.ScriptEditorInteractableObjects}">
                         <ScrollViewer>
                             <Panel>
                                 <Grid RowDefinitions="*,Auto,Auto" ColumnDefinitions="Auto,Auto" Margin="0 0 0 10">

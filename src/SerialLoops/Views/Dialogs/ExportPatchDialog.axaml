@@ -19,7 +19,7 @@
         <controls:AcrylicBorderHandler/>
 
         <StackPanel Orientation="Vertical" Spacing="20" HorizontalAlignment="Center" Margin="10 30">
-            <TextBlock TextWrapping="Wrap" HorizontalAlignment="Center" Text="{x:Static assets:Strings.Note__When_exporting_an_xdelta_patch__the_base_ROM_you_should_use_is_likely_different_than_the_one_you_used_when_creating_the_project__Please_choose_the_base_Japanese_ROM__SHA_1_can_be_confirmed_below__to_ensure_that_people_who_want_to_play_your_hack_only_need_to_patch_the_game_once_}"/>
+            <TextBlock TextWrapping="Wrap" HorizontalAlignment="Center" Text="{x:Static assets:Strings.PatchExportXdeltaNote}"/>
 
             <StackPanel Orientation="Vertical" Spacing="10" HorizontalAlignment="Center">
                 <StackPanel Orientation="Vertical" Spacing="10" HorizontalAlignment="Center">

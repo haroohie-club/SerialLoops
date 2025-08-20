@@ -24,17 +24,17 @@
                           HorizontalAlignment="Center"/>
                 <CheckBox IsChecked="{Binding BgOcclusionLayerDisplayed}" Content="{x:Static assets:Strings.MapEditorBGOcclusionLayerLabel}"
                           HorizontalAlignment="Center"/>
-                <CheckBox IsChecked="{Binding ObjectLayerDisplayed}" Content="{x:Static assets:Strings.Object_Layer}"
+                <CheckBox IsChecked="{Binding ObjectLayerDisplayed}" Content="{x:Static assets:Strings.MapEditorObjectLayer}"
                           HorizontalAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
                 <CheckBox IsChecked="{Binding ScrollingBgDisplayed}" Content="{x:Static assets:Strings.Scrolling_BG}"
                           HorizontalAlignment="Center"/>
-                <CheckBox IsChecked="{Binding InfoLayerDisplayed}" Content="{x:Static assets:Strings.Info_Layer}"
+                <CheckBox IsChecked="{Binding InfoLayerDisplayed}" Content="{x:Static assets:Strings.MapEditorInfoLayerLabel}"
                           HorizontalAlignment="Center"/>
                 <CheckBox IsChecked="{Binding BgJunkLayerDisplayed}" Content="{x:Static assets:Strings.MapEditorBGJunkLayerLabel}"
                           HorizontalAlignment="Center"/>
-                <CheckBox IsChecked="{Binding ObjectJunkLayerDisplayed}" Content="{x:Static assets:Strings.Object_Junk_Layer}"
+                <CheckBox IsChecked="{Binding ObjectJunkLayerDisplayed}" Content="{x:Static assets:Strings.MapEditorObjectJunkLayer}"
                           HorizontalAlignment="Center"/>
             </StackPanel>
         </StackPanel>
@@ -43,9 +43,9 @@
             <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
                 <CheckBox IsChecked="{Binding Unknown2sDisplayed}" Content="{x:Static assets:Strings.Unknown}"
                           HorizontalAlignment="Center"/>
-                <CheckBox IsChecked="{Binding ObjectPositionsDisplayed}" Content="{x:Static assets:Strings.Object_Locations}"
+                <CheckBox IsChecked="{Binding ObjectPositionsDisplayed}" Content="{x:Static assets:Strings.MapEditorObjectLocations}"
                           HorizontalAlignment="Center"/>
-                <CheckBox IsChecked="{Binding InteractableObjectsDisplayed}" Content="{x:Static assets:Strings.Interactable_Objects}"
+                <CheckBox IsChecked="{Binding InteractableObjectsDisplayed}" Content="{x:Static assets:Strings.ScriptEditorInteractableObjects}"
                           HorizontalAlignment="Center"/>
                 <CheckBox IsChecked="{Binding DrawCameraTruckingDefinitions}" Content="{x:Static assets:Strings.MapEditorCameraTruckingLayerLabel}"
                           HorizontalAlignment="Center"/>

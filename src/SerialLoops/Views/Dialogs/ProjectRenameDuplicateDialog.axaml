@@ -19,7 +19,7 @@
         <controls:AcrylicBorderHandler/>
 
         <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto" Margin="30 45 30 15">
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.Name}" VerticalAlignment="Center" />
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.ProjectOrHackName}" VerticalAlignment="Center" />
 
             <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding NewName}"
                      Watermark="{x:Static assets:Strings.ProjectRenameWatermark}" Margin="10 0 0 0"

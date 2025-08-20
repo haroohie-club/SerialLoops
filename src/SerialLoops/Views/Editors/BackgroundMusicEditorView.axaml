@@ -13,7 +13,7 @@
         <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="3" Margin="2">
             <Button Command="{Binding ManageLoopCommand}">
                 <StackPanel Orientation="Horizontal" Spacing="3">
-                    <TextBlock Text="{x:Static assets:Strings.Manage_Loop}" VerticalAlignment="Center"/>
+                    <TextBlock Text="{x:Static assets:Strings.BgmEditorManageLoopButton}" VerticalAlignment="Center"/>
                     <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" ToolTip.Tip="{x:Static assets:Strings.BgmEditorLoopInfoHelp}"/>
                 </StackPanel>
             </Button>

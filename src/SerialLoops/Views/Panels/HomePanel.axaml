@@ -20,15 +20,15 @@
                 <TextBlock Classes="h2" Text="{x:Static assets:Strings.Start}"/>
                 <StackPanel Orientation="Horizontal" Spacing="5">
                     <Svg Path="avares://SerialLoops/Assets/Icons/New.svg" Width="16"/>
-                    <controls:LinkButton Command="{Binding MainWindow.NewProjectCommand}" Text="{x:Static assets:Strings.New_Project}"/>
+                    <controls:LinkButton Command="{Binding MainWindow.NewProjectCommand}" Text="{x:Static assets:Strings.ProjectCreationNewProject}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Spacing="5">
                     <Svg Path="avares://SerialLoops/Assets/Icons/Open.svg" Width="16"/>
-                    <controls:LinkButton Command="{Binding MainWindow.OpenProjectCommand}" Text="{x:Static assets:Strings.Open_Project}"/>
+                    <controls:LinkButton Command="{Binding MainWindow.OpenProjectCommand}" Text="{x:Static assets:Strings.MenuProjectOpen}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Spacing="5">
                     <Svg Path="avares://SerialLoops/Assets/Icons/Import_Project.svg" Width="16"/>
-                    <controls:LinkButton Command="{Binding MainWindow.ImportProjectCommand}" Text="{x:Static assets:Strings.Import_Project}"/>
+                    <controls:LinkButton Command="{Binding MainWindow.ImportProjectCommand}" Text="{x:Static assets:Strings.MenuImportProjectLabel}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Spacing="5">
                     <Svg Path="avares://SerialLoops/Assets/Icons/Edit_Save.svg" Width="16"/>
@@ -36,7 +36,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Spacing="5">
                     <Svg Path="avares://SerialLoops/Assets/Icons/Options.svg" Width="16"/>
-                    <controls:LinkButton Command="{Binding MainWindow.PreferencesCommand}" Text="{x:Static assets:Strings.Preferences}"/>
+                    <controls:LinkButton Command="{Binding MainWindow.PreferencesCommand}" Text="{x:Static assets:Strings.MenuPreferences}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Spacing="5">
                     <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16"/>
@@ -59,7 +59,7 @@
                             <StackPanel Orientation="Horizontal" Spacing="5" Margin="7">
                                 <Svg Path="{Binding IconPath}" Width="16"/>
                                 <StackPanel Orientation="Horizontal" Spacing="2">
-                                    <TextBlock Text="{x:Static assets:Strings.Missing_}" IsVisible="{Binding IsMissing}" Foreground="{StaticResource DisabledLinkColor}"/>
+                                    <TextBlock Text="{x:Static assets:Strings.ProjectMissingPrefix}" IsVisible="{Binding IsMissing}" Foreground="{StaticResource DisabledLinkColor}"/>
                                     <controls:LinkButton Text="{Binding Text}" Command="{Binding OpenCommand}" IsEnabled="{Binding !IsMissing}"
                                                          Foreground="{StaticResource {Binding LinkColorKey}}">
                                         <controls:LinkButton.ContextMenu>

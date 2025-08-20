@@ -49,14 +49,14 @@
             <HeaderedContentControl Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Header="{x:Static assets:Strings.Settings}"
                            Margin="20, 10">
                 <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.Map}"/>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.ScriptParamMap}"/>
                     <controls:ItemLink Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" Item="{Binding Map}" Tabs="{Binding Tabs}"/>
 
                     <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.PuzzleEditorBaseTimeLabel}"/>
                     <NumericUpDown Grid.Row="1" Grid.Column="1" Margin="10,0,0,0" Minimum="0" Maximum="999"
                                    Value="{Binding BaseTime}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 
-                    <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Number_of_Singularities}"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.PuzzleEditorNumSingularities}"/>
                     <NumericUpDown Grid.Row="2" Grid.Column="1" Margin="10,0,0,0" Minimum="0" Maximum="99"
                                    Value="{Binding NumSingularities}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 
@@ -70,10 +70,10 @@
                     <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.PuzzleEditorAccompanyingCharacterLabel}"/>
                     <ComboBox Grid.Row="5" Grid.Column="1" Margin="10,0,0,0" ItemsSource="{Binding Characters}" SelectedItem="{Binding AccompanyingCharacter}"/>
 
-                    <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Power_Character_1}"/>
+                    <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.PuzzleEditorPowerCharacter1}"/>
                     <ComboBox Grid.Row="6" Grid.Column="1" Margin="10,0,0,0" ItemsSource="{Binding Characters}" SelectedItem="{Binding PowerCharacter1}"/>
 
-                    <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Power_Character_2}"/>
+                    <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.PuzzleEditorPowerCharacter2}"/>
                     <ComboBox Grid.Row="7" Grid.Column="1" Margin="10,0,0,0" ItemsSource="{Binding Characters}" SelectedItem="{Binding PowerCharacter2}"/>
 
                     <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Singularity}"/>

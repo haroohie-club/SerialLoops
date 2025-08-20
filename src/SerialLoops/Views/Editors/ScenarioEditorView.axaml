@@ -27,11 +27,11 @@
             <Button ToolTip.Tip="{x:Static assets:Strings.ScenarioEditorClearScenarioLabel}" Width="22" Command="{Binding ClearCommand}">
                 <Svg Path="avares://SerialLoops/Assets/Icons/Clear.svg" Width="22"/>
             </Button>
-            <Button ToolTip.Tip="{x:Static assets:Strings.Move_Command_Up}" Width="22" Command="{Binding UpCommand}"
+            <Button ToolTip.Tip="{x:Static assets:Strings.ScriptEditorMoveCommandUp}" Width="22" Command="{Binding UpCommand}"
                     IsEnabled="{Binding SelectedCommand, Converter={x:Static ObjectConverters.IsNotNull}}">
                 <Svg Path="avares://SerialLoops/Assets/Icons/Move_Up.svg" Width="22"/>
             </Button>
-            <Button ToolTip.Tip="{x:Static assets:Strings.Move_Command_Down}" Width="22" Command="{Binding DownCommand}"
+            <Button ToolTip.Tip="{x:Static assets:Strings.ScriptEditorMoveCommandDown}" Width="22" Command="{Binding DownCommand}"
                     IsEnabled="{Binding SelectedCommand, Converter={x:Static ObjectConverters.IsNotNull}}">
                 <Svg Path="avares://SerialLoops/Assets/Icons/Move_Down.svg" Width="22"/>
             </Button>

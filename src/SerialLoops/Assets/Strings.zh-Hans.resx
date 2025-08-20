@@ -1009,303 +1009,260 @@
   <data name="ScriptParamHorizontalIntensity" xml:space="preserve">
     <value>水平强度</value>
   </data>
-  <data name="ID" xml:space="preserve">
+  <data name="TopicEditorTopicIdLabel" xml:space="preserve">
     <value>ID</value>
   </data>
-  <data name="Image Files" xml:space="preserve">
+  <data name="FiletypeImages" xml:space="preserve">
     <value>图像文件</value>
   </data>
-  <data name="Import" xml:space="preserve">
+  <data name="ProjectImportImportLabel" xml:space="preserve">
     <value>导入</value>
     <comment>As in import an exported project</comment>
   </data>
-  <data name="Import a Hack" xml:space="preserve">
+  <data name="AsmHackImportLabel" xml:space="preserve">
     <value>导入修改</value>
   </data>
-  <data name="Import Hack" xml:space="preserve">
+  <data name="AsmHackImportButton" xml:space="preserve">
     <value>导入修改</value>
   </data>
-  <data name="Import Project" xml:space="preserve">
+  <data name="MenuImportProjectLabel" xml:space="preserve">
     <value>导入项目</value>
   </data>
-  <data name="Import Project..." xml:space="preserve">
-    <value>导入项目...</value>
-  </data>
-  <data name="Importing Project" xml:space="preserve">
+  <data name="ProjectImportProgressDialogMessage" xml:space="preserve">
     <value>导入项目</value>
   </data>
-  <data name="Include lip flap animation?" xml:space="preserve">
+  <data name="CharacterSpriteEditorIncludeLipFlapAnimationTitle" xml:space="preserve">
     <value>包括口型动画吗？</value>
   </data>
-  <data name="Invalid audio file selected." xml:space="preserve">
+  <data name="ErrorInvalidAudioSelected" xml:space="preserve">
     <value>选择的音频文件无效。</value>
   </data>
-  <data name="Invalid item type!" xml:space="preserve">
+  <data name="ErrorInvalidItemType" xml:space="preserve">
     <value>项目类型无效！</value>
   </data>
-  <data name="Invalid or unavailable script command selected: {0}" xml:space="preserve">
-    <value>所选脚本命令无效或不可用：{0}</value>
-  </data>
-  <data name="Invalid parameter detected in script {0} parameter {1}" xml:space="preserve">
-    <value>在脚本 {0} 参数 {1} 中检测到无效参数</value>
-  </data>
-  <data name="Invalid search terms" xml:space="preserve">
+  <data name="SearchDialogInvalidTermsLabel" xml:space="preserve">
     <value>无效的搜索词</value>
   </data>
-  <data name="Investigation phase options ticker tape" xml:space="preserve">
+  <data name="UiMessage70Label" xml:space="preserve">
     <value>调查阶段选项滚动条</value>
   </data>
-  <data name="Investigation Phase Results" xml:space="preserve">
+  <data name="UiMessage07Label" xml:space="preserve">
     <value>调查阶段结果</value>
   </data>
-  <data name="Italian" xml:space="preserve">
+  <data name="LanguageItalian" xml:space="preserve">
     <value>意大利语</value>
   </data>
   <data name="Item" xml:space="preserve">
     <value>项目</value>
   </data>
-  <data name="Item Names List" xml:space="preserve">
-    <value>项目名称列表</value>
-  </data>
-  <data name="Items" xml:space="preserve">
+  <data name="ItemsPanelItems" xml:space="preserve">
     <value>项目</value>
   </data>
-  <data name="Itsuki Koizumi event unlocked message box" xml:space="preserve">
+  <data name="UiMessage119Label" xml:space="preserve">
     <value>古泉事件解锁消息框</value>
   </data>
-  <data name="Japanese" xml:space="preserve">
+  <data name="LanguageJapanese" xml:space="preserve">
     <value>日语</value>
   </data>
-  <data name="Koizumi companion selected description" xml:space="preserve">
+  <data name="UiMessage59Label" xml:space="preserve">
     <value>古泉同伴选择描述</value>
   </data>
-  <data name="Koizumi puzzle phase selected description" xml:space="preserve">
+  <data name="UiMessage63Label" xml:space="preserve">
     <value>古泉解谜阶段选择描述</value>
   </data>
-  <data name="Koizumi Time Percentage" xml:space="preserve">
+  <data name="TopicEditorKoizumiTimePercentage" xml:space="preserve">
     <value>古泉时间百分比</value>
   </data>
-  <data name="Kyon companion selected description" xml:space="preserve">
+  <data name="UiMessage56Label" xml:space="preserve">
     <value>阿虚同伴选择描述</value>
   </data>
-  <data name="Kyon Time Percentage" xml:space="preserve">
+  <data name="TopicEditorKyonTimePercentage" xml:space="preserve">
     <value>阿虚时间百分比</value>
   </data>
-  <data name="Kyon's Dialogue Box Companion Selection" xml:space="preserve">
+  <data name="UiMessage112Label" xml:space="preserve">
     <value>阿虚的对话框同伴选择</value>
   </data>
-  <data name="Kyon's Dialogue Box Group Selection" xml:space="preserve">
+  <data name="UiMessage109Label" xml:space="preserve">
     <value>阿虚的对话框分组选择</value>
   </data>
-  <data name="Kyonless Topics" xml:space="preserve">
+  <data name="GroupSelectionEditorKyonlessTopics" xml:space="preserve">
     <value>没有阿虚的话题</value>
   </data>
   <data name="Language" xml:space="preserve">
     <value>语言</value>
   </data>
-  <data name="Language Template" xml:space="preserve">
+  <data name="ProjectCreationLanguageTemplate" xml:space="preserve">
     <value>语言模板</value>
   </data>
-  <data name="Listened to {0} (F{1:D2})" xml:space="preserve">
+  <data name="FlagListenedToBgm" xml:space="preserve">
     <value>已收听 {0}</value>
     <comment>{0} is the name of a BGM that's been encountered while playing the game</comment>
   </data>
-  <data name="Load Game menu ticker tape" xml:space="preserve">
+  <data name="UiMessage29Label" xml:space="preserve">
     <value>加载游戏菜单滚动条</value>
   </data>
-  <data name="Load this save prompt" xml:space="preserve">
+  <data name="UiMessage33Label" xml:space="preserve">
     <value>加载此存档提示</value>
   </data>
-  <data name="Loading Archives (dat.bin)" xml:space="preserve">
+  <data name="ProjectLoadLoadingDatBin" xml:space="preserve">
     <value>正在加载归档文件（dat.bin）</value>
   </data>
-  <data name="Loading Archives (evt.bin)" xml:space="preserve">
+  <data name="ProjectLoadLoadingEvtBin" xml:space="preserve">
     <value>正在加载归档文件（evt.bin）</value>
   </data>
-  <data name="Loading Archives (grp.bin)" xml:space="preserve">
+  <data name="ProjectLoadLoadingGrpBin" xml:space="preserve">
     <value>正在加载归档文件（grp.bin）</value>
   </data>
-  <data name="Loading Project" xml:space="preserve">
-    <value>加载项目</value>
-  </data>
-  <data name="Loading prompt message box" xml:space="preserve">
+  <data name="UiMessage38Label" xml:space="preserve">
     <value>加载提示消息框</value>
   </data>
-  <data name="Loading:" xml:space="preserve">
+  <data name="ProjectLoadProgressPrefix" xml:space="preserve">
     <value>正在加载：</value>
   </data>
-  <data name="Location" xml:space="preserve">
+  <data name="ScriptParamScreenFadeLocation" xml:space="preserve">
     <value>地点</value>
   </data>
-  <data name="Loop?" xml:space="preserve">
+  <data name="BgmEditorLoopCheckboxLabel" xml:space="preserve">
     <value>循环？</value>
   </data>
-  <data name="Main Topic" xml:space="preserve">
+  <data name="UiMessage02Label" xml:space="preserve">
     <value>主要话题</value>
   </data>
-  <data name="Manage Loop" xml:space="preserve">
+  <data name="BgmEditorManageLoopButton" xml:space="preserve">
     <value>管理循环</value>
   </data>
-  <data name="Map" xml:space="preserve">
+  <data name="ScriptParamMap" xml:space="preserve">
     <value>地图</value>
   </data>
-  <data name="Map Characters" xml:space="preserve">
+  <data name="ScriptEditorMapCharactersLabel" xml:space="preserve">
     <value>地图角色</value>
   </data>
-  <data name="Maps" xml:space="preserve">
+  <data name="ItemsPanelMaps" xml:space="preserve">
     <value>地图</value>
   </data>
-  <data name="Migrate Project" xml:space="preserve">
+  <data name="MenuMigrateProject" xml:space="preserve">
     <value>迁移项目</value>
   </data>
-  <data name="Migrate to new ROM" xml:space="preserve">
+  <data name="ProjectMigrateTitle" xml:space="preserve">
     <value>迁移到新 ROM</value>
   </data>
-  <data name="Migrated to new ROM!" xml:space="preserve">
+  <data name="ProjectMigrateSuccessMessage" xml:space="preserve">
     <value>已迁移到新 ROM！</value>
   </data>
-  <data name="Migrating to new ROM" xml:space="preserve">
+  <data name="ProjectMigrateProgressMessage" xml:space="preserve">
     <value>正在迁移到新 ROM</value>
   </data>
-  <data name="Migration Complete!" xml:space="preserve">
+  <data name="ProjectMigrateSuccessTitle" xml:space="preserve">
     <value>迁移完成！</value>
   </data>
-  <data name="Mikuru Asahina event unlocked message box" xml:space="preserve">
+  <data name="UiMessage117Label" xml:space="preserve">
     <value>朝比奈实玖瑠事件解锁消息框</value>
   </data>
-  <data name="Mikuru Time Percentage" xml:space="preserve">
+  <data name="TopicEditorMikuruTimePercentage" xml:space="preserve">
     <value>实玖瑠时间百分比</value>
   </data>
-  <data name="Miss 2 Section" xml:space="preserve">
+  <data name="ScriptParamMiss2Section" xml:space="preserve">
     <value>失败 2 部分</value>
   </data>
-  <data name="Miss Section" xml:space="preserve">
+  <data name="ScriptParamMissSection" xml:space="preserve">
     <value>失败部分</value>
   </data>
-  <data name="Missing:" xml:space="preserve">
+  <data name="ProjectMissingPrefix" xml:space="preserve">
     <value>缺失：</value>
   </data>
-  <data name="Mode" xml:space="preserve">
+  <data name="ScriptParamMode" xml:space="preserve">
     <value>模式</value>
     <comment>Sound play mode (start/stop)</comment>
   </data>
-  <data name="Modify by" xml:space="preserve">
+  <data name="ScriptParamModifyBy" xml:space="preserve">
     <value>修改于</value>
     <comment>Expects an amount, i.e. "Modify by +5"</comment>
   </data>
-  <data name="Move Command Down" xml:space="preserve">
+  <data name="ScriptEditorMoveCommandDown" xml:space="preserve">
     <value>向下移动命令</value>
   </data>
-  <data name="Move Command Up" xml:space="preserve">
+  <data name="ScriptEditorMoveCommandUp" xml:space="preserve">
     <value>向上移动命令</value>
   </data>
-  <data name="MP3 files" xml:space="preserve">
+  <data name="FiletypeMp3" xml:space="preserve">
     <value>MP3 文件</value>
   </data>
-  <data name="Music" xml:space="preserve">
+  <data name="ScriptParamMusic" xml:space="preserve">
     <value>音乐</value>
   </data>
-  <data name="Music:" xml:space="preserve">
+  <data name="SaveEditorQuicksaveMusic" xml:space="preserve">
     <value>音乐：</value>
   </data>
-  <data name="Mystery girl voice added to config message box" xml:space="preserve">
+  <data name="UiMessage129Label" xml:space="preserve">
     <value>神秘女孩的声音添加到配置中消息框</value>
   </data>
-  <data name="Nagato companion selected description" xml:space="preserve">
+  <data name="UiMessage58Label" xml:space="preserve">
     <value>长门同伴选择描述</value>
   </data>
-  <data name="Nagato puzzle phase selected description" xml:space="preserve">
+  <data name="UiMessage62Label" xml:space="preserve">
     <value>长门解谜阶段选择描述</value>
   </data>
-  <data name="Nagato Time Percentage" xml:space="preserve">
+  <data name="TopicEditorNagatoTimePercentage" xml:space="preserve">
     <value>长门时间百分比</value>
   </data>
-  <data name="Name" xml:space="preserve">
+  <data name="ProjectOrHackName" xml:space="preserve">
     <value>名称</value>
   </data>
-  <data name="Name '{0}' is already in use!" xml:space="preserve">
-    <value>名称“{0}”已被使用！</value>
-    <comment>{0} is the name of an item (this appears when attempting to rename an item)</comment>
-  </data>
-  <data name="NDS ROM" xml:space="preserve">
+  <data name="FiletypeNdsRom" xml:space="preserve">
     <value>NDS ROM</value>
   </data>
-  <data name="New Base ROM" xml:space="preserve">
+  <data name="NewBaseRom" xml:space="preserve">
     <value>新基础 ROM</value>
   </data>
-  <data name="New Command" xml:space="preserve">
+  <data name="ScriptScenarioNewCommand" xml:space="preserve">
     <value>新命令</value>
   </data>
-  <data name="New Name" xml:space="preserve">
-    <value>新名称</value>
-  </data>
-  <data name="New Project" xml:space="preserve">
+  <data name="ProjectCreationNewProject" xml:space="preserve">
     <value>新项目</value>
   </data>
-  <data name="New Project..." xml:space="preserve">
+  <data name="MenuNewProject" xml:space="preserve">
     <value>新项目…</value>
   </data>
-  <data name="New Section" xml:space="preserve">
-    <value>新部分</value>
-  </data>
-  <data name="New Update Available: {0}" xml:space="preserve">
+  <data name="UpdaterNewUpdateAvailableTitle" xml:space="preserve">
     <value>更新可用：{0}</value>
     <comment>{0} is the version</comment>
   </data>
-  <data name="NitroPacker failed to pack ROM with exception" xml:space="preserve">
+  <data name="BuildNitroPackerFailedPacking" xml:space="preserve">
     <value>NitroPacker 未能打包 ROM，出现异常</value>
   </data>
   <data name="No" xml:space="preserve">
     <value>否</value>
   </data>
-  <data name="No Emulator Path" xml:space="preserve">
+  <data name="NoEmulatorPathMessageTitle" xml:space="preserve">
     <value>未设置模拟器路径</value>
   </data>
-  <data name="No emulator path has been set.\nPlease set the path to a Nintendo DS emulator in Preferences to use Build &amp; Run." xml:space="preserve">
+  <data name="NoEmulatorPathMessage" xml:space="preserve">
     <value>未设置模拟器路径。\n请在“设置”中添加 Nintendo DS 模拟器的路径以使用“构建和运行”。</value>
   </data>
-  <data name="No exported project selected" xml:space="preserve">
+  <data name="ProjectImportNoExportedProjectSelected" xml:space="preserve">
     <value>未选择导出项目</value>
   </data>
-  <data name="No hacks applied!" xml:space="preserve">
+  <data name="AsmHackNoneApplied" xml:space="preserve">
     <value>未应用修改！</value>
   </data>
-  <data name="No preview available" xml:space="preserve">
+  <data name="GraphicSelectionNoPreviewAvailable" xml:space="preserve">
     <value>没有可用的预览</value>
   </data>
-  <data name="No Project Open" xml:space="preserve">
-    <value>没有打开的项目</value>
-  </data>
-  <data name="No recent projects. Create one and it will appear here." xml:space="preserve">
-    <value>没有最近的项目。创建项目后，将在此处显示。</value>
-  </data>
-  <data name="No ROM Hash Recorded!" xml:space="preserve">
-    <value>未记录 ROM 哈希值！</value>
-  </data>
-  <data name="No save data ticker tape" xml:space="preserve">
+  <data name="UiMessage27Label" xml:space="preserve">
     <value>没有存档数据滚动条</value>
   </data>
-  <data name="No saves Load Game menu ticker tape" xml:space="preserve">
+  <data name="UiMessage28Label" xml:space="preserve">
     <value>没有存档加载游戏菜单滚动条</value>
   </data>
-  <data name="No valid maps found." xml:space="preserve">
-    <value>未找到有效地图。</value>
-  </data>
-  <data name="None Selected" xml:space="preserve">
+  <data name="ProjectCreationNoRomSelected" xml:space="preserve">
     <value>未选择</value>
     <comment>In the context of "no ROM selected"</comment>
   </data>
-  <data name="Number of Saves:" xml:space="preserve">
+  <data name="SaveEditorNumSavesLabel" xml:space="preserve">
     <value>存档数：</value>
   </data>
-  <data name="Number of Singularities" xml:space="preserve">
+  <data name="PuzzleEditorNumSingularities" xml:space="preserve">
     <value>奇点数量</value>
-  </data>
-  <data name="objcopy exited with code {0}" xml:space="preserve">
-    <value>objcopy 已退出，代码为 {0}</value>
-  </data>
-  <data name="objcopy not found at '{0}'" xml:space="preserve">
-    <value>在“{0}”处找不到 objcopy</value>
   </data>
   <data name="Off" xml:space="preserve">
     <value>关</value>
@@ -1313,266 +1270,204 @@
   <data name="On" xml:space="preserve">
     <value>开</value>
   </data>
-  <data name="One or more archives is null." xml:space="preserve">
+  <data name="ErrorArchivesNull" xml:space="preserve">
     <value>一个或多个归档文件是空的。</value>
   </data>
-  <data name="Open Chokuretsu Save File" xml:space="preserve">
+  <data name="SaveEditorLoadSaveFileDialogTitle" xml:space="preserve">
     <value>打开《串联》存档文件</value>
   </data>
-  <data name="Open Exported Project" xml:space="preserve">
+  <data name="ProjectImportFileDialogTitle" xml:space="preserve">
     <value>打开导出的项目</value>
     <comment>As in a slzip exported project</comment>
   </data>
-  <data name="Open Project" xml:space="preserve">
+  <data name="MenuProjectOpen" xml:space="preserve">
     <value>打开项目</value>
   </data>
-  <data name="Open ROM" xml:space="preserve">
+  <data name="RomOpenFileDialogTitle" xml:space="preserve">
     <value>打开 ROM</value>
   </data>
-  <data name="Optimal Group" xml:space="preserve">
-    <value>最优组</value>
-  </data>
-  <data name="Option 1" xml:space="preserve">
+  <data name="ScriptParamOption1" xml:space="preserve">
     <value>选项 1</value>
   </data>
-  <data name="Option 2" xml:space="preserve">
+  <data name="ScriptParamOption2" xml:space="preserve">
     <value>选项 2</value>
   </data>
-  <data name="Option 3" xml:space="preserve">
+  <data name="ScriptParamOption3" xml:space="preserve">
     <value>选项 3</value>
-  </data>
-  <data name="Option 4" xml:space="preserve">
-    <value>选项 4</value>
   </data>
   <data name="Orphaned_Items" xml:space="preserve">
     <value>未使用的项目</value>
   </data>
-  <data name="Outline Color" xml:space="preserve">
+  <data name="CharacterEditorNameOutlineColor" xml:space="preserve">
     <value>轮廓颜色</value>
   </data>
-  <data name="Output patch location" xml:space="preserve">
-    <value>输出补丁位置</value>
-  </data>
-  <data name="Overwrite save prompt message box" xml:space="preserve">
+  <data name="UiMessage37Label" xml:space="preserve">
     <value>覆盖保存提示消息框</value>
   </data>
-  <data name="Packing ROM" xml:space="preserve">
+  <data name="BuildPackingRomProgressMessage" xml:space="preserve">
     <value>打包 ROM</value>
   </data>
-  <data name="Palette" xml:space="preserve">
+  <data name="SysTexEditorPaletteLabel" xml:space="preserve">
     <value>调色板</value>
   </data>
-  <data name="Parameter Value" xml:space="preserve">
+  <data name="AsmHackParameterValue" xml:space="preserve">
     <value>参数值</value>
   </data>
-  <data name="Past Description" xml:space="preserve">
+  <data name="GroupSelectionEditorPastDescriptionLabel" xml:space="preserve">
     <value>过去的描述</value>
   </data>
   <data name="Paste" xml:space="preserve">
     <value>粘贴</value>
   </data>
-  <data name="Patch Created!" xml:space="preserve">
+  <data name="ExportPatchSuccessMessageTitle" xml:space="preserve">
     <value>补丁已创建！</value>
   </data>
-  <data name="Patching ARM9" xml:space="preserve">
-    <value>给 ARM9 打补丁</value>
-  </data>
-  <data name="Patching Overlay {0}" xml:space="preserve">
-    <value>给 Overlay {0} 打补丁</value>
-  </data>
-  <data name="Pause menu Config ticker tape" xml:space="preserve">
+  <data name="UiMessage15Label" xml:space="preserve">
     <value>暂停菜单配置滚动条</value>
   </data>
-  <data name="Pause menu Load ticker tape" xml:space="preserve">
+  <data name="UiMessage14Label" xml:space="preserve">
     <value>暂停菜单加载滚动条</value>
   </data>
-  <data name="Pause menu Title ticker tape" xml:space="preserve">
+  <data name="UiMessage16Label" xml:space="preserve">
     <value>暂停菜单标题滚动条</value>
   </data>
-  <data name="Piece 1" xml:space="preserve">
-    <value>棋子 1</value>
-    <comment>Chesspiece</comment>
-  </data>
-  <data name="Piece 2" xml:space="preserve">
-    <value>棋子 2</value>
-    <comment>Chesspiece</comment>
-  </data>
-  <data name="Piece 3" xml:space="preserve">
-    <value>棋子 3</value>
-    <comment>Chesspiece</comment>
-  </data>
-  <data name="Piece 4" xml:space="preserve">
-    <value>棋子 4</value>
-    <comment>Chesspiece</comment>
-  </data>
-  <data name="Place" xml:space="preserve">
+  <data name="ScriptParamPlace" xml:space="preserve">
     <value>地点</value>
   </data>
-  <data name="Place Name" xml:space="preserve">
+  <data name="PlaceEditorPlaceName" xml:space="preserve">
     <value>地点名称</value>
   </data>
-  <data name="Places" xml:space="preserve">
+  <data name="ItemsPanelPlaces" xml:space="preserve">
     <value>地点</value>
   </data>
-  <data name="Plate Color" xml:space="preserve">
+  <data name="CharacterEditorNameplateColor" xml:space="preserve">
     <value>图板颜色</value>
   </data>
-  <data name="Please choose a project name before creating the project." xml:space="preserve">
+  <data name="ProjectCreationNoNameMessage" xml:space="preserve">
     <value>请在创建项目之前选择项目名称。</value>
   </data>
-  <data name="Please enter a game name for the banner, between 1 and 128 characters." xml:space="preserve">
+  <data name="ProjectSettingsGameNameInvalidMessage" xml:space="preserve">
     <value>请为横幅输入一个游戏名称，长度在 1 到 128 个字符之间。</value>
   </data>
-  <data name="Please enter a value for the section name" xml:space="preserve">
+  <data name="ScriptEditorSectionNameInvalid" xml:space="preserve">
     <value>请为节名称输入一个值</value>
   </data>
-  <data name="Please select a ROM before creating the project." xml:space="preserve">
+  <data name="ProjectCreationNoROMSelectedMessage" xml:space="preserve">
     <value>请在创建项目之前选择 ROM。</value>
   </data>
-  <data name="Please select a template" xml:space="preserve">
+  <data name="ScriptTemplateSelectPrompt" xml:space="preserve">
     <value>请选择一个模板</value>
   </data>
-  <data name="Please select at least one search scope and item filter." xml:space="preserve">
+  <data name="SearchDialogNoScopeOrFilterMessage" xml:space="preserve">
     <value>请至少选择一个搜索范围和项目筛选器。</value>
   </data>
-  <data name="PNG Image" xml:space="preserve">
+  <data name="FiletypePng" xml:space="preserve">
     <value>PNG 图像</value>
   </data>
-  <data name="Portuguese (Brazilian)" xml:space="preserve">
+  <data name="LanguagePtBr" xml:space="preserve">
     <value>葡萄牙语（巴西）</value>
   </data>
-  <data name="Position Image" xml:space="preserve">
-    <value>位置图片</value>
-  </data>
-  <data name="Position:" xml:space="preserve">
-    <value>位置：</value>
-  </data>
-  <data name="Power Character 1" xml:space="preserve">
+  <data name="PuzzleEditorPowerCharacter1" xml:space="preserve">
     <value>力量角色 1</value>
   </data>
-  <data name="Power Character 2" xml:space="preserve">
+  <data name="PuzzleEditorPowerCharacter2" xml:space="preserve">
     <value>力量角色 2</value>
   </data>
-  <data name="Pre-Release Channel" xml:space="preserve">
+  <data name="UpdaterPreReleaseChannel" xml:space="preserve">
     <value>预发布渠道</value>
   </data>
-  <data name="Preferences" xml:space="preserve">
+  <data name="MenuPreferences" xml:space="preserve">
     <value>设置</value>
   </data>
-  <data name="Preserve Aspect Ratio:" xml:space="preserve">
-    <value>保留纵横比：</value>
-  </data>
-  <data name="Press ENTER to execute search" xml:space="preserve">
+  <data name="SearchDialogDefaultSearchMessage" xml:space="preserve">
     <value>按 ENTER 执行搜索</value>
   </data>
-  <data name="Project Creation Warning" xml:space="preserve">
+  <data name="ProjectCreationWarning" xml:space="preserve">
     <value>项目创建警告</value>
   </data>
-  <data name="Project exported successfully!" xml:space="preserve">
-    <value>项目导出成功！</value>
-  </data>
-  <data name="Project not provided to project creation dialog" xml:space="preserve">
-    <value>项目未提供给项目创建对话框</value>
-  </data>
-  <data name="Project Options" xml:space="preserve">
+  <data name="ProjectOptions" xml:space="preserve">
     <value>项目选项</value>
   </data>
-  <data name="Project Settings" xml:space="preserve">
+  <data name="ProjectSettings" xml:space="preserve">
     <value>项目设置</value>
   </data>
-  <data name="Project Settings..." xml:space="preserve">
+  <data name="MenuProjectSettings" xml:space="preserve">
     <value>项目设置…</value>
   </data>
-  <data name="Projects" xml:space="preserve">
+  <data name="PreferencesProjectsTab" xml:space="preserve">
     <value>项目</value>
   </data>
-  <data name="Puzzle" xml:space="preserve">
+  <data name="ScriptParamPuzzle" xml:space="preserve">
     <value>解谜</value>
   </data>
-  <data name="Puzzle Interrupt Scenes" xml:space="preserve">
+  <data name="SaveSlotEditorPuzzleInterruptScenes" xml:space="preserve">
     <value>解谜中断场景</value>
   </data>
-  <data name="Puzzle Interrupt Scenes Off" xml:space="preserve">
+  <data name="UiMessage104Label" xml:space="preserve">
     <value>解谜中断场景关</value>
   </data>
-  <data name="Puzzle Interrupt Scenes On" xml:space="preserve">
+  <data name="UiMessage106Label" xml:space="preserve">
     <value>解谜中断场景开</value>
   </data>
-  <data name="Puzzle Interrupt Scenes setting" xml:space="preserve">
+  <data name="UiMessage96Label" xml:space="preserve">
     <value>解谜中断场景设置</value>
   </data>
-  <data name="Puzzle Interrupt Scenes ticker tape" xml:space="preserve">
+  <data name="UiMessage100Label" xml:space="preserve">
     <value>解谜中断场景滚动条</value>
   </data>
-  <data name="Puzzle Interrupt Scenes Unseen Only" xml:space="preserve">
+  <data name="UiMessage105Label" xml:space="preserve">
     <value>解谜中断场景仅未看过</value>
   </data>
-  <data name="Puzzle phase character description" xml:space="preserve">
+  <data name="UiMessage60Label" xml:space="preserve">
     <value>解谜阶段角色描述</value>
   </data>
-  <data name="Puzzle Phase Group" xml:space="preserve">
+  <data name="TopicEditorPuzzlePhaseGroup" xml:space="preserve">
     <value>解谜阶段分组</value>
   </data>
-  <data name="Puzzle phase options ticker tape" xml:space="preserve">
+  <data name="UiMessage71Label" xml:space="preserve">
     <value>解谜阶段选项滚动条</value>
   </data>
-  <data name="Puzzles" xml:space="preserve">
+  <data name="ItemsPanelPuzzles" xml:space="preserve">
     <value>解谜</value>
   </data>
-  <data name="Quick Save" xml:space="preserve">
+  <data name="SaveEditorQuickSaveTab" xml:space="preserve">
     <value>快速保存</value>
   </data>
-  <data name="Quick Save Data" xml:space="preserve">
-    <value>快速存档数据</value>
-  </data>
-  <data name="Quick Toggle" xml:space="preserve">
-    <value>快速切换</value>
-  </data>
-  <data name="Quicksave data damaged &amp; reset message box" xml:space="preserve">
+  <data name="UiMessage54Label" xml:space="preserve">
     <value>快速存档数据损坏&amp;重置消息框</value>
   </data>
-  <data name="Recent Projects" xml:space="preserve">
+  <data name="RecentProjects" xml:space="preserve">
     <value>最近的项目</value>
   </data>
   <data name="Recents" xml:space="preserve">
     <value>最近使用</value>
   </data>
-  <data name="References to {0}" xml:space="preserve">
+  <data name="ItemReferencesDialogTitle" xml:space="preserve">
     <value>对 {0} 的引用</value>
   </data>
-  <data name="Refresh Maps List" xml:space="preserve">
+  <data name="ScriptEditorRefreshMapsList" xml:space="preserve">
     <value>刷新地图列表</value>
   </data>
-  <data name="Remember Project Workspace" xml:space="preserve">
+  <data name="PreferencesRememberProjectWorkspace" xml:space="preserve">
     <value>记住项目工作区</value>
   </data>
-  <data name="Remove Chibi" xml:space="preserve">
+  <data name="ScriptEditorRemoveChibi" xml:space="preserve">
     <value>删除 Q 版角色</value>
   </data>
-  <data name="Remove Command" xml:space="preserve">
+  <data name="ScriptEditorRemoveCommand" xml:space="preserve">
     <value>删除命令</value>
   </data>
-  <data name="Remove Command/Section" xml:space="preserve">
-    <value>删除命令/节</value>
-  </data>
-  <data name="Remove Map Characters" xml:space="preserve">
+  <data name="ScriptEditorRemoveMapCharacters" xml:space="preserve">
     <value>删除地图角色</value>
   </data>
-  <data name="Remove Missing Projects" xml:space="preserve">
+  <data name="PreferencesRemoveMissingProjects" xml:space="preserve">
     <value>删除缺失的项目</value>
   </data>
-  <data name="Remove Read Flag" xml:space="preserve">
-    <value>删除读取旗标</value>
-    <comment>As in "remove this read flag from the script"</comment>
-  </data>
-  <data name="Remove Starting Chibis" xml:space="preserve">
+  <data name="ScriptEditorRemoveStartingChibis" xml:space="preserve">
     <value>删除起始 Q 版角色</value>
   </data>
   <data name="Rename" xml:space="preserve">
     <value>重命名</value>
-  </data>
-  <data name="Rename Item" xml:space="preserve">
-    <value>重命名项目</value>
   </data>
   <data name="Replace" xml:space="preserve">
     <value>替换</value>
@@ -2224,7 +2119,7 @@
   <data name="Volume Config" xml:space="preserve">
     <value>音量设置</value>
   </data>
-  <data name="OggFiles" xml:space="preserve">
+  <data name="FiletypeOgg" xml:space="preserve">
     <value>Vorbis 文件</value>
   </data>
   <data name="Wait Time (Frames)" xml:space="preserve">

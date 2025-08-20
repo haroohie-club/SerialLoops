@@ -204,7 +204,7 @@ public class VoicedLineEditorViewModel : EditorViewModel
     {
         IStorageFile openFile = await Window.Window.ShowOpenFilePickerAsync(Strings.Replace_voiced_line, [new(Strings.Supported_Audio_Files) { Patterns = Shared.SupportedAudioFiletypes },
             new(Strings.WAV_files) { Patterns = ["*.wav"] }, new(Strings.FiletypeFlac) { Patterns = ["*.flac"] },
-            new(Strings.MP3_files) { Patterns = ["*.mp3"] }, new(Strings.OggFiles) { Patterns = ["*.ogg"] }]);
+            new(Strings.FiletypeMp3) { Patterns = ["*.mp3"] }, new(Strings.FiletypeOgg) { Patterns = ["*.ogg"] }]);
         if (openFile is not null)
         {
             ProgressDialogViewModel tracker = new(Strings.Replace_voiced_line);

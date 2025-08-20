@@ -37,7 +37,7 @@ public class Flags
         BackgroundMusicItem bgm = (BackgroundMusicItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.BGM && ((BackgroundMusicItem)i).Flag == flag + 1);
         if (bgm is not null)
         {
-            return string.Format(project.Localize("Listened to {0} (F{1:D2})"), bgm.DisplayName, flag);
+            return string.Format(project.Localize("FlagListenedToBgm"), bgm.DisplayName, flag);
         }
 
         BackgroundItem bg = (BackgroundItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Flag == flag + 1);

@@ -158,7 +158,7 @@ public partial class ChibiEditorViewModel : EditorViewModel
 
     private async Task ReplaceFrames()
     {
-        IReadOnlyList<IStorageFile> importedFiles = await Window.Window.ShowOpenMultiFilePickerAsync(Strings.Select_frames, [ new(Strings.Image_Files) { Patterns = Shared.SupportedImageFiletypes } ]);
+        IReadOnlyList<IStorageFile> importedFiles = await Window.Window.ShowOpenMultiFilePickerAsync(Strings.Select_frames, [ new(Strings.FiletypeImages) { Patterns = Shared.SupportedImageFiletypes } ]);
         if (importedFiles is null || importedFiles.Count == 0)
         {
             return;

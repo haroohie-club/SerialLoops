@@ -24,12 +24,12 @@ public partial class ProjectCreationDialogViewModel : ViewModelBase
     public ComboBoxItem LanguageTemplateItem { get; set; }
     public string LanguageTemplateCode => (string)LanguageTemplateItem?.Tag ?? "";
     [Reactive]
-    public string RomPath { get; set; } = Strings.None_Selected;
+    public string RomPath { get; set; } = Strings.ProjectCreationNoRomSelected;
 
     public bool Migrate { get; set; }
 
-    public string Title => Migrate ? Strings.Migrate_Project : Strings.ProjectCreationCreateNewProjectTitle;
-    public string ButtonText => Migrate ? Strings.Migrate : Strings.ProjectCreateButtonLabel;
+    public string Title => Migrate ? Strings.MenuMigrateProject : Strings.ProjectCreationCreateNewProjectTitle;
+    public string ButtonText => Migrate ? Strings.ProjectMigrateMigrateButton : Strings.ProjectCreateButtonLabel;
 
     public ICommand PickRomCommand { get; set; }
     public ICommand CreateCommand { get; set; }
@@ -48,7 +48,7 @@ public partial class ProjectCreationDialogViewModel : ViewModelBase
 
     private async Task PickRom()
     {
-        IStorageFile rom = await _mainWindow.Window.ShowOpenFilePickerAsync(Strings.Open_ROM, [new(Strings.ProjectCreationChokuretsuROMLabel) { Patterns = ["*.nds"] }]);
+        IStorageFile rom = await _mainWindow.Window.ShowOpenFilePickerAsync(Strings.RomOpenFileDialogTitle, [new(Strings.ProjectCreationChokuretsuROMLabel) { Patterns = ["*.nds"] }]);
         if (rom is not null)
         {
             RomPath = rom.Path.LocalPath;
@@ -57,13 +57,13 @@ public partial class ProjectCreationDialogViewModel : ViewModelBase
 
     private async Task CreateProject(ProjectCreationDialog dialog)
     {
-        if (string.IsNullOrEmpty(RomPath) || RomPath.Equals(Strings.None_Selected))
+        if (string.IsNullOrEmpty(RomPath) || RomPath.Equals(Strings.ProjectCreationNoRomSelected))
         {
-            await _mainWindow.Window.ShowMessageBoxAsync(Strings.Project_Creation_Warning, Strings.Please_select_a_ROM_before_creating_the_project_, ButtonEnum.Ok, Icon.Warning, _log);
+            await _mainWindow.Window.ShowMessageBoxAsync(Strings.ProjectCreationWarning, Strings.ProjectCreationNoROMSelectedMessage, ButtonEnum.Ok, Icon.Warning, _log);
         }
         else if (string.IsNullOrWhiteSpace(ProjectName))
         {
-            await _mainWindow.Window.ShowMessageBoxAsync(Strings.Project_Creation_Warning, Strings.Please_choose_a_project_name_before_creating_the_project_, ButtonEnum.Ok, Icon.Warning, _log);
+            await _mainWindow.Window.ShowMessageBoxAsync(Strings.ProjectCreationWarning, Strings.ProjectCreationNoNameMessage, ButtonEnum.Ok, Icon.Warning, _log);
         }
         else
         {

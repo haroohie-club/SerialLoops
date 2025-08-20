@@ -106,20 +106,20 @@ public partial class CharacterSpriteEditorViewModel : EditorViewModel
     private async Task ReplaceSprite()
     {
         string baseFile = (await Window.Window.ShowOpenFilePickerAsync(Strings.CharacterSpriteEditorSelectBase,
-            [new(Strings.Image_Files) { Patterns = Shared.SupportedImageFiletypes }]))?.TryGetLocalPath();
+            [new(Strings.FiletypeImages) { Patterns = Shared.SupportedImageFiletypes }]))?.TryGetLocalPath();
         if (string.IsNullOrEmpty(baseFile))
         {
             return;
         }
         string[] eyeFiles = (await Window.Window.ShowOpenMultiFilePickerAsync(Strings.CharacterSpriteEditorSelectEyeFrames,
-                [new(Strings.Image_Files) { Patterns = Shared.SupportedImageFiletypes }]))?
+                [new(Strings.FiletypeImages) { Patterns = Shared.SupportedImageFiletypes }]))?
             .Select(f => f.TryGetLocalPath()).ToArray();
         if (eyeFiles is null || eyeFiles.Length == 0)
         {
             return;
         }
         string[] mouthFiles = (await Window.Window.ShowOpenMultiFilePickerAsync(Strings.CharacterSpriteEditorSelectMouthFrames,
-                [new(Strings.Image_Files) { Patterns = Shared.SupportedImageFiletypes }]))?
+                [new(Strings.FiletypeImages) { Patterns = Shared.SupportedImageFiletypes }]))?
             .Select(f => f.TryGetLocalPath()).ToArray();
         if (mouthFiles is null || mouthFiles.Length == 0)
         {
@@ -216,7 +216,7 @@ public partial class CharacterSpriteEditorViewModel : EditorViewModel
     private async Task ExportGIF()
     {
         List<(SKBitmap bitmap, int timing)> animationFrames;
-        if (await Window.Window.ShowMessageBoxAsync(Strings.ChibiEditorAnimationExportOptionMessageBoxTitle, Strings.Include_lip_flap_animation_, MsBox.Avalonia.Enums.ButtonEnum.YesNo, MsBox.Avalonia.Enums.Icon.Question, _log) == MsBox.Avalonia.Enums.ButtonResult.Yes)
+        if (await Window.Window.ShowMessageBoxAsync(Strings.ChibiEditorAnimationExportOptionMessageBoxTitle, Strings.CharacterSpriteEditorIncludeLipFlapAnimationTitle, MsBox.Avalonia.Enums.ButtonEnum.YesNo, MsBox.Avalonia.Enums.Icon.Question, _log) == MsBox.Avalonia.Enums.ButtonResult.Yes)
         {
             animationFrames = _sprite.GetLipFlapAnimation(Window.OpenProject);
         }

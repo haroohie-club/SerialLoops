@@ -90,7 +90,7 @@
                     </StackPanel>
 
                     <StackPanel Orientation="Vertical" Spacing="5">
-                        <TextBlock Text="{x:Static assets:Strings.Past_Description}" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{x:Static assets:Strings.GroupSelectionEditorPastDescriptionLabel}" HorizontalAlignment="Center"/>
                         <TextBox Text="{Binding PastDesc}" Width="350" Height="60" Name="PastDescBox"
                                  AcceptsReturn="True">
                             <i:Interaction.Behaviors>
@@ -125,7 +125,7 @@
                                         </ItemsRepeater.ItemTemplate>
                                     </ItemsRepeater>
                                     <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center">
-                                        <TextBlock Text="{x:Static assets:Strings.Kyonless_Topics}" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{x:Static assets:Strings.GroupSelectionEditorKyonlessTopics}" HorizontalAlignment="Center"/>
                                         <ListBox ItemsSource="{Binding KyonlessTopics}" HorizontalAlignment="Center"
                                                  Height="160">
                                             <ListBox.ItemTemplate>

@@ -79,18 +79,18 @@ public static class Build
             commandsIncSb.AppendLine(command.GetMacro());
         }
 
-        tracker.Focus("Loading Archives (dat.bin)", 3);
+        tracker.Focus(project.Localize("ProjectLoadLoadingDatBin"), 3);
         var dat = ArchiveFile<DataFile>.FromFile(Path.Combine(directory, "original", "archives", "dat.bin"), log);
         tracker.Finished++;
-        tracker.CurrentlyLoading = "Loading Archives (evt.bin)";
+        tracker.CurrentlyLoading = project.Localize("ProjectLoadLoadingEvtBin");
         var evt = ArchiveFile<EventFile>.FromFile(Path.Combine(directory, "original", "archives", "evt.bin"), log);
         tracker.Finished++;
-        tracker.CurrentlyLoading = "Loading Archives (grp.bin)";
+        tracker.CurrentlyLoading = project.Localize("ProjectLoadLoadingGrpBin");
         var grp = ArchiveFile<GraphicsFile>.FromFile(Path.Combine(directory, "original", "archives", "grp.bin"), log);
 
         if (dat is null || evt is null || grp is null)
         {
-            log.LogError("One or more archives is null.");
+            log.LogError(project.Localize("ErrorArchivesNull"));
             return false;
         }
 
@@ -202,14 +202,14 @@ public static class Build
         }
         tracker.Finished++;
 
-        tracker.Focus("Packing ROM", 1);
+        tracker.Focus(project.Localize("BuildPackingRomProgressMessage"), 1);
         try
         {
             NdsProjectFile.Pack(Path.Combine(project.MainDirectory, $"{project.Name}.nds"), ndsProjectFile);
         }
         catch (Exception exc)
         {
-            log.LogException("NitroPacker failed to pack ROM with exception", exc);
+            log.LogException(project.Localize("BuildNitroPackerFailedPacking"), exc);
             return false;
         }
         tracker.Finished++;

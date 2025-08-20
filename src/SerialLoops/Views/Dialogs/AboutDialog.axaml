@@ -51,11 +51,11 @@
                             </Grid>
                             <Grid ColumnDefinitions="Auto,*,Auto" Width="450">
                                 <TextBlock Grid.Column="0" Text="Oropuro_49, Fuyuko Ayumu"/>
-                                <TextBlock Grid.Column="2" Text="{x:Static assets:Strings.Italian}"/>
+                                <TextBlock Grid.Column="2" Text="{x:Static assets:Strings.LanguageItalian}"/>
                             </Grid>
                             <Grid ColumnDefinitions="Auto,*,Auto" Width="450">
                                 <TextBlock Grid.Column="0" Text="Amelia Chaplin"/>
-                                <TextBlock Grid.Column="2" Text="{x:Static assets:Strings.Japanese}"/>
+                                <TextBlock Grid.Column="2" Text="{x:Static assets:Strings.LanguageJapanese}"/>
                             </Grid>
                         </StackPanel>
                     </StackPanel>

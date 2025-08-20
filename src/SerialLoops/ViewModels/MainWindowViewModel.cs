@@ -84,7 +84,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public EditorTabsPanelViewModel EditorTabs { get; set; }
     public ItemExplorerPanelViewModel ItemExplorer { get; set; }
 
-    public NativeMenuItem RecentProjectsMenu { get; set; } = new(Strings.Recent_Projects);
+    public NativeMenuItem RecentProjectsMenu { get; set; } = new(Strings.RecentProjects);
     public LoopyLogger Log { get; set; }
 
     private SKBitmap _blankNameplate, _blankNameplateBaseArrow;
@@ -200,7 +200,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             if (!File.Exists(LoopyLogger.CrashLogLocation))
             {
-                await Window.ShowMessageBoxAsync(Strings.No_Crash_Log,
+                await Window.ShowMessageBoxAsync(Strings.NoCrashLogMessageTitle,
                     Strings.There_are_no_Serial_Loops_crash_logs__No_crashes_so_far_, ButtonEnum.Ok, Icon.Info, Log);
                 return;
             }
@@ -542,7 +542,7 @@ public partial class MainWindowViewModel : ViewModelBase
         (string newRom, string newLangCode) = await new ProjectCreationDialog { DataContext = migrateDialogVm }.ShowDialog<(string, string)>(Window);
         if (!string.IsNullOrEmpty(newRom))
         {
-            ProgressDialogViewModel tracker = new(Strings.Migrating_to_new_ROM);
+            ProgressDialogViewModel tracker = new(Strings.ProjectMigrateProgressMessage);
             tracker.InitializeTasks(() =>
             {
                 OpenProject.MigrateProject(newRom, CurrentConfig, Log, tracker);
@@ -550,7 +550,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 OpenProject.Load(CurrentConfig, Log, tracker);
                 OpenProject.SetBaseRomHash(newRom);
                 OpenProject.Save(Log);
-            }, async void () => await Window.ShowMessageBoxAsync(Strings.Migration_Complete_, Strings.Migrated_to_new_ROM_, ButtonEnum.Ok, Icon.Success, Log));
+            }, async void () => await Window.ShowMessageBoxAsync(Strings.ProjectMigrateSuccessTitle, Strings.ProjectMigrateSuccessMessage, ButtonEnum.Ok, Icon.Success, Log));
             await new ProgressDialog { DataContext = tracker }.ShowDialog(Window);
             OpenProjectView(OpenProject, tracker);
         }
@@ -665,7 +665,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 }
 
                 recentProject.IsEnabled = false;
-                recentProject.Header += Strings.Missing_;
+                recentProject.Header += Strings.ProjectMissingPrefix;
                 recentProject.Icon = ControlGenerator.GetIcon("Warning", Log);
             }
 
@@ -702,13 +702,13 @@ public partial class MainWindowViewModel : ViewModelBase
         if (newProject is not null)
         {
             OpenProject = newProject;
-            OpenProjectView(OpenProject, new ProgressDialogViewModel(Strings.Open_Project));
+            OpenProjectView(OpenProject, new ProgressDialogViewModel(Strings.MenuProjectOpen));
         }
     }
 
     public async Task OpenProjectCommand_Executed()
     {
-        IStorageFile projectFile = await Window.ShowOpenFilePickerAsync(Strings.Open_Project, [new(Strings.Serial_Loops_Project) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }], CurrentConfig.ProjectsDirectory);
+        IStorageFile projectFile = await Window.ShowOpenFilePickerAsync(Strings.MenuProjectOpen, [new(Strings.Serial_Loops_Project) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }], CurrentConfig.ProjectsDirectory);
         if (projectFile is not null)
         {
             await OpenProjectFromPath(projectFile.Path.LocalPath);
@@ -724,7 +724,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         Project.LoadProjectResult result = new(Project.LoadProjectState.FAILED); // start us off with a failure
         string projectFileName = Path.GetFileName(path);
-        ProgressDialogViewModel tracker = new(string.Format(Strings.Loading_Project____0__, projectFileName));
+        ProgressDialogViewModel tracker = new(string.Format(Strings.ProjectLoadProgressMessage, projectFileName));
         tracker.InitializeTasks(() => (OpenProject, result) = Project.OpenProject(path, CurrentConfig, Strings.ResourceManager.GetString, Log, tracker),
             () => { });
         await new ProgressDialog { DataContext = tracker }.ShowDialog(Window);
@@ -735,13 +735,13 @@ public partial class MainWindowViewModel : ViewModelBase
                     Strings.Saved_but_unbuilt_files_were_detected_in_the_project_directory__Would_you_like_to_build_before_loading_the_project__Not_building_could_result_in_these_files_being_overwritten_,
                     ButtonEnum.YesNo, Icon.Question, Log) == ButtonResult.Yes)
             {
-                ProgressDialogViewModel secondTracker = new(string.Format(Strings.Loading_Project____0__, projectFileName));
+                ProgressDialogViewModel secondTracker = new(string.Format(Strings.ProjectLoadProgressMessage, projectFileName));
                 secondTracker.InitializeTasks(() => Build.BuildIterative(OpenProject, CurrentConfig, Log, secondTracker),
                     () => { });
                 await new ProgressDialog { DataContext = secondTracker }.ShowDialog(Window);
             }
 
-            ProgressDialogViewModel thirdTracker = new(string.Format(Strings.Loading_Project____0__, projectFileName));
+            ProgressDialogViewModel thirdTracker = new(string.Format(Strings.ProjectLoadProgressMessage, projectFileName));
             thirdTracker.InitializeTasks(() => OpenProject.LoadArchives(Log, thirdTracker),
                 () => { });
             await new ProgressDialog { DataContext = thirdTracker }.ShowDialog(Window);
@@ -803,7 +803,7 @@ public partial class MainWindowViewModel : ViewModelBase
             await CloseProject_Executed(null);
 
             Project.LoadProjectResult result = new() { State = Project.LoadProjectState.FAILED };
-            ProgressDialogViewModel tracker = new(Strings.Importing_Project);
+            ProgressDialogViewModel tracker = new(Strings.ProjectImportProgressDialogMessage);
             tracker.InitializeTasks(() => (OpenProject, result) = Project.Import(slzipPath, romPath, CurrentConfig,
                     Strings.ResourceManager.GetString, Log, tracker),
                 () => { });
@@ -947,7 +947,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public async Task EditSaveFileCommand_Executed()
     {
-        IStorageFile saveFile = await Window.ShowOpenFilePickerAsync(Strings.Open_Chokuretsu_Save_File,
+        IStorageFile saveFile = await Window.ShowOpenFilePickerAsync(Strings.SaveEditorLoadSaveFileDialogTitle,
             [new(Strings.FiletypeChokuretsuSave) { Patterns = ["*.sav"] }]);
         if (saveFile is null)
         {
@@ -966,8 +966,8 @@ public partial class MainWindowViewModel : ViewModelBase
             string rom = Path.Combine(Path.GetDirectoryName(savePath) ?? string.Empty, $"{Path.GetFileNameWithoutExtension(savePath)}.nds");
             if (!File.Exists(rom))
             {
-                IStorageFile romFile = await Window.ShowOpenFilePickerAsync(Strings.Open_ROM,
-                    [new(Strings.NDS_ROM) { Patterns = ["*.nds"] }]);
+                IStorageFile romFile = await Window.ShowOpenFilePickerAsync(Strings.RomOpenFileDialogTitle,
+                    [new(Strings.FiletypeNdsRom) { Patterns = ["*.nds"] }]);
                 if (romFile is null)
                 {
                     return;
@@ -981,7 +981,7 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 if (await Window.ShowMessageBoxAsync(Strings.Temporary_Project_Already_Exists_,
                         string.Format(
-                            Strings.In_order_to_edit_this_save_file__Serial_Loops_needs_to_make_a_temporary_project__However__a_project_called___0___already_exists__Would_you_like_to_overwrite_this_project_,
+                            Strings.SaveEditorProjectAlreadyExistsWarning,
                             projectName),
                         ButtonEnum.YesNo, Icon.Warning, Log) == ButtonResult.Yes)
                 {
@@ -1330,7 +1330,7 @@ public partial class MainWindowViewModel : ViewModelBase
             if (string.IsNullOrWhiteSpace(CurrentConfig.SysConfig.EmulatorPath) && string.IsNullOrWhiteSpace(CurrentConfig.SysConfig.EmulatorFlatpak))
             {
                 Log.LogWarning("Attempted to build and run project while no emulator path/flatpak was set.");
-                await Window.ShowMessageBoxAsync(Strings.No_Emulator_Path, Strings.No_emulator_path_has_been_set__nPlease_set_the_path_to_a_Nintendo_DS_emulator_in_Preferences_to_use_Build___Run_,
+                await Window.ShowMessageBoxAsync(Strings.NoEmulatorPathMessageTitle, Strings.NoEmulatorPathMessage,
                     ButtonEnum.Ok, Icon.Warning, Log);
                 await PreferencesCommand_Executed();
                 return;
@@ -1454,13 +1454,13 @@ public partial class MainWindowViewModel : ViewModelBase
         [
             new NativeMenuItem
             {
-                Header = Strings.Project_Settings___,
+                Header = Strings.MenuProjectSettings,
                 Command = ProjectSettingsCommand,
                 Icon = ControlGenerator.GetIcon("Project_Options", Log),
             },
             new NativeMenuItem
             {
-                Header = Strings.Migrate_to_new_ROM,
+                Header = Strings.ProjectMigrateTitle,
                 Command = MigrateProjectCommand,
                 Icon = ControlGenerator.GetIcon("Migrate_ROM", Log),
             },

@@ -67,14 +67,14 @@ public class ProjectSettingsDialogViewModel : ViewModelBase
             Icon = newIcon;
             return;
         }
-        Log.LogError(Strings.Invalid_image_file_selected);
+        Log.LogError(Strings.ErrorInvalidImageSelected);
     }
 
     private void ApplyCommand_Executed()
     {
         if (GameTitle.Length is < 1 or > 127)
         {
-            Log.LogError(Strings.Please_enter_a_game_name_for_the_banner__between_1_and_128_characters_);
+            Log.LogError(Strings.ProjectSettingsGameNameInvalidMessage);
             return;
         }
 

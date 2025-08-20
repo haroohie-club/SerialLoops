@@ -15,7 +15,7 @@
             <controls:ItemLink Item="{Binding SelectedSfx}" Tabs="{Binding Tabs}"/>
         </StackPanel>
 
-        <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Text="{x:Static assets:Strings.Mode}"/>
+        <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptParamMode}"/>
         <ComboBox Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" ItemsSource="{Binding SfxPlayModes}" SelectedItem="{Binding SfxMode}"/>
 
         <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Text="{x:Static assets:Strings.Volume}"/>
@@ -23,7 +23,7 @@
                        FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 
         <StackPanel Grid.Column="0" Grid.Row="3" Orientation="Horizontal" Spacing="3">
-            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Load_Sound}"/>
+            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptParamLoadSound}"/>
             <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
                  ToolTip.Tip="{x:Static assets:Strings.ScriptCommandParameterHelpSoundLoad}"/>
         </StackPanel>

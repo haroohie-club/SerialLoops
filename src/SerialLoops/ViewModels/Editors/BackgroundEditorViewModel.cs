@@ -65,10 +65,10 @@ public class BackgroundEditorViewModel : EditorViewModel
         {
             ShowOverwritePrompt = true,
             FileTypeChoices = [
-                new(Strings.PNG_Image) { Patterns = ["*.png"] }
+                new(Strings.FiletypePng) { Patterns = ["*.png"] }
             ]
         };
-        IStorageFile savedFile = await Window.Window.ShowSaveFilePickerAsync(Strings.BackgroundEditorExportFileDialogTitle, [new(Strings.PNG_Image) { Patterns = ["*.png"] }], $"{Bg.Name}.png");
+        IStorageFile savedFile = await Window.Window.ShowSaveFilePickerAsync(Strings.BackgroundEditorExportFileDialogTitle, [new(Strings.FiletypePng) { Patterns = ["*.png"] }], $"{Bg.Name}.png");
         if (savedFile is not null)
         {
             try

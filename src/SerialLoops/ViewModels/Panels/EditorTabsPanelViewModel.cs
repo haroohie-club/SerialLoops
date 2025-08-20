@@ -174,7 +174,7 @@ public class EditorTabsPanelViewModel : ViewModelBase
             case ItemDescription.ItemType.Save:
                 return new SaveEditorViewModel((SaveItem)item, MainWindow, _log);
             default:
-                _log.LogError(Strings.Invalid_item_type_);
+                _log.LogError(Strings.ErrorInvalidItemType);
                 return null;
         }
     }

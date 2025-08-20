@@ -104,13 +104,13 @@ public class AsmHacksDialogViewModel : ViewModelBase
                 parametersLayout.Children.Add(paramDescPanel);
             }
         }
-        HeaderedContentControl parametersBox = new() { Header = Strings.Parameters, Content = parametersLayout };
+        HeaderedContentControl parametersBox = new() { Header = Strings.AsmHackParametersLabel, Content = parametersLayout };
         descriptionPanel.Children.Add(parametersBox);
     }
 
     private async Task ImportHackCommand_Executed(AsmHacksDialog dialog)
     {
-        IStorageFile file = await dialog.ShowOpenFilePickerAsync(Strings.Import_a_Hack, [new(Strings.Serial_Loops_ASM_Hack) { Patterns = ["*.slhack"] }]);
+        IStorageFile file = await dialog.ShowOpenFilePickerAsync(Strings.AsmHackImportLabel, [new(Strings.Serial_Loops_ASM_Hack) { Patterns = ["*.slhack"] }]);
         string path = file?.TryGetLocalPath();
         if (!string.IsNullOrEmpty(path))
         {
@@ -291,7 +291,7 @@ public class AsmHacksDialogViewModel : ViewModelBase
             }
             else
             {
-                await dialog.ShowMessageBoxAsync(Strings.Success_, Strings.No_hacks_applied_, ButtonEnum.Ok, Icon.Info, _log);
+                await dialog.ShowMessageBoxAsync(Strings.Success_, Strings.AsmHackNoneApplied, ButtonEnum.Ok, Icon.Info, _log);
             }
         }
 

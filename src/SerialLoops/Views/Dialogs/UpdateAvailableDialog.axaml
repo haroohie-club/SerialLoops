@@ -45,7 +45,7 @@
                 <Button Content="{x:Static assets:Strings.Skip_Update}" Command="{Binding CloseCommand}"
                         CommandParameter="{Binding #Dialog}" IsCancel="True"/>
                 <CheckBox Content="{x:Static assets:Strings.MenuOptionCheckForUpdates}" IsChecked="{Binding CheckForUpdates}"/>
-                <CheckBox Content="{x:Static assets:Strings.Pre_Release_Channel}" IsChecked="{Binding UsePreReleaseChannel}"/>
+                <CheckBox Content="{x:Static assets:Strings.UpdaterPreReleaseChannel}" IsChecked="{Binding UsePreReleaseChannel}"/>
             </StackPanel>
         </Grid>
     </Panel>

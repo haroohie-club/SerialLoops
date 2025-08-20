@@ -14,7 +14,7 @@
         Background="{DynamicResource FallbackBackgroundColor}"
         ExtendClientAreaToDecorationsHint="True"
         Icon="/Assets/serial-loops.ico"
-        Title="{x:Static assets:Strings.Preferences}">
+        Title="{x:Static assets:Strings.MenuPreferences}">
     <Panel>
         <controls:AcrylicBorderHandler/>
 
@@ -25,7 +25,7 @@
                         <TabItem Header="Serial Loops" Name="SerialLoopsTab">
                             <controls:OptionsGroup Name="SerialLoopsOptions" Width="500"/>
                         </TabItem>
-                        <TabItem Header="{x:Static assets:Strings.Projects}" Name="ProjectsTab">
+                        <TabItem Header="{x:Static assets:Strings.PreferencesProjectsTab}" Name="ProjectsTab">
                             <controls:OptionsGroup Name="ProjectOptions" Width="500"/>
                         </TabItem>
                         <TabItem Header="{x:Static assets:Strings.Build}" Name="BuildTab">

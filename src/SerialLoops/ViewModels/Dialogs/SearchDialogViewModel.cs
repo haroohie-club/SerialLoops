@@ -138,7 +138,7 @@ public class SearchDialogViewModel : ViewModelBase
         switch (query.QuickSearch)
         {
             case false when !force:
-                SearchStatusLabel = Strings.Press_ENTER_to_execute_search;
+                SearchStatusLabel = Strings.SearchDialogDefaultSearchMessage;
                 return;
             case true when string.IsNullOrWhiteSpace(SearchText):
             {
@@ -155,11 +155,11 @@ public class SearchDialogViewModel : ViewModelBase
             }
             default:
             {
-                SearchStatusLabel = Strings.Press_ENTER_to_execute_search;
+                SearchStatusLabel = Strings.SearchDialogDefaultSearchMessage;
                 if (query.Scopes.Count is 0 || query.Types.Count is 0)
                 {
-                    await dialog.ShowMessageBoxAsync(Strings.Please_select_at_least_one_search_scope_and_item_filter_,
-                        Strings.Invalid_search_terms, ButtonEnum.Ok, Icon.Error, _log);
+                    await dialog.ShowMessageBoxAsync(Strings.SearchDialogNoScopeOrFilterMessage,
+                        Strings.SearchDialogInvalidTermsLabel, ButtonEnum.Ok, Icon.Error, _log);
                     return;
                 }
 

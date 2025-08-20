@@ -87,7 +87,7 @@ public class PreferencesDialogViewModel : ViewModelBase
                 Enabled = OperatingSystem.IsLinux() && string.IsNullOrEmpty(Configuration.SysConfig.BundledEmulator),
             },
         ]);
-        _preferencesDialog.ProjectOptions.InitializeOptions(Strings.Projects,
+        _preferencesDialog.ProjectOptions.InitializeOptions(Strings.PreferencesProjectsTab,
         [
             new BooleanOption
             {

@@ -44,7 +44,7 @@
                             Spacing="3" HorizontalAlignment="Center" IsVisible="{Binding SelectedScriptTemplate, Converter={x:Static ObjectConverters.IsNull}}">
                     <Svg Path="avares://SerialLoops/Assets/Icons/Template.svg" HorizontalAlignment="Center"
                          Width="22"/>
-                    <TextBlock HorizontalAlignment="Center" Text="{x:Static assets:Strings.Please_select_a_template}"/>
+                    <TextBlock HorizontalAlignment="Center" Text="{x:Static assets:Strings.ScriptTemplateSelectPrompt}"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1" Grid.Row="1" MinWidth="480" MinHeight="330" Margin="10" Spacing="5"
                             Orientation="Vertical" IsVisible="{Binding SelectedScriptTemplate, Converter={x:Static ObjectConverters.IsNotNull}}">

@@ -39,7 +39,7 @@ public class SystemTextureEditorViewModel : EditorViewModel
 
     private async Task ExportButton_Click()
     {
-        IStorageFile savedFile = await Window.Window.ShowSaveFilePickerAsync(Strings.SystemTextureEditorExportFileDialogTitle, [new(Strings.PNG_Image) { Patterns = ["*.png"] }], $"{SystemTexture.Grp.Index:D4}.png");
+        IStorageFile savedFile = await Window.Window.ShowSaveFilePickerAsync(Strings.SystemTextureEditorExportFileDialogTitle, [new(Strings.FiletypePng) { Patterns = ["*.png"] }], $"{SystemTexture.Grp.Index:D4}.png");
         if (savedFile is not null)
         {
             try

@@ -12,7 +12,7 @@
         <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Characters}"
                   Margin="10,0,0,0" SelectedItem="{Binding Character}"/>
 
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="{x:Static assets:Strings.Modify_by}"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="{x:Static assets:Strings.ScriptParamModifyBy}"/>
         <NumericUpDown Grid.Row="1" Grid.Column="1" Margin="10,0,0,0"
                        Value="{Binding ModifiedAmount}"
                        Minimum="-64" Maximum="64" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />

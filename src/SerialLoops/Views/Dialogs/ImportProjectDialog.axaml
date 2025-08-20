@@ -11,7 +11,7 @@
         x:DataType="vm:ImportProjectDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.ImportProjectDialog"
         Icon="/Assets/serial-loops.ico"
-        Title="{x:Static assets:Strings.Import_Project}"
+        Title="{x:Static assets:Strings.MenuImportProjectLabel}"
         SizeToContent="WidthAndHeight"
         TransparencyLevelHint="AcrylicBlur"
         Background="{DynamicResource FallbackBackgroundColor}"
@@ -24,19 +24,19 @@
             <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding RomHashString}"
                        Margin="15,10" HorizontalAlignment="Center" TextAlignment="Center"/>
 
-            <Button Grid.Row="1" Grid.Column="0" Content="{x:Static assets:Strings.Open_Exported_Project}"
+            <Button Grid.Row="1" Grid.Column="0" Content="{x:Static assets:Strings.ProjectImportFileDialogTitle}"
                     Command="{Binding SelectExportedProjectCommand}" CommandParameter="{Binding #Dialog}"
                     Margin="0,10" HorizontalAlignment="Center"/>
             <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SlzipPath}" HorizontalAlignment="Center"
                        Margin="0,10" TextWrapping="Wrap" Width="200" TextAlignment="Center"/>
 
-            <Button Grid.Row="2" Grid.Column="0" Content="{x:Static assets:Strings.Open_ROM}" HorizontalAlignment="Center"
+            <Button Grid.Row="2" Grid.Column="0" Content="{x:Static assets:Strings.RomOpenFileDialogTitle}" HorizontalAlignment="Center"
                     Margin="0,10" Command="{Binding OpenRomCommand}" CommandParameter="{Binding #Dialog}"/>
             <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding RomPath}" HorizontalAlignment="Center"
                        Margin="0,10" Width="200" TextWrapping="Wrap" TextAlignment="Center"/>
 
             <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" IsChecked="{Binding IgnoreHash}"
-                      Margin="0,10" Content="{x:Static assets:Strings.Ignore_Hash_}" Name="IgnoreHashBox" HorizontalAlignment="Center">
+                      Margin="0,10" Content="{x:Static assets:Strings.ProjectImportIgnoreHashCheckbox}" Name="IgnoreHashBox" HorizontalAlignment="Center">
                 <i:Interaction.Behaviors>
                     <ia:EventTriggerBehavior EventName="IsCheckedChanged" SourceObject="{Binding #IgnoreHashBox}">
                         <ia:InvokeCommandAction Command="{Binding IgnoreHashCommand}"/>
@@ -48,7 +48,7 @@
 
                 <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
                         Margin="0,10" CommandParameter="{Binding #Dialog}" IsCancel="True" HorizontalAlignment="Center"/>
-                <Button Content="{x:Static assets:Strings.Import}" Command="{Binding ImportCommand}"
+                <Button Content="{x:Static assets:Strings.ProjectImportImportLabel}" Command="{Binding ImportCommand}"
                         CommandParameter="{Binding #Dialog}" IsDefault="True"
                         Margin="0,10" IsEnabled="{Binding CanImport}" HorizontalAlignment="Center"/>
             </StackPanel>

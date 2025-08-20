@@ -60,7 +60,7 @@ public class ScriptCommandTreeItem : ITreeItem, IViewFor<ScriptItemCommand>
                 }
                 SaveSlotEditorDialogViewModel quickSaveEditorDialogVm = new(ViewModel.Project.ProjectSaveFile,
                     ViewModel.Project.ProjectSaveFile!.Save.QuickSaveSlot,
-                    ViewModel.Project.ProjectSaveFile.Name, Strings.Quick_Save, ViewModel.Project, log, dontTreatAsQuickSave: true);
+                    ViewModel.Project.ProjectSaveFile.Name, Strings.SaveEditorQuickSaveTab, ViewModel.Project, log, dontTreatAsQuickSave: true);
                 await new SaveSlotEditorDialog { DataContext = quickSaveEditorDialogVm }.ShowDialog(window);
             }),
         });

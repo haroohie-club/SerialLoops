@@ -118,7 +118,7 @@ public class VoicedLineItem : Item, ISoundItem
 
         if (audio is null)
         {
-            log.LogError(project.Localize("Invalid audio file selected."));
+            log.LogError(project.Localize("ErrorInvalidAudioSelected"));
             log.LogWarning(audioFile);
             return;
         }
