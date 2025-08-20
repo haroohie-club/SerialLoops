@@ -11,7 +11,7 @@
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto">
         <TextBlock Grid.Column="0" Grid.Row="0" Text="{x:Static assets:Strings.EditorBackgroundItemLabel}" VerticalAlignment="Center"/>
         <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Orientation="Horizontal" Spacing="10">
-            <Button Content="{x:Static assets:Strings.Select___}" Command="{Binding ReplaceBgCommand}"/>
+            <Button Content="{x:Static assets:Strings.SelectButtonLabel}" Command="{Binding ReplaceBgCommand}"/>
             <controls:ItemLink Tabs="{Binding Tabs}" Item="{Binding Bg}"/>
         </StackPanel>
     </Grid>

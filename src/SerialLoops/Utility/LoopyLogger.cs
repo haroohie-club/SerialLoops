@@ -83,7 +83,7 @@ public class LoopyLogger : ILogger
                 }
             }
         }
-        await _owner.ShowMessageBoxAsync(Strings.Error, string.Format(Strings.ERROR___0_, message), ButtonEnum.Ok, Icon.Error, this);
+        await _owner.ShowMessageBoxAsync(Strings.Error, string.Format(Strings.LoggerErrorMessage, message), ButtonEnum.Ok, Icon.Error, this);
     }
 
     public void LogException(string message, Exception exception)

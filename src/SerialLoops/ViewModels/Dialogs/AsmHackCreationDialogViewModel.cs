@@ -45,7 +45,7 @@ public partial class AsmHackCreationDialogViewModel : ViewModelBase
     {
         IStorageFile[] hackStorageFiles =
         [
-            .. await dialog.ShowOpenMultiFilePickerAsync(Strings.Select_Hack_Files,
+            .. await dialog.ShowOpenMultiFilePickerAsync(Strings.AsmHackSelectFiles,
                 [new("Valid Source Files") { Patterns = ["*.s", "*.c"] }]),
         ];
         if (hackStorageFiles is null || hackStorageFiles.Length == 0)

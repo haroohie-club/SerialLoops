@@ -52,7 +52,7 @@ public class BgmVolumePropertiesDialogViewModel : ViewModelBase, IDisposable
     public BgmVolumePropertiesDialogViewModel(WaveStream wav, string title, float maxAmplitude, ILogger log)
     {
         _log = log;
-        Title = string.Format(Strings._0____Adjust_Volume, title);
+        Title = string.Format(Strings.BgmEditorAdjustVolumeDialogTitle, title);
         _wav = wav;
         _volume = 100;
         Waveform = WaveformRenderer.Render(wav, WaveFormRendererSettings.StandardSettings);

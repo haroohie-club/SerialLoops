@@ -9,10 +9,10 @@
              x:DataType="vm:TopicGetScriptCommandEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.TopicGetScriptCommandEditorView">
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto">
-        <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Topic}"/>
+        <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptParamTopic}"/>
         <StackPanel Name="InvalidTopicPanel" Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Orientation="Horizontal" Spacing="5" IsVisible="{Binding SelectedTopic, Converter={x:Static ObjectConverters.IsNull}}">
             <TextBlock VerticalAlignment="Center" Text="{Binding TopicId}"/>
-            <Button Content="{x:Static assets:Strings.Select_a_Topic}" Command="{Binding SelectTopicCommand}"/>
+            <Button Content="{x:Static assets:Strings.ScriptEditorNoTopicYetButton}" Command="{Binding SelectTopicCommand}"/>
         </StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Orientation="Horizontal" Spacing="5" IsVisible="{Binding SelectedTopic, Converter={x:Static ObjectConverters.IsNotNull}}">
             <ComboBox ItemsSource="{Binding Topics}" SelectedItem="{Binding SelectedTopic}"/>

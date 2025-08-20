@@ -52,7 +52,7 @@ public class ExportPatchDialogViewModel : ViewModelBase
     private async Task OpenRom(ExportPatchDialog dialog)
     {
         string romPath =
-            (await dialog.ShowOpenFilePickerAsync(Strings.Select_base_ROM,
+            (await dialog.ShowOpenFilePickerAsync(Strings.ExportPatchSelectBaseRom,
                 [new(Strings.FiletypeNdsRom) { Patterns = ["*.nds"] }]))?.TryGetLocalPath();
         if (!string.IsNullOrEmpty(romPath))
         {
@@ -71,8 +71,8 @@ public class ExportPatchDialogViewModel : ViewModelBase
 
     private async Task SelectXDeltaPath(ExportPatchDialog dialog)
     {
-        string xDeltaPath = (await dialog.ShowSaveFilePickerAsync(Strings.XDelta_patch,
-            [new(Strings.XDelta_patch) { Patterns = ["*.xdelta"] }], $"{_project.Name}.xdelta"))?.TryGetLocalPath();
+        string xDeltaPath = (await dialog.ShowSaveFilePickerAsync(Strings.FiletypeXdelta,
+            [new(Strings.FiletypeXdelta) { Patterns = ["*.xdelta"] }], $"{_project.Name}.xdelta"))?.TryGetLocalPath();
         if (!string.IsNullOrEmpty(xDeltaPath))
         {
             XDeltaPath = xDeltaPath;
@@ -104,7 +104,7 @@ public class ExportPatchDialogViewModel : ViewModelBase
         try
         {
             await new ProgressDialog { DataContext = tracker }.ShowDialog(dialog);
-            await dialog.ShowMessageBoxAsync(Strings.ExportPatchSuccessMessageTitle, Strings.Success_, ButtonEnum.Ok, Icon.Success,
+            await dialog.ShowMessageBoxAsync(Strings.ExportPatchSuccessMessageTitle, Strings.MessageBoxTitleSuccessGeneric, ButtonEnum.Ok, Icon.Success,
                 _log);
         }
         catch (Exception ex)

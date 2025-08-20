@@ -102,7 +102,7 @@ public class BackgroundItem : Item, IPreviewableGraphic
         switch (BackgroundType)
         {
             case BgType.KINETIC_SCREEN:
-                tracker.Focus(localize("Setting screen image..."), 1);
+                tracker.Focus(localize("BackgroundEditorSettingScreenImage"), 1);
                 if (Graphic2.SetScreenImage(image, quantizer, Graphic1, suppressErrors: true) < 0)
                 {
                     log.LogError(localize("ErrorFailedReplacingKbg"));
@@ -112,7 +112,7 @@ public class BackgroundItem : Item, IPreviewableGraphic
                 break;
 
             case BgType.TEX_CG_SINGLE:
-                tracker.Focus(localize("Setting CG single image..."), 1);
+                tracker.Focus(localize("BackgroundEditorCGSingleReplaceProgressMessage"), 1);
                 List<SKColor> singlePalette = Helpers.GetPaletteFromImage(image, transparentIndex == 0 ? 255 : 256, log);
                 if (singlePalette.Count == 255)
                 {
@@ -155,7 +155,7 @@ public class BackgroundItem : Item, IPreviewableGraphic
                 }
                 tileCanvas.Flush();
 
-                tracker.Focus(localize("Setting palettes and images..."), 5);
+                tracker.Focus(localize("BackgroundEditorSettingPalettesAndImages"), 5);
                 List<SKColor> tilePalette = Helpers.GetPaletteFromImage(image, transparentIndex == 0 ? 255 : 256, log);
                 if (tilePalette.Count == 255)
                 {
@@ -192,7 +192,7 @@ public class BackgroundItem : Item, IPreviewableGraphic
                 canvas2.Flush();
                 tracker.Finished++;
 
-                tracker.Focus(localize("Setting palettes and images..."), 5);
+                tracker.Focus(localize("BackgroundEditorSettingPalettesAndImages"), 5);
                 List<SKColor> texPalette = Helpers.GetPaletteFromImage(image, transparentIndex == 0 ? 255 : 256, log);
                 if (texPalette.Count == 255)
                 {

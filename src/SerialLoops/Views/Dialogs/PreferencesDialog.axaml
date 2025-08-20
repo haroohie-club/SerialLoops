@@ -14,7 +14,7 @@
         Background="{DynamicResource FallbackBackgroundColor}"
         ExtendClientAreaToDecorationsHint="True"
         Icon="/Assets/serial-loops.ico"
-        Title="{x:Static assets:Strings.MenuPreferences}">
+        Title="{x:Static assets:Strings.PreferencesDialogTitle}">
     <Panel>
         <controls:AcrylicBorderHandler/>
 
@@ -39,7 +39,7 @@
                         <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}" IsDefault="True" Name="SaveButton"/>
                     </StackPanel>
                     <controls:LabelWithIcon Name="RestartRequiredLabel" IsVisible="{Binding RequireRestart}"
-                                            Text="{x:Static assets:Strings.Restart_required}" Icon="Warning"/>
+                                            Text="{x:Static assets:Strings.PreferencesRestartRequired}" Icon="Warning"/>
                 </StackPanel>
             </StackPanel>
         </DockPanel>

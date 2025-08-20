@@ -8,7 +8,7 @@
              x:DataType="vm:TransInOutScriptCommandEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.TransInOutScriptCommandEditorView">
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto">
-        <TextBlock Grid.Column="0" Grid.Row="0" Text="{x:Static assets:Strings.Transition}" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="0" Grid.Row="0" Text="{x:Static assets:Strings.ScriptParamTransition}" VerticalAlignment="Center"/>
         <ComboBox Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" ItemsSource="{Binding Transitions}" SelectedItem="{Binding Transition}"/>
     </Grid>
 </UserControl>

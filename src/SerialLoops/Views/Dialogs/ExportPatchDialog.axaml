@@ -23,7 +23,7 @@
 
             <StackPanel Orientation="Vertical" Spacing="10" HorizontalAlignment="Center">
                 <StackPanel Orientation="Vertical" Spacing="10" HorizontalAlignment="Center">
-                    <Button Content="{x:Static assets:Strings.Select_base_ROM}" Command="{Binding OpenRomCommand}"
+                    <Button Content="{x:Static assets:Strings.ExportPatchSelectBaseRom}" Command="{Binding OpenRomCommand}"
                             CommandParameter="{Binding #Dialog}" HorizontalAlignment="Center"/>
                     <TextBlock Text="{Binding BaseRomHash}" HorizontalAlignment="Center"/>
                 </StackPanel>
@@ -34,7 +34,7 @@
             </StackPanel>
 
             <StackPanel Orientation="Vertical" Spacing="10" HorizontalAlignment="Center">
-                <Button Content="{x:Static assets:Strings.XDelta_patch}" Command="{Binding SelectXdeltaPathCommand}"
+                <Button Content="{x:Static assets:Strings.FiletypeXdelta}" Command="{Binding SelectXdeltaPathCommand}"
                         CommandParameter="{Binding #Dialog}" HorizontalAlignment="Center"/>
                 <TextBlock TextWrapping="Wrap" Text="{Binding XDeltaPath}" HorizontalAlignment="Center"/>
             </StackPanel>

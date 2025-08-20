@@ -55,7 +55,7 @@ public static class Shared
         }
         gif.Frames.RemoveFrame(0);
 
-        tracker.Focus(Strings.Saving_GIF___, 1);
+        tracker.Focus(Strings.AnimationGifSavingProgressMessage, 1);
         gif.SaveAsGif(fileName);
         tracker.Finished++;
     }

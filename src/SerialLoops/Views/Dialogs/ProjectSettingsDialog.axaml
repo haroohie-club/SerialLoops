@@ -30,7 +30,7 @@
                                         <Image Source="{Binding Icon, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
                                                Width="64" Height="64" />
                                     </StackPanel>
-                                    <Button Content="{x:Static assets:Strings.Replace___}" Command="{Binding ReplaceCommand}" />
+                                    <Button Content="{x:Static assets:Strings.MenuReplace}" Command="{Binding ReplaceCommand}" />
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <TextBlock Text="{x:Static assets:Strings.ProjectSettingsGameTitleLabel}" />

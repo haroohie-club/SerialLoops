@@ -63,9 +63,9 @@ public class ItemReferencesDialogViewModel : ViewModelBase
 
         Tabs = tabs;
         Item = item;
-        Title = string.Format(Strings.References_to__0_, Item.DisplayName);
+        Title = string.Format(Strings.ItemReferencesDialogTitle, Item.DisplayName);
         Items = new(item.GetReferencesTo(project));
-        FoundReferencesLabel = string.Format(Strings._0__results_found, Items.Count);
+        FoundReferencesLabel = string.Format(Strings.SearchDialogResultsDisplay, Items.Count);
         OpenItemCommand = ReactiveCommand.Create<TreeDataGrid>(OpenItem);
         CloseCommand = ReactiveCommand.Create<ItemReferencesDialog>(dialog => dialog.Close());
     }

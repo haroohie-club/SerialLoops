@@ -31,7 +31,7 @@ public class SearchDialogViewModel : ViewModelBase
     public ICommand CloseCommand { get; }
 
     [Reactive]
-    public string SearchStatusLabel { get; private set; } = Strings.Search_Project;
+    public string SearchStatusLabel { get; private set; } = Strings.SearchProjectLabel;
     [Reactive]
     public KeyGesture CloseHotKey { get; private set; }
     [Reactive]
@@ -142,7 +142,7 @@ public class SearchDialogViewModel : ViewModelBase
                 return;
             case true when string.IsNullOrWhiteSpace(SearchText):
             {
-                SearchStatusLabel = Strings.Search_Project;
+                SearchStatusLabel = Strings.SearchProjectLabel;
                 Items = [];
                 break;
             }
@@ -150,7 +150,7 @@ public class SearchDialogViewModel : ViewModelBase
             {
                 var results = _project.GetSearchResults(query, _log);
                 Items = new(results);
-                SearchStatusLabel = string.Format(Strings._0__results_found, _items.Count);
+                SearchStatusLabel = string.Format(Strings.SearchDialogResultsDisplay, _items.Count);
                 break;
             }
             default:
@@ -163,13 +163,13 @@ public class SearchDialogViewModel : ViewModelBase
                     return;
                 }
 
-                ProgressDialogViewModel tracker = new(string.Format(Strings.Searching__0____, _project.Name));
+                ProgressDialogViewModel tracker = new(string.Format(Strings.SearchDialogProgressMessage, _project.Name));
                 List<ItemDescription> results = [];
                 tracker.InitializeTasks(() => results = _project.GetSearchResults(query, _log, tracker),
                     () =>
                     {
                         Items = new(results);
-                        SearchStatusLabel = string.Format(Strings._0__results_found, _items.Count);
+                        SearchStatusLabel = string.Format(Strings.SearchDialogResultsDisplay, _items.Count);
                     });
                 await new ProgressDialog { DataContext = tracker }.ShowDialog(dialog);
                 break;

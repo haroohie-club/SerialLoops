@@ -14,7 +14,7 @@
 
         <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptParamPlace}"/>
         <StackPanel Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Orientation="Horizontal">
-            <Button Content="{x:Static assets:Strings.Select___}" Command="{Binding ChangePlaceCommand}"/>
+            <Button Content="{x:Static assets:Strings.SelectButtonLabel}" Command="{Binding ChangePlaceCommand}"/>
             <controls:ItemLink Tabs="{Binding Tabs}" Item="{Binding Place}"/>
         </StackPanel>
     </Grid>

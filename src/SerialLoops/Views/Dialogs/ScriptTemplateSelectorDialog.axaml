@@ -14,7 +14,7 @@
         ExtendClientAreaToDecorationsHint="True"
         x:DataType="vm:ScriptTemplateSelectorDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.ScriptTemplateSelectorDialog"
-        Title="{x:Static assets:Strings.Select_Template_to_Apply}"
+        Title="{x:Static assets:Strings.ScriptTemplateSelectToApply}"
         Name="ApplyTemplateDialog">
     <Panel>
         <controls:AcrylicBorderHandler/>

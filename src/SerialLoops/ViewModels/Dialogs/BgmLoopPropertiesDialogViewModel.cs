@@ -31,7 +31,7 @@ public class BgmLoopPropertiesDialogViewModel : ViewModelBase, IDisposable
     public BgmLoopPropertiesDialogViewModel(WaveStream wav, string title, ILogger log, bool loopEnabled, uint startSample = 0, uint endSample = 0)
     {
         Log = log;
-        Title = string.Format(Strings._0____Manage_Loop, title);
+        Title = string.Format(Strings.BgmEditorManageLoopDialogTitle, title);
         Waveform = WaveformRenderer.Render(wav, WaveFormRendererSettings.StandardSettings);
         if (endSample == 0)
         {

@@ -16,7 +16,7 @@
         Icon="/Assets/serial-loops.ico"
         x:DataType="vm:SearchDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.SearchDialog"
-        Title="{x:Static assets:Strings.Search_Project}"
+        Title="{x:Static assets:Strings.SearchProjectLabel}"
         Name="Dialog">
     <Panel>
         <controls:AcrylicBorderHandler/>
@@ -28,7 +28,7 @@
                     <Button Command="{Binding DeepSearchCommand}" CommandParameter="{Binding #Dialog}" HotKey="{Binding DeepSearchHotKey}"></Button>
                 </StackPanel>
                 <TextBox Grid.Row="0" Name="Search" Width="520" Margin="0 10" Text="{Binding SearchText}"
-                         Watermark="{x:Static assets:Strings.Search___}">
+                         Watermark="{x:Static assets:Strings.MenuSearch}">
                     <i:Interaction.Behaviors>
                         <ia:EventTriggerBehavior EventName="TextChanged" SourceObject="{Binding #Search}">
                             <ia:InvokeCommandAction Command="{Binding SearchCommand}"
@@ -40,7 +40,7 @@
                 <Grid Grid.Row="1" ColumnDefinitions="Auto,*">
                     <!-- Scope filters -->
                     <StackPanel Grid.Column="0" Spacing="5" Margin="0 0 5 0">
-                        <TextBlock FontWeight="Bold" Text="{x:Static assets:Strings.Search_Scope}" />
+                        <TextBlock FontWeight="Bold" Text="{x:Static assets:Strings.SearchDialogSearchScope}" />
                         <ItemsRepeater ItemsSource="{Binding SearchScopes}">
                             <ItemsRepeater.Layout>
                                 <UniformGridLayout MaximumRowsOrColumns="10" Orientation="Vertical" ItemsJustification="Start" MinItemWidth="200"/>

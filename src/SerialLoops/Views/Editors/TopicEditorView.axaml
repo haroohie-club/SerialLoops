@@ -31,10 +31,10 @@
         <TextBlock Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" IsVisible="{Binding Topic.HiddenMainTopic, Converter={x:Static ObjectConverters.IsNotNull}}"
                    Text="{Binding Topic.HiddenMainTopic.Id, Converter={StaticResource SubtractionConverter}, ConverterParameter=1}"/>
 
-        <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Text="{x:Static assets:Strings.Title}"/>
+        <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Text="{x:Static assets:Strings.TopicEditorTopicTitle}"/>
         <TextBox Grid.Column="1" Grid.Row="2" Margin="10,0,0,0" Text="{Binding Title}"/>
 
-        <TextBlock Grid.Column="0" Grid.Row="3" Text="{x:Static assets:Strings.Type}" />
+        <TextBlock Grid.Column="0" Grid.Row="3" Text="{x:Static assets:Strings.TopicEditorTopicTypeLabel}" />
         <TextBlock Grid.Column="1" Grid.Row="3" Margin="10,0,0,0" Text="{Binding Topic.TopicEntry.CardType}"/>
 
         <TextBlock Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Text="{x:Static assets:Strings.EditorItemAssociatedScriptLabel}" IsVisible="{Binding Topic.TopicEntry.Type, Converter={x:Static ObjectConverters.NotEqual}, ConverterParameter=3}"/>
@@ -50,7 +50,7 @@
         <NumericUpDown Grid.Column="1" Grid.Row="6" Margin="10,0,0,0" Value="{Binding PuzzlePhaseGroup}" Minimum="1" Maximum="6"
                        FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 
-        <controls:HeaderedContentControlWithSvg Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="7" Header="{x:Static assets:Strings.Times}"
+        <controls:HeaderedContentControlWithSvg Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="7" Header="{x:Static assets:Strings.TopicEditorGainedTimesTable}"
                                                 IconPath="avares://SerialLoops/Assets/Icons/Help.svg"
                                                 IconTip="{x:Static assets:Strings.TopicTimesHelp}">
             <Grid ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
@@ -58,7 +58,7 @@
                 <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Orientation="Horizontal" Spacing="3">
                     <NumericUpDown Value="{Binding BaseTimeGain}" Minimum="0" Maximum="{Binding MaxShort}"
                                    FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
-                    <TextBlock Text="{x:Static assets:Strings.sec}" VerticalAlignment="Center"/>
+                    <TextBlock Text="{x:Static assets:Strings.SecondsLabel}" VerticalAlignment="Center"/>
                 </StackPanel>
 
                 <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Text="{x:Static assets:Strings.TopicEditorKyonTimePercentage}"/>
@@ -70,7 +70,7 @@
                 <StackPanel Grid.Column="2" Grid.Row="1" Margin="10,0,0,0" Orientation="Horizontal" Spacing="2"
                             VerticalAlignment="Center">
                     <TextBlock Text="{Binding KyonTime}" VerticalAlignment="Center"/>
-                    <TextBlock Text="{x:Static assets:Strings.sec}" VerticalAlignment="Center"/>
+                    <TextBlock Text="{x:Static assets:Strings.SecondsLabel}" VerticalAlignment="Center"/>
                 </StackPanel>
 
                 <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Text="{x:Static assets:Strings.TopicEditorMikuruTimePercentage}"/>
@@ -82,7 +82,7 @@
                 <StackPanel Grid.Column="2" Grid.Row="2" Margin="10,0,0,0" Orientation="Horizontal" Spacing="2"
                             VerticalAlignment="Center">
                     <TextBlock Text="{Binding MikuruTime}" VerticalAlignment="Center"/>
-                    <TextBlock Text="{x:Static assets:Strings.sec}" VerticalAlignment="Center"/>
+                    <TextBlock Text="{x:Static assets:Strings.SecondsLabel}" VerticalAlignment="Center"/>
                 </StackPanel>
 
                 <TextBlock Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" Text="{x:Static assets:Strings.TopicEditorNagatoTimePercentage}"/>
@@ -94,7 +94,7 @@
                 <StackPanel Grid.Column="2" Grid.Row="3" Margin="10,0,0,0" Orientation="Horizontal" Spacing="2"
                             VerticalAlignment="Center">
                     <TextBlock Text="{Binding NagatoTime}" VerticalAlignment="Center"/>
-                    <TextBlock Text="{x:Static assets:Strings.sec}" VerticalAlignment="Center"/>
+                    <TextBlock Text="{x:Static assets:Strings.SecondsLabel}" VerticalAlignment="Center"/>
                 </StackPanel>
 
                 <TextBlock Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Text="{x:Static assets:Strings.TopicEditorKoizumiTimePercentage}"/>
@@ -106,7 +106,7 @@
                 <StackPanel Grid.Column="2" Grid.Row="4" Margin="10,0,0,0" Orientation="Horizontal" Spacing="2"
                             VerticalAlignment="Center">
                     <TextBlock Text="{Binding KoizumiTime}" VerticalAlignment="Center"/>
-                    <TextBlock Text="{x:Static assets:Strings.sec}" VerticalAlignment="Center"/>
+                    <TextBlock Text="{x:Static assets:Strings.SecondsLabel}" VerticalAlignment="Center"/>
                 </StackPanel>
             </Grid>
         </controls:HeaderedContentControlWithSvg>

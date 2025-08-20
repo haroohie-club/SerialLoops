@@ -8,7 +8,7 @@
              x:DataType="vm:ToggleDialogueScriptCommandEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.ToggleDialogueScriptCommandEditorView">
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto">
-        <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Show}"/>
+        <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptParamShow}"/>
         <CheckBox Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" IsChecked="{Binding DialogueVisible}"/>
     </Grid>
 </UserControl>

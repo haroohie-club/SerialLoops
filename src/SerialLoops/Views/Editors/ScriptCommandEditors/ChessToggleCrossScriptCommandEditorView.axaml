@@ -19,7 +19,7 @@
                         </Style>
                     </Svg.Styles>
                 </Svg>
-                <TextBlock Text="{x:Static assets:Strings.Set}"/>
+                <TextBlock Text="{x:Static assets:Strings.SetAmountLabel}"/>
             </StackPanel>
             <StackPanel Orientation="Vertical" Spacing="5">
                 <Svg Path="avares://SerialLoops/Assets/Icons/Close.svg" Width="20" Height="20" Opacity="0.5">

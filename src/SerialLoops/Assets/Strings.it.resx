@@ -123,7 +123,7 @@
   <data name="AboutMenuTitle" xml:space="preserve">
     <value>Informazioni</value>
   </data>
-  <data name="SettingsAutoReopenLabel" xml:space="preserve">
+  <data name="PreferencesAutoReopenLabel" xml:space="preserve">
     <value>Avvia automaticamente ultimo progetto</value>
   </data>
   <data name="Command" xml:space="preserve">
@@ -148,7 +148,7 @@
   <data name="CloseProjectLabel" xml:space="preserve">
     <value>Chiudi Progetto</value>
   </data>
-  <data name="_Tools" xml:space="preserve">
+  <data name="MenuTools" xml:space="preserve">
     <value>_Strumenti</value>
   </data>
   <data name="ScriptEditorAddCommandLabel" xml:space="preserve">
@@ -190,9 +190,6 @@
   <data name="UiMessage93Label" xml:space="preserve">
     <value>Casella di messaggio Tutti i dati cancellati</value>
   </data>
-  <data name="TranslatorCreditsSimplifiedChinese" xml:space="preserve">
-    <value>Cinese (Semplificato)</value>
-  </data>
   <data name="ScriptEditorAddStartingChibisSectionLabel" xml:space="preserve">
     <value>Aggiungi Chibi</value>
   </data>
@@ -221,7 +218,7 @@
     <value>Aggiungi</value>
     <comment>As in add/subtract</comment>
   </data>
-  <data name="_File" xml:space="preserve">
+  <data name="MenuFile" xml:space="preserve">
     <value>_File</value>
   </data>
   <data name="ScreenSelectorBothScreens" xml:space="preserve">
@@ -237,7 +234,7 @@
   <data name="ProjectMissingLabel" xml:space="preserve">
     <value> (Mancante)</value>
   </data>
-  <data name="_Build" xml:space="preserve">
+  <data name="MenuBuild" xml:space="preserve">
     <value>_Costruisci</value>
   </data>
   <data name="BuildSucceeded" xml:space="preserve">
@@ -309,7 +306,7 @@
   <data name="Build" xml:space="preserve">
     <value>Compila</value>
   </data>
-  <data name="_Edit" xml:space="preserve">
+  <data name="MenuEdit" xml:space="preserve">
     <value>_Modifica</value>
   </data>
   <data name="Chess_Puzzle" xml:space="preserve">
@@ -321,7 +318,7 @@
   <data name="Background_Type" xml:space="preserve">
     <value>Tipi di sfondo</value>
   </data>
-  <data name="_Check for Updates..." xml:space="preserve">
+  <data name="MenuCheckForUpdates" xml:space="preserve">
     <value>Controlla _Aggiornamenti…</value>
   </data>
   <data name="EditorBackgroundItemLabel" xml:space="preserve">
@@ -357,7 +354,7 @@
   <data name="ChibiEditorAnimationHeader" xml:space="preserve">
     <value>Animazioni</value>
   </data>
-  <data name="_Preferences..." xml:space="preserve">
+  <data name="MenuPreferences" xml:space="preserve">
     <value>_Preferenze…</value>
   </data>
   <data name="ChibiAndSpriteEditorAddFramesLabel" xml:space="preserve">
@@ -383,9 +380,6 @@
   </data>
   <data name="AnimationExportingGifProgressMessage" xml:space="preserve">
     <value>Esportando una GIF…</value>
-  </data>
-  <data name="UiMessage18Lbael" xml:space="preserve">
-    <value>Titolo del 2' episodio</value>
   </data>
   <data name="BgmItemCachingMessage" xml:space="preserve">
     <value>Caching</value>
@@ -446,9 +440,6 @@
   </data>
   <data name="ErrorBgmFileNotFound" xml:space="preserve">
     <value>Errore caricare file BGM: File non trovato.</value>
-  </data>
-  <data name="ProjectExportButtonLabel" xml:space="preserve">
-    <value>Esporta</value>
   </data>
   <data name="UpdaterDownloadFromGitHubLabel" xml:space="preserve">
     <value>Scarica da Github</value>
@@ -528,13 +519,13 @@
   <data name="ScriptParamFadeInPercentage" xml:space="preserve">
     <value>Fade In Percentage</value>
   </data>
-  <data name="Topic Stock Mode" xml:space="preserve">
+  <data name="SaveEditorTopicStockModeOption" xml:space="preserve">
     <value>Modalità Discussione generica</value>
   </data>
   <data name="ProjectCreationLanguageTemplate" xml:space="preserve">
     <value>Template Lingua</value>
   </data>
-  <data name="Script Position" xml:space="preserve">
+  <data name="SaveEditorScriptPosition" xml:space="preserve">
     <value>Posizione Script</value>
   </data>
   <data name="ErrorFailedInsertingHacks" xml:space="preserve">
@@ -543,7 +534,7 @@
   <data name="UiMessage66Label" xml:space="preserve">
     <value>Fase Puzzle (Opzioni)</value>
   </data>
-  <data name="Text Speed" xml:space="preserve">
+  <data name="ScriptParamTextDisplaySpeed" xml:space="preserve">
     <value>Velocità testo</value>
   </data>
   <data name="ScriptParamOption3" xml:space="preserve">
@@ -585,7 +576,7 @@
   <data name="MenuProjectOpen" xml:space="preserve">
     <value>Apri Progetto</value>
   </data>
-  <data name="Select a Topic" xml:space="preserve">
+  <data name="ScriptEditorNoTopicYetButton" xml:space="preserve">
     <value>Seleziona discussione</value>
   </data>
   <data name="TopicEditorHiddenID" xml:space="preserve">
@@ -600,28 +591,22 @@
   <data name="ErrorFailedReplacingGraphicsFile" xml:space="preserve">
     <value>Impossibile sostituire il file grafico {0} con il file '{1}'</value>
   </data>
-  <data name="Topic" xml:space="preserve">
+  <data name="ScriptParamTopic" xml:space="preserve">
     <value>Discussione</value>
   </data>
-  <data name="Scale Image" xml:space="preserve">
+  <data name="IcrScaleImage" xml:space="preserve">
     <value>Ridimensiona Immagine</value>
-  </data>
-  <data name="Select Icon" xml:space="preserve">
-    <value>Scegli Icona</value>
   </data>
   <data name="ErrorFailedEncodingAudioAdx" xml:space="preserve">
     <value>Errore nel decodificare file audio in ADX.</value>
   </data>
-  <data name="Subtitle Text" xml:space="preserve">
+  <data name="VoicedLineEditorSubtitleTextLabel" xml:space="preserve">
     <value>Sottotitoli</value>
-  </data>
-  <data name="SFX" xml:space="preserve">
-    <value>SFX</value>
   </data>
   <data name="UiMessage27Label" xml:space="preserve">
     <value>Pannello Info su nessun dato salvato</value>
   </data>
-  <data name="Set" xml:space="preserve">
+  <data name="SetAmountLabel" xml:space="preserve">
     <value>Imposta</value>
     <comment>As in "set value to"</comment>
   </data>
@@ -640,7 +625,7 @@
   <data name="UiMessage116Label" xml:space="preserve">
     <value>messaggio evento sbloccato di Haruhi Suzumiya</value>
   </data>
-  <data name="Topic Set" xml:space="preserve">
+  <data name="PuzzleEditorTopicSet" xml:space="preserve">
     <value>Imposta discussione</value>
   </data>
   <data name="UiMessage73Label" xml:space="preserve">
@@ -652,24 +637,21 @@
   <data name="UiMessage74Label" xml:space="preserve">
     <value>Pannello info sul volume della musica di background</value>
   </data>
-  <data name="Replace..." xml:space="preserve">
+  <data name="MenuReplace" xml:space="preserve">
     <value>Sostituisci…</value>
   </data>
   <data name="ErrorFailedReplacingAnimationFile" xml:space="preserve">
     <value>Impossibile sostituire il file di animazione {0} in grp.bin con il file '{1}'</value>
   </data>
-  <data name="Show" xml:space="preserve">
+  <data name="ScriptParamShow" xml:space="preserve">
     <value>Mostra</value>
     <comment>As in show/hide</comment>
   </data>
-  <data name="Toggle Tsuruya's voice ticker tape" xml:space="preserve">
+  <data name="UiMessage85Label" xml:space="preserve">
     <value>Pannello Info Attiva voce Tsuruya</value>
   </data>
   <data name="ProjectSettingsGameBannerNameLimitMessages" xml:space="preserve">
     <value>Il Banner del Gioco può contenere massimo 3 linee.</value>
-  </data>
-  <data name="Target Number" xml:space="preserve">
-    <value>Numero di riferimento</value>
   </data>
   <data name="SoundEditorConvertingFromVorbisMessage" xml:space="preserve">
     <value>Conversione da Vorbis in corso…</value>
@@ -692,10 +674,10 @@
   <data name="RecentProjects" xml:space="preserve">
     <value>Progetti recenti</value>
   </data>
-  <data name="Save data 1 damaged &amp; reset message box" xml:space="preserve">
+  <data name="UiMessage52Label" xml:space="preserve">
     <value>Pannello Info sul salvataggio 1 danneggiato e ripristino</value>
   </data>
-  <data name="Select Command Type" xml:space="preserve">
+  <data name="ScriptEditorAddCommandDialogTitle" xml:space="preserve">
     <value>Scegli tipo di comando</value>
   </data>
   <data name="GifExportAddingFramesStatusMessage" xml:space="preserve">
@@ -710,7 +692,7 @@
   <data name="FiletypePng" xml:space="preserve">
     <value>Immagine PNG</value>
   </data>
-  <data name="Text Color" xml:space="preserve">
+  <data name="CharacterEditorNameplateTextColor" xml:space="preserve">
     <value>Colore del testo</value>
   </data>
   <data name="UiMessage08Label" xml:space="preserve">
@@ -719,7 +701,7 @@
   <data name="UiMessage65Label" xml:space="preserve">
     <value>Fase Investigazione (Opzioni)</value>
   </data>
-  <data name="Success!" xml:space="preserve">
+  <data name="MessageBoxTitleSuccessGeneric" xml:space="preserve">
     <value>Successo!</value>
   </data>
   <data name="ProjectCreationWarning" xml:space="preserve">
@@ -728,13 +710,10 @@
   <data name="PreferencesEmulatorPathLabel" xml:space="preserve">
     <value>Percorso Emulatore</value>
   </data>
-  <data name="Results" xml:space="preserve">
-    <value>Risultati</value>
-  </data>
-  <data name="Topic Stock Mode ticker tape" xml:space="preserve">
+  <data name="UiMessage101Label" xml:space="preserve">
     <value>Pannello Info Modalità Discussione generica</value>
   </data>
-  <data name="Save voiced line as WAV" xml:space="preserve">
+  <data name="VoicedLineEditorSaveAsWavLabel" xml:space="preserve">
     <value>Salva File audio come WAV</value>
   </data>
   <data name="MenuNewProject" xml:space="preserve">
@@ -755,7 +734,7 @@
   <data name="GroupSelectionEditorPastDescriptionLabel" xml:space="preserve">
     <value>Descrizione precedente</value>
   </data>
-  <data name="Successfully applied the following hacks:\n{0}" xml:space="preserve">
+  <data name="AsmHacksSuccessMessage" xml:space="preserve">
     <value>Applicata con successo le seguenti hacks:\n{0}</value>
   </data>
   <data name="ScriptEditorRemoveChibi" xml:space="preserve">
@@ -764,10 +743,10 @@
   <data name="GroupSelectionEditorHaruhiPresentLabel" xml:space="preserve">
     <value>Haruhi è presente</value>
   </data>
-  <data name="SFXs" xml:space="preserve">
+  <data name="ItemsPanelSFXs" xml:space="preserve">
     <value>SFXs</value>
   </data>
-  <data name="Time (Frames)" xml:space="preserve">
+  <data name="ScriptParamTime" xml:space="preserve">
     <value>Tempo (Frames)</value>
   </data>
   <data name="Required Brigade Member" xml:space="preserve">
@@ -776,7 +755,7 @@
   <data name="TopicEditorTopicIdLabel" xml:space="preserve">
     <value>ID</value>
   </data>
-  <data name="Reset options to default title" xml:space="preserve">
+  <data name="UiMessage67Label" xml:space="preserve">
     <value>Formatta Impostazioni</value>
   </data>
   <data name="UiMessage95Label" xml:space="preserve">
@@ -785,20 +764,14 @@
   <data name="ErrorFailedReplacingBackground" xml:space="preserve">
     <value>Impossibile sostituire sfondo {0} con file {1}</value>
   </data>
-  <data name="Routes" xml:space="preserve">
-    <value>Strade</value>
-  </data>
   <data name="ErrorInvalidAudioSelected" xml:space="preserve">
     <value>File audio non valdio selezionato.</value>
   </data>
-  <data name="Singularity" xml:space="preserve">
+  <data name="PuzzleEditorSingularityImage" xml:space="preserve">
     <value>Anomalie</value>
   </data>
   <data name="BgmItemEncodingProgressMessage" xml:space="preserve">
     <value>Encoding</value>
-  </data>
-  <data name="Select..." xml:space="preserve">
-    <value>Seleziona…</value>
   </data>
   <data name="ScriptParamPlace" xml:space="preserve">
     <value>Spazio</value>
@@ -809,7 +782,7 @@
   <data name="SysTexEditorPaletteLabel" xml:space="preserve">
     <value>Palette</value>
   </data>
-  <data name="Replace voiced line" xml:space="preserve">
+  <data name="VoicedLineEditorReplaceLine" xml:space="preserve">
     <value>Sostituisci file audio</value>
   </data>
   <data name="ErrorFailedSavingChokuSave" xml:space="preserve">
@@ -830,19 +803,19 @@
   <data name="ScriptParameterDelay" xml:space="preserve">
     <value>Ritarda (Frames)</value>
   </data>
-  <data name="Toggle Mysterious Girl's voice ticker tape" xml:space="preserve">
+  <data name="UiMessage88Label" xml:space="preserve">
     <value>Pannello Info Attiva voce Ragazza misteriosa</value>
   </data>
-  <data name="Select frames" xml:space="preserve">
+  <data name="AnimationSelectFramesReplacementDialogTitle" xml:space="preserve">
     <value>Seleziona frames</value>
   </data>
   <data name="Episode_Number" xml:space="preserve">
     <value>Numero Episodio</value>
   </data>
-  <data name="Transition" xml:space="preserve">
+  <data name="ScriptParamTransition" xml:space="preserve">
     <value>Transizione</value>
   </data>
-  <data name="Saved but unbuilt files were detected in the project directory. Would you like to build before loading the project? Not building could result in these files being overwritten." xml:space="preserve">
+  <data name="ProjectLoadSavedButUnbuiltFilesDetectedPrompt" xml:space="preserve">
     <value>Nella cartella del progetto sono stati rilevati file salvati ma non compilati. Si desidera eseguire la compilazione prima di caricare il progetto? La mancata compilazione potrebbe causare la sovrascrittura di questi file.</value>
   </data>
   <data name="MenuEditSaveFile" xml:space="preserve">
@@ -860,37 +833,31 @@
   <data name="SaveEditorQuickSaveTab" xml:space="preserve">
     <value>Salvataggio rapido</value>
   </data>
-  <data name="Sub-Topic" xml:space="preserve">
+  <data name="UiMessage05Label" xml:space="preserve">
     <value>Discussione generica</value>
-  </data>
-  <data name="To edit Save Files, you need to have a project open.\nNo project is currently open. Would you like to create a new project?" xml:space="preserve">
-    <value>Per modificare il salvataggio, devi aprire il progetto.\nNessun progetto aperto. Vuoi crearne uno nuovo?</value>
   </data>
   <data name="TopicEditorEpisodeGroup" xml:space="preserve">
     <value>Gruppo Episodi</value>
   </data>
-  <data name="System_Texture" xml:space="preserve">
-    <value>Texture di sistema</value>
-  </data>
-  <data name="Sound (Options)" xml:space="preserve">
+  <data name="UiMessage64Label" xml:space="preserve">
     <value>Audio (Opzioni)</value>
   </data>
   <data name="BuildCopyingArchivesMessage" xml:space="preserve">
     <value>Copiare gli archivi negli originali iterativi</value>
   </data>
-  <data name="Supported Audio Files" xml:space="preserve">
+  <data name="FiletypeSupportedAudio" xml:space="preserve">
     <value>File audio supportati</value>
   </data>
-  <data name="Topics" xml:space="preserve">
+  <data name="ItemsPanelTopics" xml:space="preserve">
     <value>Discussioni</value>
   </data>
-  <data name="System data damaged &amp; reset message box" xml:space="preserve">
+  <data name="UiMessage51Label" xml:space="preserve">
     <value>Messagio sul danneggiamento dei dati e reset del gioco</value>
   </data>
-  <data name="Setting item image..." xml:space="preserve">
+  <data name="ItemEditorReplaceProgressMessage" xml:space="preserve">
     <value>Imposta Immagini degli oggetti…</value>
   </data>
-  <data name="Text Timer" xml:space="preserve">
+  <data name="CharacterEditorTextTimer" xml:space="preserve">
     <value>Testo del timer</value>
   </data>
   <data name="LanguagePtBr" xml:space="preserve">
@@ -905,28 +872,28 @@
   <data name="ScriptParamFlag" xml:space="preserve">
     <value>Flag</value>
   </data>
-  <data name="Screen Position" xml:space="preserve">
+  <data name="VoicedLineEditorSubtitleScreenPosition" xml:space="preserve">
     <value>Posizione schermo</value>
   </data>
-  <data name="Save prompt" xml:space="preserve">
+  <data name="UiMessage36Label" xml:space="preserve">
     <value>Salva prompt</value>
   </data>
-  <data name="Toggle Haruhi's voice ticker tape" xml:space="preserve">
+  <data name="UiMessage80Label" xml:space="preserve">
     <value>Pannello Info Attiva voce Haruhi</value>
   </data>
   <data name="No" xml:space="preserve">
     <value>No</value>
   </data>
-  <data name="Serial Loops v{0}" xml:space="preserve">
+  <data name="SerialLoopsVersionString" xml:space="preserve">
     <value>Serial Loops Ver{0}</value>
   </data>
   <data name="TopicEditorKyonTimePercentage" xml:space="preserve">
     <value>Percentuale tempo Kyon</value>
   </data>
-  <data name="Replacing BGM" xml:space="preserve">
+  <data name="BgmEditorReplacingProgressMessage" xml:space="preserve">
     <value>Sostituendo BGM</value>
   </data>
-  <data name="Text Voice Font" xml:space="preserve">
+  <data name="ScriptParamTextVoiceFont" xml:space="preserve">
     <value>Font per i dialoghi</value>
   </data>
   <data name="Item" xml:space="preserve">
@@ -935,22 +902,22 @@
   <data name="FiletypeMp3" xml:space="preserve">
     <value>File MP3</value>
   </data>
-  <data name="Toggle Kyon's voice ticker tape" xml:space="preserve">
+  <data name="UiMessage79Label" xml:space="preserve">
     <value>Pannello Info Attiva voce Kyon</value>
   </data>
-  <data name="Save chibi GIF" xml:space="preserve">
+  <data name="ChibiEditorSaveGifFileDialogTitle" xml:space="preserve">
     <value>Salva Chibi come GIF</value>
   </data>
   <data name="SaveEditorSaveSlotEditTitle" xml:space="preserve">
     <value>Modifica Salvataggio - {0}</value>
   </data>
-  <data name="Script Section" xml:space="preserve">
+  <data name="ParamScriptSection" xml:space="preserve">
     <value>Sezione Script</value>
   </data>
-  <data name="Select Graphic" xml:space="preserve">
+  <data name="GraphicSelectionTitle" xml:space="preserve">
     <value>Scegli grafica</value>
   </data>
-  <data name="Setting screen image..." xml:space="preserve">
+  <data name="BackgroundEditorSettingScreenImage" xml:space="preserve">
     <value>imposta immagini su schermo…</value>
   </data>
   <data name="UiMessage107Label" xml:space="preserve">
@@ -965,7 +932,7 @@
   <data name="ErrorFailedDownsamplingAudio" xml:space="preserve">
     <value>Errore nel downsampling file audio.</value>
   </data>
-  <data name="Replace BGM track" xml:space="preserve">
+  <data name="BgmEditorReplaceBgmTrack" xml:space="preserve">
     <value>Sostituisci traccia BGM</value>
   </data>
   <data name="RomOpenFileDialogTitle" xml:space="preserve">
@@ -992,16 +959,16 @@
   <data name="ProjectSettingsGameBanner" xml:space="preserve">
     <value>Banner del Gioco</value>
   </data>
-  <data name="Scripts" xml:space="preserve">
+  <data name="ItemsPanelScripts" xml:space="preserve">
     <value>Scripts</value>
   </data>
   <data name="CommandTypeLabel" xml:space="preserve">
     <value>Tipo di Comando:</value>
   </data>
-  <data name="Replacing Files" xml:space="preserve">
+  <data name="BuildReplacingFilesProgressMessage" xml:space="preserve">
     <value>Sostituendo Files</value>
   </data>
-  <data name="Toggle Kunikida's voice ticker tape" xml:space="preserve">
+  <data name="UiMessage87Label" xml:space="preserve">
     <value>Pannello Info Attiva voce Kunikida</value>
   </data>
   <data name="UiMessage56Label" xml:space="preserve">
@@ -1010,10 +977,10 @@
   <data name="BgItemDrawingTexturesProgressMessage" xml:space="preserve">
     <value>Caricando textures…</value>
   </data>
-  <data name="Save Files" xml:space="preserve">
+  <data name="SaveEditorSaveFilesHeader" xml:space="preserve">
     <value>Salva file</value>
   </data>
-  <data name="Serial Loops Project" xml:space="preserve">
+  <data name="FiletypeProject" xml:space="preserve">
     <value>Progetto Serial Loops</value>
   </data>
   <data name="ErrorFailedLoadingCharacterProgressVoice" xml:space="preserve">
@@ -1028,7 +995,7 @@
   <data name="SaveEditorQuicksaveMusic" xml:space="preserve">
     <value>Musica: </value>
   </data>
-  <data name="Save game read fail message box" xml:space="preserve">
+  <data name="UiMessage48Label" xml:space="preserve">
     <value>Messaggio sul fallimento nel leggere i dati salvati</value>
   </data>
   <data name="UpdaterNewUpdateAvailableTitle" xml:space="preserve">
@@ -1055,10 +1022,10 @@
   <data name="ErrorFailedToDecodeOriginalAdx" xml:space="preserve">
     <value>Impossibile decriptare file originale, ci rinuncio!</value>
   </data>
-  <data name="Russian" xml:space="preserve">
+  <data name="LanguageRussian" xml:space="preserve">
     <value>Russo</value>
   </data>
-  <data name="Sound" xml:space="preserve">
+  <data name="ScriptParamSound" xml:space="preserve">
     <value>Audio</value>
   </data>
   <data name="ScriptParamEndScriptSection" xml:space="preserve">
@@ -1070,7 +1037,7 @@
   <data name="LanguageJapanese" xml:space="preserve">
     <value>Giapponese</value>
   </data>
-  <data name="Title" xml:space="preserve">
+  <data name="GroupSelectionEditorRouteTitle" xml:space="preserve">
     <value>Titolo</value>
   </data>
   <data name="ErrorFailedToCacheAudioFile" xml:space="preserve">
@@ -1085,13 +1052,13 @@
   <data name="Start" xml:space="preserve">
     <value>Avvia</value>
   </data>
-  <data name="Toggle Kyon's sister's voice ticker tape" xml:space="preserve">
+  <data name="UiMessage84Label" xml:space="preserve">
     <value>Pannello Info Attiva voce Sorella</value>
   </data>
   <data name="ItemsPanelCharacterSprites" xml:space="preserve">
     <value>Sprites dei Personaggi</value>
   </data>
-  <data name="Toggle Nagato's voice ticker tape" xml:space="preserve">
+  <data name="UiMessage82Label" xml:space="preserve">
     <value>Pannello Info Attiva voce Nagato</value>
   </data>
   <data name="PuzzleEditorHaruhiRoutes" xml:space="preserve">
@@ -1130,14 +1097,11 @@
   <data name="ProjectCreationProgressMessage" xml:space="preserve">
     <value>Creazione Progetto</value>
   </data>
-  <data name="Save character sprite GIF" xml:space="preserve">
+  <data name="CharacterSpriteEditorSaveGifFileDialogTitle" xml:space="preserve">
     <value>Salva Sprite dei personaggi come GIF</value>
   </data>
-  <data name="Replace BGM" xml:space="preserve">
+  <data name="BgmEditorReplaceBgmLabel" xml:space="preserve">
     <value>Sostituisci BGM</value>
-  </data>
-  <data name="Searching" xml:space="preserve">
-    <value>Cercando</value>
   </data>
   <data name="EditorConvertingFramesMessage" xml:space="preserve">
     <value>Conversione frames in corso…</value>
@@ -1145,22 +1109,22 @@
   <data name="UiMessage17Label" xml:space="preserve">
     <value>Titolo del 1' Episodio</value>
   </data>
-  <data name="Sound options ticker tape" xml:space="preserve">
+  <data name="UiMessage69Label" xml:space="preserve">
     <value>Pannello Informazioni Effetti sonori</value>
   </data>
   <data name="ScriptEditorChessWinSectionLabel" xml:space="preserve">
     <value>Sezione Vittoria</value>
   </data>
-  <data name="Set/Clear" xml:space="preserve">
+  <data name="ScriptParamSetClear" xml:space="preserve">
     <value>Imposta/Cancella</value>
   </data>
-  <data name="Target Screen" xml:space="preserve">
+  <data name="ScreenSelectTarget" xml:space="preserve">
     <value>Schermo di riferimento</value>
   </data>
   <data name="CommandIndexLabel" xml:space="preserve">
     <value>Index Comandi: </value>
   </data>
-  <data name="Successfully applied hacks!" xml:space="preserve">
+  <data name="AsmHacksSuccessMessageBoxTitle" xml:space="preserve">
     <value>Hacks applicate con successo!</value>
   </data>
   <data name="ProjectCreationNoRomSelected" xml:space="preserve">
@@ -1172,13 +1136,13 @@
   <data name="UpdaterDownloadReleaseFromGitHubTitle" xml:space="preserve">
     <value>Scarica nuova versione da GitHub</value>
   </data>
-  <data name="Toggle Taniguchi's voice ticker tape" xml:space="preserve">
+  <data name="UiMessage86Label" xml:space="preserve">
     <value>Pannello Info Attiva voce Taniguchi</value>
   </data>
   <data name="UiMessage06Label" xml:space="preserve">
     <value>Dividi i personaggi</value>
   </data>
-  <data name="MenuPreferences" xml:space="preserve">
+  <data name="PreferencesDialogTitle" xml:space="preserve">
     <value>Preferenze</value>
   </data>
   <data name="SaveEditorDialogueVolumeConfigLabel" xml:space="preserve">
@@ -1193,7 +1157,7 @@
   <data name="ScriptParamFadeOutTime" xml:space="preserve">
     <value>Fade Out Time (Frames)</value>
   </data>
-  <data name="Serial Loops ASM Hack" xml:space="preserve">
+  <data name="FiletypeAsmHack" xml:space="preserve">
     <value>Hack ASM serializzato</value>
   </data>
   <data name="PuzzleEditorNumSingularities" xml:space="preserve">
@@ -1217,25 +1181,22 @@
   <data name="ErrorFailedExportingChibiAnimation" xml:space="preserve">
     <value>Impossibile esportare animazione {0} del chibi {1} come file</value>
   </data>
-  <data name="Save Project" xml:space="preserve">
+  <data name="MenuSaveProject" xml:space="preserve">
     <value>Salva progetto</value>
   </data>
-  <data name="Set BGM loop info" xml:space="preserve">
+  <data name="BgmEditorSetBgmLoopInfoTitle" xml:space="preserve">
     <value>Imposta informazioni del loop della BGM</value>
   </data>
-  <data name="Setting CG single image..." xml:space="preserve">
+  <data name="BackgroundEditorCGSingleReplaceProgressMessage" xml:space="preserve">
     <value>Imposta Immagine singola dei PG…</value>
-  </data>
-  <data name="Run" xml:space="preserve">
-    <value>Avvia</value>
   </data>
   <data name="ScriptParamDisplay" xml:space="preserve">
     <value>Mostrare?</value>
   </data>
-  <data name="Select chibi export folder" xml:space="preserve">
+  <data name="ChibiEditorSelectExportFolder" xml:space="preserve">
     <value>Seleziona cartella dove esportare Chibi</value>
   </data>
-  <data name="The changes made will require Serial Loops to be restarted. Is that okay?" xml:space="preserve">
+  <data name="PreferencesRestartMessage" xml:space="preserve">
     <value>Per applicare tali cambiamenti bisogna riavviare Serial Loops. Sei sicuro?</value>
   </data>
   <data name="Paste" xml:space="preserve">
@@ -1244,19 +1205,19 @@
   <data name="BgmItemDownsamplingProgressMessage" xml:space="preserve">
     <value>Downsampling…</value>
   </data>
-  <data name="Reset settings to default ticker tape" xml:space="preserve">
+  <data name="UiMessage89Label" xml:space="preserve">
     <value>Pannello Info sulla formattazione delle impostazioni</value>
   </data>
   <data name="SaveSlotEditorFlagsHeader" xml:space="preserve">
     <value>Flags</value>
   </data>
-  <data name="Save data damaged &amp; reset message box" xml:space="preserve">
+  <data name="UiMessage50Label" xml:space="preserve">
     <value>Pannello Info sul salvataggio danneggiato e ripristino</value>
   </data>
   <data name="ErrorFailedReplacingDatFile" xml:space="preserve">
     <value>Impossibile sostituire il file sorgente {0} in dat.bin con il file '{1}'</value>
   </data>
-  <data name="Script:" xml:space="preserve">
+  <data name="SaveEditorScript" xml:space="preserve">
     <value>Script: </value>
   </data>
   <data name="ProjectOrHackName" xml:space="preserve">
@@ -1275,7 +1236,7 @@
     <value>Raccolte sonore: {0}</value>
     <comment>As in "Sound Groups"</comment>
   </data>
-  <data name="Sound Effects:" xml:space="preserve">
+  <data name="SaveEditorSoundEffectsLabel" xml:space="preserve">
     <value>Effetti Sonori: </value>
   </data>
   <data name="ScriptParamDontClearText" xml:space="preserve">
@@ -1284,7 +1245,7 @@
   <data name="VoicedLineEditorEditSubtitleHeader" xml:space="preserve">
     <value>Modifica Sottotitoli</value>
   </data>
-  <data name="Sound effect volume options ticker tape" xml:space="preserve">
+  <data name="UiMessage75Label" xml:space="preserve">
     <value>Pannello Informazioni sull'opzione per aggiustare il volume</value>
   </data>
   <data name="UiMessage99Label" xml:space="preserve">
@@ -1305,10 +1266,10 @@
   <data name="ProjectSettings" xml:space="preserve">
     <value>Impostazioni del progetto</value>
   </data>
-  <data name="Transitions" xml:space="preserve">
+  <data name="ItemsPanelTransitions" xml:space="preserve">
     <value>Transizioni</value>
   </data>
-  <data name="Search Scope" xml:space="preserve">
+  <data name="SearchDialogSearchScope" xml:space="preserve">
     <value>Campo di Ricerca</value>
   </data>
   <data name="ColorMonoParamCustom" xml:space="preserve">
@@ -1320,7 +1281,7 @@
   <data name="PuzzleEditorContinueOnFailureLabel" xml:space="preserve">
     <value>Continua a fallire</value>
   </data>
-  <data name="Replace Frames" xml:space="preserve">
+  <data name="AnimationReplaceFrames" xml:space="preserve">
     <value>Sostituisci Frames</value>
   </data>
   <data name="ScenarioEditorClearScenarioLabel" xml:space="preserve">
@@ -1329,7 +1290,7 @@
   <data name="UiMessage63Label" xml:space="preserve">
     <value>Pannello Info descrizione di Koizumi fase investigazione</value>
   </data>
-  <data name="Sprite" xml:space="preserve">
+  <data name="ScriptParamSprite" xml:space="preserve">
     <value>Sprite</value>
   </data>
   <data name="UiMessage78Label" xml:space="preserve">
@@ -1347,7 +1308,7 @@
   <data name="ErrorFailedExportingSpriteLayout" xml:space="preserve">
     <value>Impossibile esportare layout da sprite {0} a file</value>
   </data>
-  <data name="Select character sprite export folder" xml:space="preserve">
+  <data name="CharacterSpriteEditorSelectExportFolder" xml:space="preserve">
     <value>Scegli cartella dove esportare gli sprite dei personaggi</value>
   </data>
   <data name="SfxEditorGroupsLabel" xml:space="preserve">
@@ -1357,29 +1318,29 @@
   <data name="ScriptParamFadeInTime" xml:space="preserve">
     <value>Fade In Time (Frame)</value>
   </data>
-  <data name="sec" xml:space="preserve">
+  <data name="SecondsLabel" xml:space="preserve">
     <value>secondi</value>
     <comment>As in "seconds"</comment>
   </data>
-  <data name="Scenes to Skip" xml:space="preserve">
+  <data name="ScriptParamScenesToSkip" xml:space="preserve">
     <value>Scene da saltare</value>
   </data>
-  <data name="Select ROM" xml:space="preserve">
+  <data name="RomSelectButton" xml:space="preserve">
     <value>Scegli ROM</value>
   </data>
   <data name="ErrorFailedConvertingAudioToWav" xml:space="preserve">
     <value>Errore nel convertire file audio in WAV.</value>
   </data>
-  <data name="Spanish" xml:space="preserve">
+  <data name="LanguageSpanish" xml:space="preserve">
     <value>Spagnolo</value>
   </data>
   <data name="MenuProjectSettings" xml:space="preserve">
     <value>Impostando il progetto…</value>
   </data>
-  <data name="Setting palettes and images..." xml:space="preserve">
+  <data name="BackgroundEditorSettingPalettesAndImages" xml:space="preserve">
     <value>Imposta pallette e immagini…</value>
   </data>
-  <data name="Toggle Mikuru's voice ticker tape" xml:space="preserve">
+  <data name="UiMessage81Label" xml:space="preserve">
     <value>Pannello Info Attiva voce Mikuru</value>
   </data>
   <data name="ChibiEditorFramesLabel" xml:space="preserve">
@@ -1388,7 +1349,7 @@
   <data name="AsmHackParameterValue" xml:space="preserve">
     <value>Valore del parametro</value>
   </data>
-  <data name="Searching {0}..." xml:space="preserve">
+  <data name="SearchDialogProgressMessage" xml:space="preserve">
     <value>Cercando {0}…</value>
   </data>
   <data name="ErrorFailedReplacingSysTex" xml:space="preserve">
@@ -1403,31 +1364,28 @@
   <data name="UiMessage23Label" xml:space="preserve">
     <value>Pannello Info Episodio 2</value>
   </data>
-  <data name="Set BGM volume" xml:space="preserve">
-    <value>Imposta volume BGM</value>
-  </data>
   <data name="SaveEditorLoadSaveFileDialogTitle" xml:space="preserve">
     <value>Apri Salvataggio di Chokuretsu</value>
   </data>
   <data name="ErrorFailedCalculatingScriptGraph" xml:space="preserve">
     <value>Impossibile calcolare limiti grafici!</value>
   </data>
-  <data name="Template" xml:space="preserve">
+  <data name="ScriptTemplateToolbarText" xml:space="preserve">
     <value>Template</value>
   </data>
-  <data name="Select base ROM" xml:space="preserve">
+  <data name="ProjectCreationSelectBaseRom" xml:space="preserve">
     <value>Seleziona ROM di base</value>
   </data>
-  <data name="Top Screen" xml:space="preserve">
+  <data name="ScreenSelectorTopScreen" xml:space="preserve">
     <value>Schermo superiore</value>
   </data>
-  <data name="Search..." xml:space="preserve">
+  <data name="MenuSearch" xml:space="preserve">
     <value>Cerca…</value>
   </data>
   <data name="ErrorFailedReadingBgmFile" xml:space="preserve">
     <value>Impossibile leggere file BGM; ripristinando originale…</value>
   </data>
-  <data name="Skip Update" xml:space="preserve">
+  <data name="UpdaterSkipUpdateLabel" xml:space="preserve">
     <value>Ignora aggiornamento</value>
   </data>
   <data name="ErrorFailedDeletingHackFiles" xml:space="preserve">
@@ -1436,17 +1394,14 @@
   <data name="ScriptParamDisableLipFlap" xml:space="preserve">
     <value>Disattiva Labiale</value>
   </data>
-  <data name="Save data 2 damaged &amp; reset message box" xml:space="preserve">
+  <data name="UiMessage53Label" xml:space="preserve">
     <value>Pannello Info sul salvataggio 2 danneggiato e ripristino</value>
   </data>
-  <data name="Topic Stock Mode option" xml:space="preserve">
+  <data name="UiMessage97Label" xml:space="preserve">
     <value>Impostazioni modalità discussione generica</value>
   </data>
-  <data name="Saving GIF..." xml:space="preserve">
+  <data name="AnimationGifSavingProgressMessage" xml:space="preserve">
     <value>Salvando GIF…</value>
-  </data>
-  <data name="Size:" xml:space="preserve">
-    <value>Dimensioni:</value>
   </data>
   <data name="UiMessage42Label" xml:space="preserve">
     <value>Messaggio sul salvataggio del gioco</value>
@@ -1454,13 +1409,13 @@
   <data name="ScriptParamPuzzle" xml:space="preserve">
     <value>Puzzle</value>
   </data>
-  <data name="Select Template to Apply" xml:space="preserve">
+  <data name="ScriptTemplateSelectToApply" xml:space="preserve">
     <value>Scegli template da applicare</value>
   </data>
   <data name="EditUITextTitle" xml:space="preserve">
     <value>Modifica Testo UI</value>
   </data>
-  <data name="Toggle Koizumi's voice ticker tape" xml:space="preserve">
+  <data name="UiMessage83Label" xml:space="preserve">
     <value>Pannello Info Attiva voce Koizumi</value>
   </data>
   <data name="ErrorFailedCreatingDir" xml:space="preserve">
@@ -1475,7 +1430,7 @@
   <data name="ProjectCreationNoNameMessage" xml:space="preserve">
     <value>Inserisci un nome al progetto prima di crearlo.</value>
   </data>
-  <data name="Script" xml:space="preserve">
+  <data name="ScenarioParamScript" xml:space="preserve">
     <value>Script</value>
   </data>
   <data name="UiMessage108Label" xml:space="preserve">
@@ -1487,13 +1442,13 @@
   <data name="MapEditorDrawStartingPointLabel" xml:space="preserve">
     <value>Disegna partenza</value>
   </data>
-  <data name="Supported Images" xml:space="preserve">
+  <data name="FiletypeSupportedImages" xml:space="preserve">
     <value>Immagini supportate</value>
   </data>
   <data name="UiMessage68Label" xml:space="preserve">
     <value>Titolo opzioni cancellazione dati</value>
   </data>
-  <data name="Replacing {0}..." xml:space="preserve">
+  <data name="ReplacingItemProgressMessage" xml:space="preserve">
     <value>Sostituendo {0}…</value>
   </data>
   <data name="SearchDialogDefaultSearchMessage" xml:space="preserve">
@@ -1502,7 +1457,7 @@
   <data name="ScriptScenarioNewCommand" xml:space="preserve">
     <value>Nuovo Comando</value>
   </data>
-  <data name="System_Textures" xml:space="preserve">
+  <data name="ItemsPanelSystemTextures" xml:space="preserve">
     <value>Textures di sistema</value>
   </data>
   <data name="ScriptParamOption2" xml:space="preserve">
@@ -1526,9 +1481,6 @@
   <data name="Orphaned_Items" xml:space="preserve">
     <value>Oggetti senza collegamenti</value>
   </data>
-  <data name="Search for items by name, ID, or type." xml:space="preserve">
-    <value>Cerca oggetto per Nome, ID o Tipo.</value>
-  </data>
   <data name="PreferencesProjectsTab" xml:space="preserve">
     <value>Progetti</value>
   </data>
@@ -1541,7 +1493,7 @@
   <data name="ScriptParamOption1" xml:space="preserve">
     <value>Opzione 1</value>
   </data>
-  <data name="Scene" xml:space="preserve">
+  <data name="ScriptParamScene" xml:space="preserve">
     <value>Scena</value>
   </data>
   <data name="SaveFilePreviewText" xml:space="preserve">
@@ -1560,7 +1512,7 @@
   <data name="MapEditorDrawPathingMapLabel" xml:space="preserve">
     <value>Disegna percorsi mappa</value>
   </data>
-  <data name="Save Data" xml:space="preserve">
+  <data name="SaveEditorSaveDataHeader" xml:space="preserve">
     <value>Salva dati</value>
   </data>
   <data name="UiMessage58Label" xml:space="preserve">
@@ -1751,42 +1703,33 @@
   <data name="ErrorFailedWritingIncludeFiles" xml:space="preserve">
     <value>Impossibile scrivere file su disco.</value>
   </data>
-  <data name="Unable to create command" xml:space="preserve">
-    <value>Impossibile creare comando</value>
-  </data>
   <data name="ItemReferencesDialogTitle" xml:space="preserve">
     <value>Collegato a {0}</value>
-  </data>
-  <data name="Update on Close" xml:space="preserve">
-    <value>Aggiorna mentre chiudi il programma</value>
   </data>
   <data name="UiMessage96Label" xml:space="preserve">
     <value>Impostazioni scene interrotte Puzzle</value>
   </data>
-  <data name="Title screen Options ticker tape" xml:space="preserve">
+  <data name="UiMessage13Label" xml:space="preserve">
     <value>Pannello Info Schermo Titolo Opzioni</value>
   </data>
-  <data name="Voice Font" xml:space="preserve">
+  <data name="CharacterEditorVoiceFontLabel" xml:space="preserve">
     <value>Font Voce</value>
   </data>
-  <data name="Title screen New Game ticker tape" xml:space="preserve">
+  <data name="UiMessage10Label" xml:space="preserve">
     <value>Pannello Info Schermo titolo nuova partita</value>
   </data>
-  <data name="Scenario" xml:space="preserve">
+  <data name="ItemsPanelScenario" xml:space="preserve">
     <value>Scenario</value>
   </data>
-  <data name="Unvoiced dialogue volume options ticker tape" xml:space="preserve">
+  <data name="UiMessage76Label" xml:space="preserve">
     <value>Pannello Info muta voci dialoghi</value>
   </data>
-  <data name="Writing Includes" xml:space="preserve">
+  <data name="BuildWritingIncludesProgressMessage" xml:space="preserve">
     <value>Compila Includendo</value>
     <comment>"Includes" here is a noun, as in "an 'includes' file"</comment>
   </data>
-  <data name="Voices" xml:space="preserve">
+  <data name="ItemsPanelVoices" xml:space="preserve">
     <value>Voci</value>
-  </data>
-  <data name="Use Docker for ASM Hacks" xml:space="preserve">
-    <value>Usa Docker per ASM Hacks</value>
   </data>
   <data name="FiletypeOgg" xml:space="preserve">
     <value>Vorbis files</value>
@@ -1794,34 +1737,31 @@
   <data name="UiMessage54Label" xml:space="preserve">
     <value>Messaggio Riparazione dati danneggiati e reset</value>
   </data>
-  <data name="{0} results" xml:space="preserve">
-    <value>{0} risultati</value>
-  </data>
-  <data name="Skip Already Read" xml:space="preserve">
+  <data name="SaveEditorSkipAlreadyReadSetting" xml:space="preserve">
     <value>Salta già letti</value>
   </data>
-  <data name="{0} - Adjust Volume" xml:space="preserve">
+  <data name="BgmEditorAdjustVolumeDialogTitle" xml:space="preserve">
     <value>{0} - Sistema Volume</value>
   </data>
-  <data name="Reset to default config ticker tape" xml:space="preserve">
+  <data name="UiMessage72Label" xml:space="preserve">
     <value>Pannello Info Impostazioni di fabbrica</value>
   </data>
-  <data name="Yuki Nagato event unlocked message box" xml:space="preserve">
+  <data name="UiMessage118Label" xml:space="preserve">
     <value>Messaggio Evento sbloccato Yuki Nagato</value>
   </data>
-  <data name="{0} - Manage Loop" xml:space="preserve">
+  <data name="BgmEditorManageLoopDialogTitle" xml:space="preserve">
     <value>{0} - Gestisci Loop</value>
   </data>
   <data name="UiMessage106Label" xml:space="preserve">
     <value>Scene interrotte Puzzle On</value>
   </data>
-  <data name="Vertical Intensity" xml:space="preserve">
+  <data name="ScriptParamVerticalIntensity" xml:space="preserve">
     <value>Intensità verticale</value>
   </data>
-  <data name="Resetting save data message box" xml:space="preserve">
+  <data name="UiMessage46Label" xml:space="preserve">
     <value>Messaggio cancellazione dati salvati</value>
   </data>
-  <data name="Type" xml:space="preserve">
+  <data name="TopicEditorTopicTypeLabel" xml:space="preserve">
     <value>Scrivi</value>
   </data>
   <data name="UiMessage104Label" xml:space="preserve">
@@ -1830,176 +1770,146 @@
   <data name="SpritePostCommandTransition" xml:space="preserve">
     <value>Sprite transizione sposta/esci</value>
   </data>
-  <data name="Voice" xml:space="preserve">
-    <value>Voce</value>
-  </data>
   <data name="UiMessage105Label" xml:space="preserve">
     <value>Non vedere scene interrotte Puzzle</value>
   </data>
-  <data name="Title screen return unsaved progress lost prompt message box" xml:space="preserve">
+  <data name="UiMessage43Label" xml:space="preserve">
     <value>Messaggio prompt tornando al titolo i dati non salvati andranno perduti</value>
   </data>
-  <data name="Writing NitroPacker Project File" xml:space="preserve">
+  <data name="BuildWritingNPProjectFile" xml:space="preserve">
     <value>Compila File progetto NitroPacker</value>
   </data>
-  <data name="Unknown 17" xml:space="preserve">
+  <data name="PuzzleEditorUnknown17" xml:space="preserve">
     <value>Sconosciuto 17</value>
   </data>
-  <data name="Replace me" xml:space="preserve">
+  <data name="PlaceholderDialogueText" xml:space="preserve">
     <value>Sostituiscimi</value>
   </data>
-  <data name="Visible?" xml:space="preserve">
+  <data name="ScriptParamVisible" xml:space="preserve">
     <value>Rendere visibile?</value>
   </data>
-  <data name="Unsure what to do with file '{0}'" xml:space="preserve">
+  <data name="BuildUnsureWhatToDoWithFileMessage" xml:space="preserve">
     <value>Cosa fare con il file '{0}'</value>
   </data>
-  <data name="Unable to select asset URL for download" xml:space="preserve">
-    <value>Impossibile selezionare URL per scaricare risorse</value>
-  </data>
-  <data name="While attempting to build,  file #{0:X3} in archive {1} was found to be corrupt. Serial Loops can delete this file from your base directory automatically which may allow you to load the rest of the project, but any changes made to that file will be lost. Alternatively, you can attempt to edit the file manually to fix it. How would you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually." xml:space="preserve">
+  <data name="BuildCorruptedFileDetectedPrompt" xml:space="preserve">
     <value>Compilando il file #{0:X3} nell'archivio {1} è stato trovato un file corrotto. Serial Loops cancellerà questo file dalla cartella, permettendoti di caricare il progetto senza problemi. Come vuoi proseguire? Clicca OK per cancellare il file o cancella per sistemare il problema da solo.</value>
   </data>
-  <data name="WAV File" xml:space="preserve">
+  <data name="FiletypeWav" xml:space="preserve">
     <value>File WAV</value>
   </data>
-  <data name="WAV files" xml:space="preserve">
+  <data name="FiletypeWavs" xml:space="preserve">
     <value>File WAV</value>
   </data>
-  <data name="Voices:" xml:space="preserve">
+  <data name="SaveEditorVoicesLabel" xml:space="preserve">
     <value>Voci: </value>
   </data>
-  <data name="Unknown 15" xml:space="preserve">
+  <data name="PuzzleEditorUnknown15" xml:space="preserve">
     <value>Sconosciuto 15</value>
   </data>
-  <data name="Unknown 16" xml:space="preserve">
+  <data name="PuzzleEditorUnknown16" xml:space="preserve">
     <value>Sconosciuto 16</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Sì</value>
   </data>
-  <data name="Save game ticker tape" xml:space="preserve">
+  <data name="UiMessage30Label" xml:space="preserve">
     <value>Pannello Info salvataggio dati gioco</value>
   </data>
-  <data name="XDelta patch" xml:space="preserve">
+  <data name="FiletypeXdelta" xml:space="preserve">
     <value>Patch XDelta</value>
   </data>
-  <data name="Scale to Fit:" xml:space="preserve">
+  <data name="IcrScaleToFit" xml:space="preserve">
     <value>Ridimensiona per adattare:</value>
-  </data>
-  <data name="Replace with Palette" xml:space="preserve">
-    <value>Sostituisci Palette</value>
   </data>
   <data name="ScriptEditorRefreshMapsList" xml:space="preserve">
     <value>Aggiorna lista mappe</value>
   </data>
-  <data name="Scenarios" xml:space="preserve">
-    <value>Scenari</value>
-  </data>
-  <data name="{0} results found" xml:space="preserve">
+  <data name="SearchDialogResultsDisplay" xml:space="preserve">
     <value>{0} risultati trovati</value>
   </data>
-  <data name="Wait Time (Frames)" xml:space="preserve">
+  <data name="ScriptParamWaitTime" xml:space="preserve">
     <value>Aspetta (frame)</value>
   </data>
-  <data name="You have unsaved changes in {0} item(s). Would you like to save before closing the project?" xml:space="preserve">
+  <data name="UnsavedChangesPrompt" xml:space="preserve">
     <value>Sono presenti {0} cambiamento(i) non salvati. Salvare prima di chiudere?</value>
   </data>
-  <data name="Scroll Direction" xml:space="preserve">
+  <data name="ScriptParamScrollDirection" xml:space="preserve">
     <value>Scorri direzione</value>
   </data>
-  <data name="Volume Config" xml:space="preserve">
+  <data name="SaveEditorVolumeConfigHeader" xml:space="preserve">
     <value>Configura Volume</value>
   </data>
   <data name="UiMessage71Label" xml:space="preserve">
     <value>Pannello Info Opzioni fase puzzle</value>
   </data>
-  <data name="unknown04" xml:space="preserve">
-    <value>Sconosciuto04</value>
-  </data>
   <data name="TopicEditorPuzzlePhaseGroup" xml:space="preserve">
     <value>Gruppo fase puzzle</value>
   </data>
-  <data name="Unknown 04" xml:space="preserve">
+  <data name="PuzzleEditorUnknown04" xml:space="preserve">
     <value>Sconosciuto 04</value>
   </data>
-  <data name="unknown01" xml:space="preserve">
+  <data name="ScriptParamUnknown01" xml:space="preserve">
     <value>Sconosciuto01</value>
   </data>
-  <data name="Tutorial {0}" xml:space="preserve">
-    <value>Tutorial {0}</value>
-  </data>
-  <data name="Save progress prompt end game message box" xml:space="preserve">
+  <data name="UiMessage35Label" xml:space="preserve">
     <value>Messaggio prompt salvataggio dati fine gioco</value>
   </data>
-  <data name="Save Time:" xml:space="preserve">
+  <data name="SaveEditorSaveTimeLabel" xml:space="preserve">
     <value>Risparmia tempo: </value>
   </data>
-  <data name="Title screen Load Game ticker tape" xml:space="preserve">
+  <data name="UiMessage11Label" xml:space="preserve">
     <value>Pannello Info Schermo titolo carica partita</value>
   </data>
-  <data name="Section Label" xml:space="preserve">
-    <value>Sezione Etichetta</value>
-  </data>
-  <data name="unknown02" xml:space="preserve">
+  <data name="ScriptParamUnknown02" xml:space="preserve">
     <value>Sconosciuto02</value>
   </data>
   <data name="UiMessage60Label" xml:space="preserve">
     <value>Descrizione personaggio fase puzzle</value>
   </data>
-  <data name="Update Now" xml:space="preserve">
-    <value>Aggiorna adesso</value>
-  </data>
-  <data name="Scenario Command Index:" xml:space="preserve">
+  <data name="SaveEditorScenarioCommandIndex" xml:space="preserve">
     <value>Index comandi scenario: </value>
   </data>
-  <data name="Voices Config" xml:space="preserve">
+  <data name="SaveEditorVoicesConfigHeader" xml:space="preserve">
     <value>Configura Voci</value>
   </data>
-  <data name="Unknown Extras Short: {0}" xml:space="preserve">
+  <data name="BgEditorUnknownExtrasShort" xml:space="preserve">
     <value>Sconosciuto Extras Short: {0}</value>
   </data>
   <data name="ItemsPanelPuzzles" xml:space="preserve">
     <value>Puzzles</value>
   </data>
-  <data name="Unknown Extras Byte: {0}" xml:space="preserve">
+  <data name="BgEditorUnknownExtrasByte" xml:space="preserve">
     <value>Sconosciuto Byte Extra: {0}</value>
   </data>
-  <data name="Voiced dialogue volume options ticker tape" xml:space="preserve">
+  <data name="UiMessage77Label" xml:space="preserve">
     <value>Pannello Info volume voci dialogo</value>
   </data>
-  <data name="Unseen Only" xml:space="preserve">
+  <data name="SaveEditorUnseenOnlySetting" xml:space="preserve">
     <value>Solo non vedere</value>
   </data>
-  <data name="Script Section:" xml:space="preserve">
+  <data name="SaveEditorScriptSectionQuicksave" xml:space="preserve">
     <value>Block: </value>
   </data>
-  <data name="Saving prompt message box" xml:space="preserve">
+  <data name="UiMessage39Label" xml:space="preserve">
     <value>Messaggio prompt salvataggio</value>
   </data>
-  <data name="Worst Group" xml:space="preserve">
-    <value>Gruppo Peggiore</value>
-  </data>
-  <data name="Volume" xml:space="preserve">
+  <data name="ScriptParamVolume" xml:space="preserve">
     <value>Volume</value>
   </data>
-  <data name="Voice Line" xml:space="preserve">
+  <data name="ScriptParamVoiceLine" xml:space="preserve">
     <value>Linea voce</value>
   </data>
-  <data name="Sprite Shake" xml:space="preserve">
+  <data name="ScriptParamSpriteShake" xml:space="preserve">
     <value>Sprite Shake</value>
   </data>
-  <data name="Value" xml:space="preserve">
+  <data name="ValueString" xml:space="preserve">
     <value>Valore</value>
   </data>
-  <data name="unknown03" xml:space="preserve">
+  <data name="ScriptParamUnknown03" xml:space="preserve">
     <value>Sconosciuto03</value>
   </data>
-  <data name="Save game write fail message box" xml:space="preserve">
+  <data name="UiMessage49Label" xml:space="preserve">
     <value>Messaggio Salvataggio dati gioco fallito</value>
-  </data>
-  <data name="View Logs" xml:space="preserve">
-    <value>Leggi Logs</value>
   </data>
   <data name="UiMessage100Label" xml:space="preserve">
     <value>Pannello Info Scene interrotte Puzzle</value>
@@ -2007,49 +1917,43 @@
   <data name="SaveSlotEditorPuzzleInterruptScenes" xml:space="preserve">
     <value>Scene interrotte Puzzle</value>
   </data>
-  <data name="Section Name:" xml:space="preserve">
+  <data name="ScriptEditorAddScriptSectionLabel" xml:space="preserve">
     <value>Nome sezione:</value>
   </data>
-  <data name="Scroll Speed" xml:space="preserve">
+  <data name="ScriptParamScrollSpeed" xml:space="preserve">
     <value>Velocità scorri</value>
   </data>
-  <data name="Text Entrance Effect" xml:space="preserve">
+  <data name="ScriptParameterTextEntranceEffect" xml:space="preserve">
     <value>Effetto testo entrata</value>
   </data>
-  <data name="Writing Replaced Archives" xml:space="preserve">
+  <data name="BuildWritingReplacedArchivesProgressMessage" xml:space="preserve">
     <value>Compila sovrascrivendo archivi</value>
   </data>
-  <data name="Second prompt on data being erased" xml:space="preserve">
+  <data name="UiMessage91Label" xml:space="preserve">
     <value>Secondo Prompt sui dati cancellati</value>
   </data>
   <data name="Unknown" xml:space="preserve">
     <value>Sconosciuto</value>
   </data>
-  <data name="Tsuruya event unlocked message box" xml:space="preserve">
+  <data name="UiMessage120Label" xml:space="preserve">
     <value>Messaggio evento sbloccato Tsuruya</value>
   </data>
-  <data name="Save loaded message box" xml:space="preserve">
+  <data name="UiMessage41Label" xml:space="preserve">
     <value>Messaggio salvataggio caricato</value>
   </data>
-  <data name="Sprite Layer" xml:space="preserve">
+  <data name="ScriptParamSpriteLayer" xml:space="preserve">
     <value>Sprite Layer</value>
   </data>
-  <data name="View _Logs" xml:space="preserve">
+  <data name="MenuViewLogs" xml:space="preserve">
     <value>View _Logs</value>
   </data>
-  <data name="Starting Chibis" xml:space="preserve">
+  <data name="ScriptEditorStartingChibis" xml:space="preserve">
     <value>Caricando Chibis</value>
   </data>
-  <data name="Title screen Extra ticker tape" xml:space="preserve">
+  <data name="UiMessage12Label" xml:space="preserve">
     <value>Pannello Info Schermo titolo extra</value>
   </data>
-  <data name="Unknown 03" xml:space="preserve">
-    <value>Sconosciuto 03</value>
-  </data>
-  <data name="Restoring Workspace" xml:space="preserve">
-    <value>Ripristina posto lavoro</value>
-  </data>
-  <data name="Save progress prompt message box" xml:space="preserve">
+  <data name="UiMessage34Label" xml:space="preserve">
     <value>Messaggio prompt salvataggio dati</value>
   </data>
   <data name="SpritePreCommandTransition" xml:space="preserve">
@@ -2058,16 +1962,13 @@
   <data name="Restore" xml:space="preserve">
     <value>Ripristina</value>
   </data>
-  <data name="Reset:" xml:space="preserve">
-    <value>Resetta:</value>
-  </data>
-  <data name="Use Pre-Release Update Channel" xml:space="preserve">
+  <data name="PreferencesUsePreReleaseUpdateChannel" xml:space="preserve">
     <value>Usa canale pre-rilascio per aggiornare</value>
   </data>
-  <data name="Times" xml:space="preserve">
+  <data name="TopicEditorGainedTimesTable" xml:space="preserve">
     <value>Tentativi</value>
   </data>
-  <data name="Try again prompt message box" xml:space="preserve">
+  <data name="UiMessage44Label" xml:space="preserve">
     <value>Messaggio prompt riprova</value>
   </data>
   <data name="PreferencesRememberProjectWorkspace" xml:space="preserve">

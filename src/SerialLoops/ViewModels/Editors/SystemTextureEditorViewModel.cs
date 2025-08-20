@@ -67,7 +67,7 @@ public class SystemTextureEditorViewModel : EditorViewModel
     private async Task ReplaceImage(bool replacePalette)
     {
         SKBitmap original = SystemTexture.GetTexture();
-        IStorageFile openFile = await Window.Window.ShowOpenFilePickerAsync(Strings.Replace_System_Texture, [new(Strings.Supported_Images) { Patterns = Shared.SupportedImageFiletypes }]);
+        IStorageFile openFile = await Window.Window.ShowOpenFilePickerAsync(Strings.SysTexEditorReplaceSysTex, [new(Strings.FiletypeSupportedImages) { Patterns = Shared.SupportedImageFiletypes }]);
         if (openFile is not null)
         {
             ImageCropResizeDialogViewModel cropResizeDialogViewModel = new(openFile.TryGetLocalPath(), original.Width, original.Height, _log);
@@ -79,7 +79,7 @@ public class SystemTextureEditorViewModel : EditorViewModel
             {
                 try
                 {
-                    ProgressDialogViewModel tracker = new(string.Format(Strings.Replacing__0____, SystemTexture.DisplayName));
+                    ProgressDialogViewModel tracker = new(string.Format(Strings.ReplacingItemProgressMessage, SystemTexture.DisplayName));
                     tracker.InitializeTasks(() => SystemTexture.SetTexture(finalImage, replacePalette, _log), () => { });
                     await new ProgressDialog { DataContext = tracker }.ShowDialog(Window.Window);
                     this.RaisePropertyChanged(nameof(SystemTextureBitmap));

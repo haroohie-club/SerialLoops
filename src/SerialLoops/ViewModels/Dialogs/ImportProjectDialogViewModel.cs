@@ -43,7 +43,7 @@ public class ImportProjectDialogViewModel : ViewModelBase
         _log = log;
 
         RomHashString = string.Format(Strings.ExpectedRomHashLabel,
-            Strings.Select_an_exported_project_to_see_expected_ROM_hash);
+            Strings.ImportProjectRomHashDefaultMessage);
         SlzipPath = string.IsNullOrEmpty(slzipPath) ? Strings.ProjectImportNoExportedProjectSelected : slzipPath;
         if (!string.IsNullOrEmpty(slzipPath))
         {
@@ -100,8 +100,8 @@ public class ImportProjectDialogViewModel : ViewModelBase
 
         if (!_expectedRomHash.Equals(_actualRomHash))
         {
-            await dialog.ShowMessageBoxAsync(Strings.ROM_Hash_Mismatch,
-                Strings.The_selected_ROM_s_hash_does_not_match_the_expected_ROM_hash__Please_ensure_you_are_using_the_correct_base_ROM__n_nIf_you_wish_to_ignore_this__please_check_the___Ignore_Hash___checkbox_,
+            await dialog.ShowMessageBoxAsync(Strings.ImportProjectRomHashMismatch,
+                Strings.ProjectImportSelectedRomHashWarning,
                 ButtonEnum.Ok, Icon.Warning, _log);
             return;
         }

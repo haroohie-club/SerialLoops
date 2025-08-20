@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
@@ -26,9 +27,9 @@ public class ItemItem : Item, IPreviewableGraphic
         return ItemGraphic.GetImage(transparentIndex: 0);
     }
 
-    public void SetImage(SKBitmap image, IProgressTracker tracker, ILogger log)
+    public void SetImage(SKBitmap image, IProgressTracker tracker, ILogger log, Func<string, string> localize)
     {
-        tracker.Focus("Setting item image...", 1);
+        tracker.Focus(localize("ItemEditorReplaceProgressMessage"), 1);
         List<SKColor> palette = Helpers.GetPaletteFromImage(image, 255, log);
         ItemGraphic.SetPalette(palette, 0);
         ItemGraphic.SetImage(image);

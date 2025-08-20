@@ -40,7 +40,7 @@
                                                FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
                             </StackPanel>
 
-                            <HeaderedContentControl Grid.Row="1" Grid.Column="0" Header="{x:Static assets:Strings.Volume_Config}" Margin="10"
+                            <HeaderedContentControl Grid.Row="1" Grid.Column="0" Header="{x:Static assets:Strings.SaveEditorDialogueVolumeConfigLabel}" Margin="10"
                                            HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                                 <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto" VerticalAlignment="Center">
                                     <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.SaveEditorQuicksaveMusic}" />
@@ -49,7 +49,7 @@
                                                    Maximum="100" FormatString="N0" Increment="1"
                                                    ParsingNumberStyle="Integer" />
 
-                                    <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Text="{x:Static assets:Strings.Sound_Effects_}" />
+                                    <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Text="{x:Static assets:Strings.SaveEditorSoundEffectsLabel}" />
                                     <NumericUpDown Grid.Column="1" Grid.Row="1" Margin="10,0,0,0"
                                                    Value="{Binding SfxVolume}" Minimum="0"
                                                    Maximum="100" FormatString="N0" Increment="1"
@@ -61,14 +61,14 @@
                                                    Maximum="100" FormatString="N0" Increment="1"
                                                    ParsingNumberStyle="Integer" />
 
-                                    <TextBlock Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" Text="{x:Static assets:Strings.Voices_}" />
+                                    <TextBlock Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" Text="{x:Static assets:Strings.SaveEditorVoicesLabel}" />
                                     <NumericUpDown Grid.Column="1" Grid.Row="3" Margin="10,0,0,0"
                                                    Value="{Binding VoiceVolume}" Minimum="0"
                                                    Maximum="100" FormatString="N0" Increment="1"
                                                    ParsingNumberStyle="Integer" />
                                 </Grid>
                             </HeaderedContentControl>
-                            <HeaderedContentControl Grid.Row="1" Grid.Column="1" Header="{x:Static assets:Strings.Voices_Config}" Margin="10"
+                            <HeaderedContentControl Grid.Row="1" Grid.Column="1" Header="{x:Static assets:Strings.SaveEditorVoicesConfigHeader}" Margin="10"
                                            HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                                 <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
                                     <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5" Margin="5">
@@ -127,11 +127,11 @@
                                            HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                                 <StackPanel Orientation="Vertical" Spacing="5">
                                     <RadioButton GroupName="PuzzleInterruptScenes" Content="{x:Static assets:Strings.Off}" IsChecked="{Binding PuzzleInterruptScenesOff}"/>
-                                    <RadioButton GroupName="PuzzleInterruptScenes" Content="{x:Static assets:Strings.Unseen_Only}" IsChecked="{Binding PuzzleInterruptScenesUnseenOnly}"/>
+                                    <RadioButton GroupName="PuzzleInterruptScenes" Content="{x:Static assets:Strings.SaveEditorUnseenOnlySetting}" IsChecked="{Binding PuzzleInterruptScenesUnseenOnly}"/>
                                     <RadioButton GroupName="PuzzleInterruptScenes" Content="{x:Static assets:Strings.On}" IsChecked="{Binding PuzzleInterruptScenesOn}"/>
                                 </StackPanel>
                             </HeaderedContentControl>
-                            <HeaderedContentControl Grid.Row="2" Grid.Column="1" Header="{x:Static assets:Strings.Topic_Stock_Mode}" Margin="10"
+                            <HeaderedContentControl Grid.Row="2" Grid.Column="1" Header="{x:Static assets:Strings.SaveEditorTopicStockModeOption}" Margin="10"
                                            HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                                 <StackPanel Orientation="Vertical" Spacing="5">
                                     <RadioButton GroupName="TopicStockMode" Content="{x:Static assets:Strings.Off}" IsChecked="True"/>
@@ -142,7 +142,7 @@
                                            HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                                 <StackPanel Orientation="Vertical" Spacing="5">
                                     <RadioButton GroupName="DialogueSkipping" Content="{x:Static assets:Strings.SaveEditorFastForwardLabel}" IsChecked="True"/>
-                                    <RadioButton GroupName="DialogueSkipping" Content="{x:Static assets:Strings.Skip_Already_Read}" IsChecked="{Binding DialogueSkipping}"/>
+                                    <RadioButton GroupName="DialogueSkipping" Content="{x:Static assets:Strings.SaveEditorSkipAlreadyReadSetting}" IsChecked="{Binding DialogueSkipping}"/>
                                 </StackPanel>
                             </HeaderedContentControl>
                             <HeaderedContentControl Grid.Row="3" Grid.Column="1" Header="{x:Static assets:Strings.SaveEditorOptionBatchDialogueDisplay}" Margin="10"
@@ -170,17 +170,17 @@
                                                                        Maximum="5" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
                                                     </StackPanel>
                                                     <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="5">
-                                                        <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Remaining_Uses}"/>
+                                                        <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.SaveEditorRemainingPowerUses}"/>
                                                         <NumericUpDown Value="{Binding RemainingUses}" Minimum="0"
                                                                        Maximum="9" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
                                                     </StackPanel>
                                                     <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="5">
-                                                        <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Uses_Since_Level_Up}"/>
+                                                        <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.SaveEditorPowerUsesSinceLevelUp}"/>
                                                         <NumericUpDown Value="{Binding UsesSinceLevelUp}" Minimum="0"
                                                                        Maximum="10" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
                                                     </StackPanel>
                                                     <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="5">
-                                                        <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Uses_to_Level_Up}"/>
+                                                        <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.SaveEditorPowerUsesToLevelUp}"/>
                                                         <NumericUpDown Value="{Binding UsesToLevelUp}" Minimum="1"
                                                                        Maximum="10" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
                                                     </StackPanel>
@@ -195,17 +195,17 @@
                 </TabItem>
                 <TabItem IsVisible="{Binding IsSaveSlot}"
                          IsSelected="{Binding IsSaveSlot}"
-                         Header="{x:Static assets:Strings.Save_Data}"
+                         Header="{x:Static assets:Strings.SaveEditorSaveDataHeader}"
                          GotFocus="CharacterPortraitTab_OnGotFocus">
                     <ScrollViewer>
                         <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
-                            <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Save_Time_}"/>
+                            <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.SaveEditorSaveTimeLabel}"/>
                             <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" Orientation="Horizontal" Spacing="3">
                                 <CalendarDatePicker SelectedDate="{Binding SaveDate}"/>
                                 <TimePicker SelectedTime="{Binding SaveTime}"/>
                             </StackPanel>
 
-                            <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Scenario_Command_Index_}"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.SaveEditorScenarioCommandIndex}"/>
                             <controls:ScenarioCommandPicker Grid.Row="1" Grid.Column="1" DataContext="{Binding ScenarioCommandPickerVm}"/>
 
                             <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Episode_Number}"/>
@@ -226,7 +226,7 @@
                                                     <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding FirstSelection}"
                                                               Content="1" ToolTip.Tip="{x:Static assets:Strings.SaveEditorFirstSelectionLabel}"/>
                                                     <CheckBox Grid.Row="0" Grid.Column="3" IsChecked="{Binding SecondSelection}"
-                                                              Content="2" ToolTip.Tip="{x:Static assets:Strings.Second_Selection}"/>
+                                                              Content="2" ToolTip.Tip="{x:Static assets:Strings.SaveEditorSecondSelectionLabel}"/>
                                                     <CheckBox Grid.Row="1" Grid.Column="0" IsChecked="{Binding KyonPresent}"
                                                               ToolTip.Tip="{x:Static assets:Strings.SaveEditorKyonPresentLabel}" Margin="10,0">
                                                         <Image Source="{Binding $parent[dialogs:SaveSlotEditorDialog].((vm:SaveSlotEditorDialogViewModel)DataContext).KyonVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
@@ -299,18 +299,18 @@
                     </ScrollViewer>
                 </TabItem>
                 <TabItem IsVisible="{Binding IsQuickSave}"
-                         Header="{x:Static assets:Strings.Script_Position}">
+                         Header="{x:Static assets:Strings.SaveEditorScriptPosition}">
                     <ScrollViewer>
                         <Grid RowDefinitions="Auto,Auto,Auto,*" ColumnDefinitions="Auto,*">
                             <StackPanel Margin="10,5" Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5">
-                                <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Script_}"/>
+                                <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.SaveEditorScript}"/>
                                 <ComboBox ItemsSource="{Binding ScriptItems}" SelectedItem="{Binding SelectedScriptItem}"/>
                                 <controls:ItemLink Item="{Binding SelectedScriptItem}" Tabs="{Binding Tabs}"
                                                    IsVisible="{Binding Tabs, Converter={x:Static ObjectConverters.IsNotNull}}"/>
                             </StackPanel>
 
                             <StackPanel Margin="10,5" Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="5">
-                                <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Script_Section}"/>
+                                <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.SaveEditorScriptSectionQuicksave}"/>
                                 <ComboBox ItemsSource="{Binding ScriptSections}" SelectedItem="{Binding SelectedScriptSection}"/>
                             </StackPanel>
 
@@ -349,7 +349,7 @@
                             </StackPanel>
 
                             <StackPanel Grid.Row="1" Spacing="10" Orientation="Horizontal">
-                                <TextBlock Text="{x:Static assets:Strings.Value}" Margin="0,0,10,0" Classes="b"/>
+                                <TextBlock Text="{x:Static assets:Strings.ValueString}" Margin="0,0,10,0" Classes="b"/>
                                 <TextBlock Text="{x:Static assets:Strings.SaveEditorFlagDescriptionLabel}" Classes="b"/>
                             </StackPanel>
 

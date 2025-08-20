@@ -91,19 +91,19 @@ public class PreferencesDialogViewModel : ViewModelBase
         [
             new BooleanOption
             {
-                OptionName = Strings.SettingsAutoReopenLabel,
+                OptionName = Strings.PreferencesAutoReopenLabel,
                 Value = Configuration.AutoReopenLastProject,
                 OnChange = value => Configuration.AutoReopenLastProject = value,
             },
             new BooleanOption
             {
-                OptionName = Strings.Remember_Project_Workspace,
+                OptionName = Strings.PreferencesRememberProjectWorkspace,
                 Value = Configuration.RememberProjectWorkspace,
                 OnChange = value => Configuration.RememberProjectWorkspace = value,
             },
             new BooleanOption
             {
-                OptionName = Strings.Remove_Missing_Projects,
+                OptionName = Strings.PreferencesRemoveMissingProjects,
                 Value = Configuration.RemoveMissingProjects,
                 OnChange = value => Configuration.RemoveMissingProjects = value,
             },
@@ -152,7 +152,7 @@ public class PreferencesDialogViewModel : ViewModelBase
             },
             new BooleanOption
             {
-                OptionName = Strings.Use_Pre_Release_Update_Channel,
+                OptionName = Strings.PreferencesUsePreReleaseUpdateChannel,
                 Value = Configuration.PreReleaseChannel,
                 OnChange = value => Configuration.PreReleaseChannel = value,
                 Enabled = Configuration.SysConfig.UseUpdater,

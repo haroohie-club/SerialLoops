@@ -28,7 +28,7 @@
                           HorizontalAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
-                <CheckBox IsChecked="{Binding ScrollingBgDisplayed}" Content="{x:Static assets:Strings.Scrolling_BG}"
+                <CheckBox IsChecked="{Binding ScrollingBgDisplayed}" Content="{x:Static assets:Strings.MapEditorScrollingBg}"
                           HorizontalAlignment="Center"/>
                 <CheckBox IsChecked="{Binding InfoLayerDisplayed}" Content="{x:Static assets:Strings.MapEditorInfoLayerLabel}"
                           HorizontalAlignment="Center"/>

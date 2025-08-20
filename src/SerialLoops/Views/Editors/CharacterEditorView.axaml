@@ -22,7 +22,7 @@
         <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.EditorCharacterLabel}"/>
         <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding CharacterName}"/>
 
-        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Text_Color}"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.CharacterEditorNameplateTextColor}"/>
         <ColorPicker Grid.Row="1" Grid.Column="1" Color="{Binding TextColor, Converter={StaticResource ColorConverter}}"
                      IsColorPaletteVisible="True" Palette="{Binding ColorPalette}"/>
 
@@ -39,7 +39,7 @@
                Source="{Binding NameplateBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
 
         <StackPanel Grid.Row="5" Grid.Column="0" Orientation="Horizontal" Spacing="3" Margin="0 0 10 0">
-            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Voice_Font}"/>
+            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptParamTextVoiceFont}"/>
             <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center" ToolTip.Tip="{x:Static assets:Strings.CharacterEditorVoiceFontHelp}"/>
         </StackPanel>
         <ComboBox Grid.Row="5" Grid.Column="1" ItemsSource="{Binding Sfxs}" SelectedItem="{Binding VoiceFont}"/>
@@ -47,7 +47,7 @@
                            Tabs="{Binding Tabs}"/>
 
         <StackPanel Grid.Row="6" Grid.Column="0" Orientation="Horizontal" Spacing="3" Margin="0 0 10 0">
-            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Text_Timer}"/>
+            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.CharacterEditorTextTimer}"/>
             <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center" ToolTip.Tip="{x:Static assets:Strings.CharacterEditorTextTimerHelp}"/>
         </StackPanel>
         <NumericUpDown Grid.Row="6" Grid.Column="1" Value="{Binding TextTimer}"

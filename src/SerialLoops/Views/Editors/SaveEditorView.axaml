@@ -9,7 +9,7 @@
              x:DataType="vm:SaveEditorViewModel"
              x:Class="SerialLoops.Views.Editors.SaveEditorView">
     <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*" HorizontalAlignment="Center">
-        <HeaderedContentControl Grid.Row="0" Margin="5" Header="{x:Static assets:Strings.Save_Files}">
+        <HeaderedContentControl Grid.Row="0" Margin="5" Header="{x:Static assets:Strings.SaveEditorSaveFilesHeader}">
             <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <controls:SaveSlotPreview DataContext="{Binding Slot1ViewModel}"/>
                 <controls:SaveSlotPreview DataContext="{Binding Slot2ViewModel}"/>

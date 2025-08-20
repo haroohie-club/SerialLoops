@@ -73,7 +73,7 @@
                            Stretch="None"/>
 
                     <StackPanel Orientation="Vertical" Spacing="5">
-                        <TextBlock Text="{x:Static assets:Strings.Title}" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{x:Static assets:Strings.GroupSelectionEditorRouteTitle}" HorizontalAlignment="Center"/>
                         <TextBox Text="{Binding Title}" Width="150"/>
                     </StackPanel>
 

@@ -20,7 +20,7 @@
             <Button Content="{x:Static assets:Strings.Replace}" Command="{Binding ReplaceCommand}"/>
             <Button Command="{Binding ReplaceAsAhxCommand}">
                 <StackPanel Orientation="Horizontal" Spacing="3">
-                    <TextBlock Text="{x:Static assets:Strings.ReplaceAsAhx}" VerticalAlignment="Center"/>
+                    <TextBlock Text="{x:Static assets:Strings.VoicedLineEditorReplaceAsAhxButton}" VerticalAlignment="Center"/>
                     <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" ToolTip.Tip="{x:Static assets:Strings.HelpAhx}"
                          VerticalAlignment="Center"/>
                 </StackPanel>
@@ -32,7 +32,7 @@
                        IsVisible="{Binding SubsEnabled}" Grid.Row="2" Grid.Column="0">
             <StackPanel Spacing="5" Orientation="Vertical">
                 <StackPanel Spacing="3" Orientation="Horizontal">
-                    <TextBlock Text="{x:Static assets:Strings.Subtitle_Text}" VerticalAlignment="Center"/>
+                    <TextBlock Text="{x:Static assets:Strings.VoicedLineEditorSubtitleTextLabel}" VerticalAlignment="Center"/>
                     <TextBox Text="{Binding Subtitle, Mode=TwoWay}" Watermark="{x:Static assets:Strings.VoicedLineEditorSubtitleWatermark}" Width="400"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="20">
@@ -41,12 +41,12 @@
                                IsColorSpectrumVisible="False" IsComponentSliderVisible="False" IsHexInputVisible="False" IsColorSpectrumSliderVisible="False"
                                IsComponentTextInputVisible="False" Color="{Binding SubtitleColor}"/>
                     <StackPanel Spacing="3" Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="{x:Static assets:Strings.Target_Screen}" VerticalAlignment="Center"/>
+                        <TextBlock Text="{x:Static assets:Strings.ScreenSelectTarget}" VerticalAlignment="Center"/>
                         <controls:ScreenSelector DataContext="{Binding ScreenSelector}"/>
                     </StackPanel>
                     <CheckBox Content="{x:Static assets:Strings.VoicedLineEditorSubtitleForceDropShadow}" IsChecked="{Binding ForceDropShadow}"/>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="3">
-                        <TextBlock Text="{x:Static assets:Strings.Screen_Position}" VerticalAlignment="Center"/>
+                        <TextBlock Text="{x:Static assets:Strings.VoicedLineEditorSubtitleScreenPosition}" VerticalAlignment="Center"/>
                         <ListBox ItemsSource="{Binding SubtitlePositions}"
                                  SelectedItem="{Binding SubtitlePosition}"
                                  Classes="RadioButtonListBox"/>

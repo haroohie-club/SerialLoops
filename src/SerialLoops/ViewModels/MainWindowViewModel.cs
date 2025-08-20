@@ -201,7 +201,7 @@ public partial class MainWindowViewModel : ViewModelBase
             if (!File.Exists(LoopyLogger.CrashLogLocation))
             {
                 await Window.ShowMessageBoxAsync(Strings.NoCrashLogMessageTitle,
-                    Strings.There_are_no_Serial_Loops_crash_logs__No_crashes_so_far_, ButtonEnum.Ok, Icon.Info, Log);
+                    Strings.SerialLoopsNoCrashLogsMessage, ButtonEnum.Ok, Icon.Info, Log);
                 return;
             }
 
@@ -395,7 +395,7 @@ public partial class MainWindowViewModel : ViewModelBase
                     {
                         e.Cancel = true;
                     }
-                    result = await Window.ShowMessageBoxAsync(Strings.Confirm, string.Format(Strings.You_have_unsaved_changes_in__0__item_s___Would_you_like_to_save_before_closing_the_project_, unsavedItems.Count()),
+                    result = await Window.ShowMessageBoxAsync(Strings.Confirm, string.Format(Strings.UnsavedChangesPrompt, unsavedItems.Count()),
                         ButtonEnum.YesNoCancel, Icon.Warning, Log);
                 }
                 switch (result)
@@ -485,7 +485,7 @@ public partial class MainWindowViewModel : ViewModelBase
         };
 
         string hackSaveFile = (await Window.ShowSaveFilePickerAsync(Strings.AsmHackExportDialogTitle,
-            [new(Strings.Serial_Loops_ASM_Hack) { Patterns = ["*.slhack"] }],
+            [new(Strings.FiletypeAsmHack) { Patterns = ["*.slhack"] }],
             $"{asmHack.Name}.slhack"))?.TryGetLocalPath();
         if (!string.IsNullOrEmpty(hackSaveFile))
         {
@@ -501,7 +501,7 @@ public partial class MainWindowViewModel : ViewModelBase
             using FileStream fs = File.Create(hackSaveFile);
             ZipFile.CreateFromDirectory(tempDir, fs);
 
-            await Window.ShowMessageBoxAsync(Strings.AsmHackCreatedSuccessfullyTitle, Strings.The_hack_file_has_been_successfully_created__To_import_it__open_the_ASM_hacks_dialog_and_select__Import_Hack__,
+            await Window.ShowMessageBoxAsync(Strings.AsmHackCreatedSuccessfullyTitle, Strings.AsmHackCreationSuccessMessage,
                 ButtonEnum.Ok, Icon.Success, Log);
         }
     }
@@ -559,7 +559,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private async Task ExportProjectCommand_Executed()
     {
         string exportPath = (await Window.ShowSaveFilePickerAsync(Strings.MenuExportProject,
-            [new(Strings.FiletypeExportedProject) { Patterns = ["*.slzip"] }], $"{OpenProject.Name}.slzip"))?.TryGetLocalPath();
+            [new(Strings.FiletypeExportedProject) { Patterns = [$"*.{Project.EXPORT_FORMAT}"] }], $"{OpenProject.Name}.{Project.EXPORT_FORMAT}"))?.TryGetLocalPath();
         if (!string.IsNullOrEmpty(exportPath))
         {
             OpenProject.Export(exportPath, Log);
@@ -602,7 +602,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 .First(m => m is NativeMenuItem nm && nm.Header?.Equals(Strings.ProjectDeleteText) == true);
 
             NativeMenuItem projectSaveItem = (NativeMenuItem)WindowMenu[MenuHeader.FILE].Menu!.Items
-                .First(m => m is NativeMenuItem nm && nm.Header?.Equals(Strings.Save_Project) == true);
+                .First(m => m is NativeMenuItem nm && nm.Header?.Equals(Strings.MenuSaveProject) == true);
             NativeMenuItem projectCloseItem = (NativeMenuItem)WindowMenu[MenuHeader.FILE].Menu.Items
                 .First(m => m is NativeMenuItem nm && nm.Header?.Equals(Strings.CloseProjectLabel) == true);
             int projectAreaIndex = WindowMenu[MenuHeader.FILE].Menu.Items.IndexOf(projectSaveItem);
@@ -708,7 +708,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public async Task OpenProjectCommand_Executed()
     {
-        IStorageFile projectFile = await Window.ShowOpenFilePickerAsync(Strings.MenuProjectOpen, [new(Strings.Serial_Loops_Project) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }], CurrentConfig.ProjectsDirectory);
+        IStorageFile projectFile = await Window.ShowOpenFilePickerAsync(Strings.MenuProjectOpen, [new(Strings.FiletypeProject) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }], CurrentConfig.ProjectsDirectory);
         if (projectFile is not null)
         {
             await OpenProjectFromPath(projectFile.Path.LocalPath);
@@ -732,7 +732,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             if (await Window.ShowMessageBoxAsync(
                     Strings.ProjectLoadBuildUnbuiltFiles,
-                    Strings.Saved_but_unbuilt_files_were_detected_in_the_project_directory__Would_you_like_to_build_before_loading_the_project__Not_building_could_result_in_these_files_being_overwritten_,
+                    Strings.ProjectLoadSavedButUnbuiltFilesDetectedPrompt,
                     ButtonEnum.YesNo, Icon.Question, Log) == ButtonResult.Yes)
             {
                 ProgressDialogViewModel secondTracker = new(string.Format(Strings.ProjectLoadProgressMessage, projectFileName));
@@ -749,7 +749,7 @@ public partial class MainWindowViewModel : ViewModelBase
         else if (result.State == Project.LoadProjectState.CORRUPTED_FILE)
         {
             if ((await Window.ShowMessageBoxAsync(Strings.ProjectLoadCorruptedFileDetectedTitle,
-                    string.Format(Strings.While_attempting_to_build___file___0_X3__in_archive__1__was_found_to_be_corrupt__Serial_Loops_can_delete_this_file_from_your_base_directory_automatically_which_may_allow_you_to_load_the_rest_of_the_project__but_any_changes_made_to_that_file_will_be_lost__Alternatively__you_can_attempt_to_edit_the_file_manually_to_fix_it__How_would_you_like_to_proceed__Press_OK_to_proceed_with_deleting_the_file_and_Cancel_to_attempt_to_deal_with_it_manually_,
+                    string.Format(Strings.BuildCorruptedFileDetectedPrompt,
                         result.BadFileIndex, result.BadArchive),
                     ButtonEnum.OkCancel, Icon.Warning, Log)) == ButtonResult.Ok)
             {
@@ -830,7 +830,7 @@ public partial class MainWindowViewModel : ViewModelBase
         else
         {
             projectPath = (await Window.ShowOpenFilePickerAsync(Strings.ProjectRenameText,
-                [new(Strings.Serial_Loops_Project) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }],
+                [new(Strings.FiletypeProject) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }],
                 CurrentConfig.ProjectsDirectory))?.TryGetLocalPath();
             if (string.IsNullOrEmpty(projectPath))
             {
@@ -875,7 +875,7 @@ public partial class MainWindowViewModel : ViewModelBase
         else
         {
             projectPath = (await Window.ShowOpenFilePickerAsync(Strings.ProjectRenameText,
-                [new(Strings.Serial_Loops_Project) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }],
+                [new(Strings.FiletypeProject) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }],
                 CurrentConfig.ProjectsDirectory))?.TryGetLocalPath();
             if (string.IsNullOrEmpty(projectPath))
             {
@@ -903,7 +903,7 @@ public partial class MainWindowViewModel : ViewModelBase
         if (OpenProject is null)
         {
             projFile = (await Window.ShowOpenFilePickerAsync(Strings.ProjectDeleteText,
-                [new(Strings.Serial_Loops_Project) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }],
+                [new(Strings.FiletypeProject) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }],
                 CurrentConfig.ProjectsDirectory))?.TryGetLocalPath();
             if (string.IsNullOrEmpty(projFile))
             {
@@ -934,7 +934,7 @@ public partial class MainWindowViewModel : ViewModelBase
             CurrentConfig = preferencesDialogViewModel.Configuration;
             if (preferencesDialogViewModel.RequireRestart)
             {
-                if ((await Window.ShowMessageBoxAsync(Strings.Restart_required, Strings.The_changes_made_will_require_Serial_Loops_to_be_restarted__Is_that_okay_, ButtonEnum.YesNo, Icon.Setting, Log)) == ButtonResult.Yes)
+                if ((await Window.ShowMessageBoxAsync(Strings.PreferencesRestartRequired, Strings.PreferencesRestartMessage, ButtonEnum.YesNo, Icon.Setting, Log)) == ButtonResult.Yes)
                 {
                     Window.RestartOnClose = true;
                     Window.Close();
@@ -979,7 +979,7 @@ public partial class MainWindowViewModel : ViewModelBase
             string tempProjectDirectory = Path.Combine(CurrentConfig.ProjectsDirectory, projectName);
             if (Directory.Exists(tempProjectDirectory))
             {
-                if (await Window.ShowMessageBoxAsync(Strings.Temporary_Project_Already_Exists_,
+                if (await Window.ShowMessageBoxAsync(Strings.SaveEditorTemporaryProjectExistsMessageTitle,
                         string.Format(
                             Strings.SaveEditorProjectAlreadyExistsWarning,
                             projectName),
@@ -1017,19 +1017,19 @@ public partial class MainWindowViewModel : ViewModelBase
 
                 // Add a few commands to the menu
                 NativeMenu menu = NativeMenu.GetMenu(Window);
-                int insertionPoint = menu.Items.Count;
-                if (((NativeMenuItem)menu.Items.Last()).Header.Equals(Strings._Help))
+                int insertionPoint = menu!.Items.Count;
+                if (((NativeMenuItem)menu.Items.Last()).Header!.Equals(Strings.MenuHelp))
                 {
                     insertionPoint--;
                 }
 
                 // PROJECT
-                WindowMenu.Add(MenuHeader.PROJECT, new(Strings._Project));
+                WindowMenu.Add(MenuHeader.PROJECT, new(Strings.MenuProject));
                 WindowMenu[MenuHeader.PROJECT].Menu =
                 [
                     new NativeMenuItem
                     {
-                        Header = Strings.Save_Save_File,
+                        Header = Strings.SaveEditorSaveFileLabel,
                         Command = SaveProjectCommand,
                         Icon = ControlGenerator.GetIcon("Save", Log),
                         Gesture = SaveHotKey,
@@ -1410,11 +1410,11 @@ public partial class MainWindowViewModel : ViewModelBase
         }
         NativeMenu menu = NativeMenu.GetMenu(Window);
         int insertionPoint = menu!.Items.Count;
-        if (((NativeMenuItem)menu.Items.Last()).Header!.Equals(Strings._Help))
+        if (((NativeMenuItem)menu.Items.Last()).Header!.Equals(Strings.MenuHelp))
         {
             insertionPoint--;
         }
-        NativeMenu fileMenu = ((NativeMenuItem)menu.Items.First(m => m is NativeMenuItem nm && nm.Header == Strings._File)).Menu;
+        NativeMenu fileMenu = ((NativeMenuItem)menu.Items.First(m => m is NativeMenuItem nm && nm.Header == Strings.MenuFile)).Menu;
 
         // FILE (additions and removals)
         NativeMenuItem projectRenameItem = (NativeMenuItem)WindowMenu[MenuHeader.FILE].Menu!.Items
@@ -1433,7 +1433,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
         NativeMenuItem projectSaveItem = new()
         {
-            Header = Strings.Save_Project,
+            Header = Strings.MenuSaveProject,
             Command = SaveProjectCommand,
             Icon = ControlGenerator.GetIcon("Save", Log),
             Gesture = SaveHotKey,
@@ -1449,7 +1449,7 @@ public partial class MainWindowViewModel : ViewModelBase
         WindowMenu[MenuHeader.FILE].Menu.Items.Insert(projectAreaIndex + 1, projectCloseItem);
 
         // PROJECT
-        WindowMenu.Add(MenuHeader.PROJECT, new(Strings._Project));
+        WindowMenu.Add(MenuHeader.PROJECT, new(Strings.MenuProject));
         WindowMenu[MenuHeader.PROJECT].Menu =
         [
             new NativeMenuItem
@@ -1485,7 +1485,7 @@ public partial class MainWindowViewModel : ViewModelBase
         insertionPoint++;
 
         // TOOLS
-        WindowMenu.Add(MenuHeader.TOOLS, new(Strings._Tools));
+        WindowMenu.Add(MenuHeader.TOOLS, new(Strings.MenuTools));
         WindowMenu[MenuHeader.TOOLS].Menu =
         [
             new NativeMenuItem
@@ -1518,7 +1518,7 @@ public partial class MainWindowViewModel : ViewModelBase
             },
             new NativeMenuItem
             {
-                Header = Strings.Search___,
+                Header = Strings.MenuSearch,
                 Command = SearchProjectCommand,
                 Icon = ControlGenerator.GetIcon("Search", Log),
                 Gesture = SearchHotKey,
@@ -1528,7 +1528,7 @@ public partial class MainWindowViewModel : ViewModelBase
         insertionPoint++;
 
         // BUILD
-        WindowMenu.Add(MenuHeader.BUILD, new(Strings._Build));
+        WindowMenu.Add(MenuHeader.BUILD, new(Strings.MenuBuild));
         WindowMenu[MenuHeader.BUILD].Menu =
         [
             new NativeMenuItem

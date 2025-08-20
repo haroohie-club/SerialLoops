@@ -60,7 +60,7 @@
                     <NumericUpDown Grid.Row="2" Grid.Column="1" Margin="10,0,0,0" Minimum="0" Maximum="99"
                                    Value="{Binding NumSingularities}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 
-                    <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Unknown_04}"/>
+                    <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.PuzzleEditorUnknown04}"/>
                     <NumericUpDown Grid.Row="3" Grid.Column="1" Margin="10,0,0,0" Minimum="0" Maximum="999"
                                    Value="{Binding Unknown04}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 
@@ -76,22 +76,22 @@
                     <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.PuzzleEditorPowerCharacter2}"/>
                     <ComboBox Grid.Row="7" Grid.Column="1" Margin="10,0,0,0" ItemsSource="{Binding Characters}" SelectedItem="{Binding PowerCharacter2}"/>
 
-                    <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Singularity}"/>
+                    <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.PuzzleEditorSingularityImage}"/>
                     <Image Grid.Row="8" Grid.Column="1" Margin="10,0,0,0" Source="{Binding Singularity, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
 
-                    <TextBlock Grid.Row="9" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Topic_Set}"/>
+                    <TextBlock Grid.Row="9" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.PuzzleEditorTopicSet}"/>
                     <NumericUpDown Grid.Row="9" Grid.Column="1" Margin="10,0,0,0" Minimum="0" Maximum="20"
                                    Value="{Binding TopicSet}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 
-                    <TextBlock Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Unknown_15}"/>
+                    <TextBlock Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.PuzzleEditorUnknown15}"/>
                     <NumericUpDown Grid.Row="10" Grid.Column="1" Margin="10,0,0,0" Minimum="0" Maximum="65535"
                                    Value="{Binding Unknown15}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 
-                    <TextBlock Grid.Row="11" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Unknown_16}"/>
+                    <TextBlock Grid.Row="11" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.PuzzleEditorUnknown16}"/>
                     <NumericUpDown Grid.Row="11" Grid.Column="1" Margin="10,0,0,0" Minimum="0" Maximum="65535"
                                    Value="{Binding Unknown16}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 
-                    <TextBlock Grid.Row="12" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Unknown_17}"/>
+                    <TextBlock Grid.Row="12" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.PuzzleEditorUnknown17}"/>
                     <NumericUpDown Grid.Row="12" Grid.Column="1" Margin="10,0,0,0" Minimum="0" Maximum="65535"
                                    Value="{Binding Unknown17}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
                 </Grid>

@@ -21,7 +21,7 @@
 
         <StackPanel Orientation="Vertical" Spacing="20" Margin="15">
             <StackPanel Orientation="Vertical" Spacing="3">
-                <TextBlock Text="{x:Static assets:Strings.Select_Command_Type}"/>
+                <TextBlock Text="{x:Static assets:Strings.ScriptEditorAddCommandDialogTitle}"/>
                 <StackPanel Orientation="Horizontal" Spacing="3">
                     <ComboBox ItemsSource="{Binding CommandVerbs}" SelectedItem="{Binding SelectedCommandVerb}"
                               IsDropDownOpen="True" Name="CommandBox"/>

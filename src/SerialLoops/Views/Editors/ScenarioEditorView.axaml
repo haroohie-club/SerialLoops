@@ -20,7 +20,7 @@
             <Button ToolTip.Tip="{x:Static assets:Strings.ScriptEditorAddCommandLabel}" Width="22" Command="{Binding AddCommand}">
                 <Svg Path="avares://SerialLoops/Assets/Icons/Add.svg" Width="22"/>
             </Button>
-            <Button ToolTip.Tip="{x:Static assets:Strings.Remove_Command}" Width="22" Command="{Binding DeleteCommand}"
+            <Button ToolTip.Tip="{x:Static assets:Strings.ScriptEditorRemoveCommand}" Width="22" Command="{Binding DeleteCommand}"
                     IsEnabled="{Binding SelectedCommand, Converter={x:Static ObjectConverters.IsNotNull}}">
                 <Svg Path="avares://SerialLoops/Assets/Icons/Remove.svg" Width="22"/>
             </Button>

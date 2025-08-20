@@ -9,7 +9,7 @@
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.WaitCancelScriptCommandEditorView">
     <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,Auto">
         <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Spacing="3">
-            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Wait_Time__Frames_}"/>
+            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptParamWaitTime}"/>
             <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
                  ToolTip.Tip="{x:Static assets:Strings.FramesToSecondsHelp}"/>
         </StackPanel>

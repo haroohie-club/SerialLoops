@@ -34,8 +34,8 @@
                                 <ComboBoxItem Tag="en" Content="{x:Static assets:Strings.LanguageEnglish}"/>
                                 <ComboBoxItem Tag="ja" Content="{x:Static assets:Strings.LanguageJapanese}"/>
                                 <ComboBoxItem Tag="zh-Hans" Content="{x:Static assets:Strings.LanguageChineseSimplified}"/>
-                                <ComboBoxItem Tag="ru" Content="{x:Static assets:Strings.Russian}"/>
-                                <ComboBoxItem Tag="es" Content="{x:Static assets:Strings.Spanish}"/>
+                                <ComboBoxItem Tag="ru" Content="{x:Static assets:Strings.LanguageRussian}"/>
+                                <ComboBoxItem Tag="es" Content="{x:Static assets:Strings.LanguageSpanish}"/>
                                 <ComboBoxItem Tag="pt-BR" Content="{x:Static assets:Strings.LanguagePtBr}"/>
                                 <ComboBoxItem Tag="it" Content="{x:Static assets:Strings.LanguageItalian}"/>
                                 <ComboBoxItem Tag="fr" Content="{x:Static assets:Strings.LanguageFrench}"/>
@@ -46,7 +46,7 @@
                     </StackPanel>
                 </StackPanel>
             </HeaderedContentControl>
-            <HeaderedContentControl Header="{x:Static assets:Strings.Select_ROM}" Padding="5" MinWidth="300" MinHeight="80">
+            <HeaderedContentControl Header="{x:Static assets:Strings.RomSelectButton}" Padding="5" MinWidth="300" MinHeight="80">
                 <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
                     <Button Content="{x:Static assets:Strings.RomOpenFileDialogTitle}" Command="{Binding PickRomCommand}"
                             Name="OpenRomButton"/>

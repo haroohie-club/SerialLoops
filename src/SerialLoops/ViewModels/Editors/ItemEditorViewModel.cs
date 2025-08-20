@@ -44,7 +44,7 @@ public class ItemEditorViewModel : EditorViewModel
     private async Task Import()
     {
         string importPath = (await Window.Window.ShowOpenFilePickerAsync(Strings.ItemEditorImportImage,
-            [new(Strings.Supported_Images) { Patterns = Shared.SupportedImageFiletypes }]))?.TryGetLocalPath();
+            [new(Strings.FiletypeSupportedImages) { Patterns = Shared.SupportedImageFiletypes }]))?.TryGetLocalPath();
         if (!string.IsNullOrEmpty(importPath))
         {
             SKBitmap original = _item.GetImage();
@@ -57,8 +57,8 @@ public class ItemEditorViewModel : EditorViewModel
             {
                 try
                 {
-                    ProgressDialogViewModel tracker = new(string.Format(Strings.Replacing__0____, _item.DisplayName));
-                    tracker.InitializeTasks(() => _item.SetImage(finalImage, tracker, _log),
+                    ProgressDialogViewModel tracker = new(string.Format(Strings.ReplacingItemProgressMessage, _item.DisplayName));
+                    tracker.InitializeTasks(() => _item.SetImage(finalImage, tracker, _log, _project.Localize),
                         () => { });
                     await new ProgressDialog { DataContext = tracker }.ShowDialog(Window.Window);
                     this.RaisePropertyChanged(nameof(ItemBitmap));

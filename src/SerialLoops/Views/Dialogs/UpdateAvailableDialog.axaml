@@ -42,7 +42,7 @@
                         Grid.Row="3" Grid.Column="0" Command="{Binding OpenReleaseLinkCommand}"/>
             <StackPanel Grid.Row="5" Grid.Column="0" Orientation="Horizontal" Spacing="20">
                 <Button Content="{x:Static assets:Strings.UpdaterDownloadFromGitHubLabel}" Command="{Binding OpenReleaseLinkCommand}"/>
-                <Button Content="{x:Static assets:Strings.Skip_Update}" Command="{Binding CloseCommand}"
+                <Button Content="{x:Static assets:Strings.UpdaterSkipUpdateLabel}" Command="{Binding CloseCommand}"
                         CommandParameter="{Binding #Dialog}" IsCancel="True"/>
                 <CheckBox Content="{x:Static assets:Strings.MenuOptionCheckForUpdates}" IsChecked="{Binding CheckForUpdates}"/>
                 <CheckBox Content="{x:Static assets:Strings.UpdaterPreReleaseChannel}" IsChecked="{Binding UsePreReleaseChannel}"/>

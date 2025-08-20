@@ -110,7 +110,7 @@ public class AsmHacksDialogViewModel : ViewModelBase
 
     private async Task ImportHackCommand_Executed(AsmHacksDialog dialog)
     {
-        IStorageFile file = await dialog.ShowOpenFilePickerAsync(Strings.AsmHackImportLabel, [new(Strings.Serial_Loops_ASM_Hack) { Patterns = ["*.slhack"] }]);
+        IStorageFile file = await dialog.ShowOpenFilePickerAsync(Strings.AsmHackImportLabel, [new(Strings.FiletypeAsmHack) { Patterns = ["*.slhack"] }]);
         string path = file?.TryGetLocalPath();
         if (!string.IsNullOrEmpty(path))
         {
@@ -286,12 +286,12 @@ public class AsmHacksDialogViewModel : ViewModelBase
         {
             if (appliedHacks.Count != 0)
             {
-                await dialog.ShowMessageBoxAsync(Strings.Successfully_applied_hacks_, string.Format(Strings.Successfully_applied_the_following_hacks__n_0_, string.Join(", ", appliedHacks.Select(h => h.Name))),
+                await dialog.ShowMessageBoxAsync(Strings.AsmHacksSuccessMessageBoxTitle, string.Format(Strings.AsmHacksSuccessMessage, string.Join(", ", appliedHacks.Select(h => h.Name))),
                     ButtonEnum.Ok, Icon.Info, _log);
             }
             else
             {
-                await dialog.ShowMessageBoxAsync(Strings.Success_, Strings.AsmHackNoneApplied, ButtonEnum.Ok, Icon.Info, _log);
+                await dialog.ShowMessageBoxAsync(Strings.MessageBoxTitleSuccessGeneric, Strings.AsmHackNoneApplied, ButtonEnum.Ok, Icon.Info, _log);
             }
         }
 

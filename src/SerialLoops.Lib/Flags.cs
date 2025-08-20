@@ -23,7 +23,7 @@ public class Flags
         TopicItem topic = (TopicItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).TopicEntry.Id == flag + 1);
         if (topic is not null)
         {
-            return string.Format(project.Localize("{0} Obtained (F{1:D2})"), topic.DisplayName, flag);
+            return string.Format(project.Localize("FlagTopicObtained"), topic.DisplayName, flag);
         }
 
         TopicItem readTopic = (TopicItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic &&
@@ -31,7 +31,7 @@ public class Flags
                                                                             (((TopicItem)i).TopicEntry.Type != TopicType.Main && ((TopicItem)i).TopicEntry.Id + 3451 == flag + 1)));
         if (readTopic is not null)
         {
-            return string.Format(project.Localize("{0} Watched in Extras (F{1:D2})"), readTopic.DisplayName, flag);
+            return string.Format(project.Localize("FlagTopicSceneWatchedInExtras"), readTopic.DisplayName, flag);
         }
 
         BackgroundMusicItem bgm = (BackgroundMusicItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.BGM && ((BackgroundMusicItem)i).Flag == flag + 1);
@@ -43,7 +43,7 @@ public class Flags
         BackgroundItem bg = (BackgroundItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Flag == flag + 1);
         if (bg is not null && flag + 1 > 0)
         {
-            return string.Format(project.Localize("{0} ({1}) Seen (F{2:D2})"), bg.CgName, bg.DisplayName, flag);
+            return string.Format(project.Localize("FlagCgSeen"), bg.CgName, bg.DisplayName, flag);
         }
 
         GroupSelectionItem groupSelection = (GroupSelectionItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Group_Selection &&
@@ -51,7 +51,7 @@ public class Flags
         if (groupSelection is not null)
         {
             ScenarioRoute route = groupSelection.Selection.Activities.First(a => a?.Routes.Any(r => r.Flag == flag + 1) ?? false).Routes.First(r => r.Flag == flag + 1);
-            return string.Format(project.Localize("Route \"{0}\" Completed (F{1:D2})"), route.Title.GetSubstitutedString(project), flag);
+            return string.Format(project.Localize("FlagsRouteCompletedDescription"), route.Title.GetSubstitutedString(project), flag);
         }
 
         ScriptItem script = (ScriptItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).StartReadFlag > 0 &&
@@ -64,7 +64,7 @@ public class Flags
         Tutorial tutorial = project.TutorialFile.Tutorials.FirstOrDefault(t => t.Id != 0 && t.Id == flag + 1);
         if (tutorial is not null)
         {
-            return string.Format(project.Localize("Tutorial {0} Completed (F{1:D2})"),
+            return string.Format(project.Localize("FlagsTutorialCompletedDescription"),
                 ((ScriptItem)project.Items.First(i =>
                     i.Type == ItemDescription.ItemType.Script &&
                     ((ScriptItem)i).Event.Index == tutorial.AssociatedScript)).DisplayName, flag);

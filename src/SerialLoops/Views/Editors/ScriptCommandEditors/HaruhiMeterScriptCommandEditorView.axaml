@@ -32,7 +32,7 @@
             </NumericUpDown.IsVisible>
         </NumericUpDown>
 
-        <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{x:Static assets:Strings.Set}">
+        <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{x:Static assets:Strings.SetAmountLabel}">
             <TextBlock.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">
                     <Binding Path="!NoShow"/>

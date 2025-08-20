@@ -12,15 +12,15 @@
         <NumericUpDown Grid.Column="1" Grid.Row="0" Minimum="0" Maximum="{Binding MaxShort}" Value="{Binding MapCharacterSet}"
                        Margin="10,0,0,0" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 
-        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.unknown01}"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptParamUnknown01}"/>
         <NumericUpDown Grid.Column="1" Grid.Row="1" Minimum="{Binding MinShort}" Maximum="{Binding MaxShort}" Value="{Binding Unknown1}"
                        Margin="10,0,0,0" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 
-        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.unknown02}"/>
+        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptParamUnknown02}"/>
         <NumericUpDown Grid.Column="1" Grid.Row="2" Minimum="{Binding MinShort}" Maximum="{Binding MaxShort}" Value="{Binding Unknown2}"
                        Margin="10,0,0,0" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 
-        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.unknown03}"/>
+        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptParamUnknown03}"/>
         <NumericUpDown Grid.Column="1" Grid.Row="3" Minimum="{Binding MinShort}" Maximum="{Binding MaxShort}" Value="{Binding Unknown3}"
                        Margin="10,0,0,0" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 

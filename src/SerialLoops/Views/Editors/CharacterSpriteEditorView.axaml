@@ -22,7 +22,7 @@
             </StackPanel>
             <CheckBox IsChecked="{Binding IsLarge}" Content="{x:Static assets:Strings.CharacterSpriteEditorIsLargeLabel}"/>
         </StackPanel>
-        <Button Command="{Binding ReplaceCommand}" Content="{x:Static assets:Strings.Replace_Sprite}"/>
+        <Button Command="{Binding ReplaceCommand}" Content="{x:Static assets:Strings.CharacterSpriteEditorReplaceSprite}"/>
         <StackPanel Orientation="Horizontal" Spacing="3">
             <Button Name="ExportFramesButton" Command="{Binding ExportFramesCommand}" Content="{x:Static assets:Strings.AnimationExportFramesButton}"/>
             <Button Name="ExportGIFButton" Command="{Binding ExportGIFCommand}" Content="{x:Static assets:Strings.AnimationExportGifButton}"/>

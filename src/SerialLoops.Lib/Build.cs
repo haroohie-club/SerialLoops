@@ -94,7 +94,7 @@ public static class Build
             return false;
         }
 
-        tracker.Focus("Writing Includes", 4);
+        tracker.Focus(project.Localize("BuildWritingIncludesProgressMessage"), 4);
         try
         {
             File.WriteAllText(Path.Combine(directory, "COMMANDS.INC"), commandsIncSb.ToString());
@@ -111,7 +111,7 @@ public static class Build
 
         // Replace files
         string[] files = Directory.GetFiles(Path.Combine(directory, "assets"), "*.*", SearchOption.AllDirectories);
-        tracker.Focus("Replacing Files", files.Length);
+        tracker.Focus(project.Localize("BuildReplacingFilesProgressMessage"), files.Length);
         foreach (string file in files)
         {
             if (int.TryParse(Path.GetFileNameWithoutExtension(file).Split('_')[0], NumberStyles.HexNumber, new CultureInfo("en-US"), out int index) || Path.GetFileName(file).StartsWith("new", StringComparison.OrdinalIgnoreCase))
@@ -160,7 +160,7 @@ public static class Build
                     }
                     else
                     {
-                        log.LogError(string.Format(project.Localize("Unsure what to do with file '{0}'"), Path.GetFileName(file)));
+                        log.LogError(string.Format(project.Localize("BuildUnsureWhatToDoWithFileMessage"), Path.GetFileName(file)));
                         return false;
                     }
                 }
@@ -173,7 +173,7 @@ public static class Build
         }
 
         // Save files to disk
-        tracker.Focus("Writing Replaced Archives", 3);
+        tracker.Focus("BuildWritingReplacedArchivesProgressMessage", 3);
         if (!IO.WriteBinaryFile(Path.Combine(directory, "rom", "data", "dat.bin"), dat?.GetBytes(), log))
         {
             return false;
@@ -190,7 +190,7 @@ public static class Build
 
         // Save project file to disk
         string ndsProjectFile = Path.Combine(directory, "rom", $"{project.Name}.json");
-        tracker.Focus("Writing NitroPacker Project File", 1);
+        tracker.Focus(project.Localize("BuildWritingNPProjectFile"), 1);
         try
         {
             project.Settings.File.Serialize(ndsProjectFile);

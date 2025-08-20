@@ -11,7 +11,7 @@
              x:Class="SerialLoops.Views.Panels.ItemExplorerPanel">
 
     <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,30">
-        <TextBox Grid.Row="0" Grid.Column="0" Name="Search" Focusable="True" Height="30" Watermark="{x:Static assets:Strings.Search___}">
+        <TextBox Grid.Row="0" Grid.Column="0" Name="Search" Focusable="True" Height="30" Watermark="{x:Static assets:Strings.MenuSearch}">
             <i:Interaction.Behaviors>
                 <ia:EventTriggerBehavior EventName="TextChanged" SourceObject="{Binding #Search}">
                     <ia:InvokeCommandAction Command="{Binding SearchCommand}" CommandParameter="{Binding #Search.Text}"/>

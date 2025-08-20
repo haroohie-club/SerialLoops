@@ -9,7 +9,7 @@
              x:DataType="vm:VcePlayScriptCommandEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.VcePlayScriptCommandEditorView">
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto">
-        <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Voice_Line}"/>
+        <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptParamVoiceLine}"/>
         <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Orientation="Horizontal" Spacing="3">
             <ComboBox ItemsSource="{Binding Vces}" SelectedItem="{Binding Vce}"/>
             <controls:ItemLink Item="{Binding Vce}" Tabs="{Binding Tabs}"/>

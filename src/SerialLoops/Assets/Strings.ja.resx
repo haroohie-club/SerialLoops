@@ -117,17 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="_File" xml:space="preserve">
+  <data name="MenuFile" xml:space="preserve">
     <value>ファイル (_F)</value>
     <comment> </comment>
   </data>
   <data name="Language" xml:space="preserve">
     <value>言語</value>
   </data>
-  <data name="Search for items by name, ID, or type." xml:space="preserve">
-    <value>名前かIDか種類でアイテムを探す</value>
-  </data>
-  <data name="Search..." xml:space="preserve">
+  <data name="MenuSearch" xml:space="preserve">
     <value>探す</value>
   </data>
   <data name="AboutMenuTitle" xml:space="preserve">
@@ -139,7 +136,7 @@
   <data name="PuzzleEditorAccompanyingCharacterLabel" xml:space="preserve">
     <value>同行者</value>
   </data>
-  <data name="_Tools" xml:space="preserve">
+  <data name="MenuTools" xml:space="preserve">
     <value>ツール（_T）</value>
   </data>
   <data name="ScriptEditorAddCommandLabel" xml:space="preserve">
@@ -170,7 +167,7 @@
   <data name="ProjectMissingLabel" xml:space="preserve">
     <value> (欠落)</value>
   </data>
-  <data name="_Build" xml:space="preserve">
+  <data name="MenuBuild" xml:space="preserve">
     <value>ビルド（_B）</value>
   </data>
   <data name="UpdaterTitleMessage" xml:space="preserve">
@@ -185,13 +182,13 @@
   <data name="PercentSign" xml:space="preserve">
     <value>％</value>
   </data>
-  <data name="_Edit" xml:space="preserve">
+  <data name="MenuEdit" xml:space="preserve">
     <value>編集（_E）</value>
   </data>
-  <data name="_Check for Updates..." xml:space="preserve">
+  <data name="MenuCheckForUpdates" xml:space="preserve">
     <value>更新を確認（_C）</value>
   </data>
-  <data name="_Preferences..." xml:space="preserve">
+  <data name="MenuPreferences" xml:space="preserve">
     <value>設定（_P）</value>
   </data>
   <data name="ChibiAndSpriteEditorAddFramesLabel" xml:space="preserve">

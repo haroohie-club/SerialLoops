@@ -528,7 +528,7 @@ public class ScriptEditorViewModel : EditorViewModel
         if (ScriptSections.Any(s => s.Name.Equals(sectionName)))
         {
             await Window.Window.ShowMessageBoxAsync(Strings.ScriptEditorDupeSectionNameErrorTitle,
-                Strings.Section_name_already_exists__Please_pick_a_different_name_for_this_section_,
+                Strings.ScriptEditorSectionNameExistsWarning,
                 ButtonEnum.Ok, Icon.Warning, _log);
             return;
         }
@@ -600,7 +600,7 @@ public class ScriptEditorViewModel : EditorViewModel
             if (sectionIndex == 0)
             {
                 await Window.Window.ShowMessageBoxAsync(Strings.ScriptEditorCannotDeleteRootSection,
-                    Strings.The_root_section_cannot_be_deleted_, ButtonEnum.Ok,
+                    Strings.ScriptEditorCannotDeleteRootWarning, ButtonEnum.Ok,
                     Icon.Warning, _log);
                 return;
             }
@@ -968,7 +968,7 @@ public class ScriptEditorViewModel : EditorViewModel
         ChoicesSectionEntry choice = new()
         {
             Id = _script.Event.LabelsSection.Objects.FirstOrDefault(i => i.Id > 0)?.Id ?? 0,
-            Text = "Replace me",
+            Text = _project.Localize("Replace me"),
         };
         if (_script.Event.ChoicesSection.Objects.Count > 0)
         {

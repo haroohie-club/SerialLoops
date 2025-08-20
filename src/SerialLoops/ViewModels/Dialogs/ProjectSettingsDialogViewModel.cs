@@ -54,7 +54,7 @@ public class ProjectSettingsDialogViewModel : ViewModelBase
 
     private async void ReplaceCommand_Executed()
     {
-        IStorageFile image = await _settingsDialog.ShowOpenFilePickerAsync(Strings.Replace_Game_Icon, [new(Strings.Supported_Images) { Patterns = Shared.SupportedImageFiletypes }]);
+        IStorageFile image = await _settingsDialog.ShowOpenFilePickerAsync(Strings.ProjectSettingsReplaceGameIcon, [new(Strings.FiletypeSupportedImages) { Patterns = Shared.SupportedImageFiletypes }]);
         if (image is null)
         {
             return;

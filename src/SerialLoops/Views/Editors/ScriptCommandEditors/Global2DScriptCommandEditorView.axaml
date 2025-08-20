@@ -8,7 +8,7 @@
              x:DataType="vm:Global2DScriptCommandEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.Global2DScriptCommandEditorView">
     <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,Auto">
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.Value}"
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.ValueString}"
                    VerticalAlignment="Center"/>
         <NumericUpDown Grid.Column="1" Grid.Row="0" Margin="10,0,0,0"
                        Minimum="{Binding MinShort}"

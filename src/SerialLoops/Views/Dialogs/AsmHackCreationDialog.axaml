@@ -21,7 +21,7 @@
         <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="Auto,Auto" Margin="10 30">
             <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5" Margin="10"
                         HorizontalAlignment="Center">
-                <Button HorizontalAlignment="Center" Content="{x:Static assets:Strings.Select_Hack_Files}"
+                <Button HorizontalAlignment="Center" Content="{x:Static assets:Strings.AsmHackSelectFiles}"
                         Command="{Binding SelectHackFilesCommand}"
                         CommandParameter="{Binding #Dialog}"/>
             </StackPanel>
@@ -36,7 +36,7 @@
                     <Grid RowDefinitions="Auto,*,Auto,*" DataContext="{Binding SelectedHackFile}">
                         <ComboBox Grid.Row="0" ItemsSource="{Binding Locations}" SelectedValue="{Binding Location}"/>
 
-                        <HeaderedContentControl Grid.Row="1" Header="{x:Static assets:Strings.Symbols}" Margin="3" Padding="5">
+                        <HeaderedContentControl Grid.Row="1" Header="{x:Static assets:Strings.AsmHackSymbolsLabel}" Margin="3" Padding="5">
                             <ItemsRepeater ItemsSource="{Binding Symbols}">
                                 <ItemsRepeater.Layout>
                                     <StackLayout Orientation="Vertical" Spacing="10"/>
@@ -74,7 +74,7 @@
                                                                 <StackPanel Orientation="Horizontal" Spacing="3">
                                                                     <TextBlock Text="{x:Static assets:Strings.ProjectOrHackName}" VerticalAlignment="Center"/>
                                                                     <TextBox Text="{Binding Name}" IsTabStop="True"/>
-                                                                    <TextBlock Text="{x:Static assets:Strings.Value}" VerticalAlignment="Center"/>
+                                                                    <TextBlock Text="{x:Static assets:Strings.ValueString}" VerticalAlignment="Center"/>
                                                                     <TextBox Text="{Binding Value}" IsTabStop="True"/>
                                                                     <Button Command="{Binding RemoveValueCommand}">
                                                                         <Svg Path="avares://SerialLoops/Assets/Icons/Remove.svg" Width="16" Height="16"/>

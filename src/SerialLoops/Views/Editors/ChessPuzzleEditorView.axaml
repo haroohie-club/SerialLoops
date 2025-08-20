@@ -73,7 +73,7 @@
                      ToolTip.Tip="{x:Static assets:Strings.ChessPuzzleEditorRemoveLimitHelp}"/>
             </StackPanel>
 
-            <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Text="{x:Static assets:Strings.Time_Limit}"/>
+            <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Text="{x:Static assets:Strings.ChessPuzzleEditorTimeLimitLabel}"/>
             <NumericUpDown Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Value="{Binding TimeLimit}"
                            Minimum="0" Maximum="999" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 

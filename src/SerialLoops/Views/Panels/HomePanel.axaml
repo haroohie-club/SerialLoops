@@ -36,7 +36,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Spacing="5">
                     <Svg Path="avares://SerialLoops/Assets/Icons/Options.svg" Width="16"/>
-                    <controls:LinkButton Command="{Binding MainWindow.PreferencesCommand}" Text="{x:Static assets:Strings.MenuPreferences}"/>
+                    <controls:LinkButton Command="{Binding MainWindow.PreferencesCommand}" Text="{x:Static assets:Strings.PreferencesDialogTitle}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Spacing="5">
                     <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16"/>

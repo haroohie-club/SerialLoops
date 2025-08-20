@@ -49,11 +49,11 @@
                                IsHitTestVisible="False"/>
                 </Canvas>
                 <StackPanel Orientation="Vertical" Spacing="5">
-                    <HeaderedContentControl Header="{x:Static assets:Strings.Scale_Image}"
+                    <HeaderedContentControl Header="{x:Static assets:Strings.IcrScaleImage}"
                                    Width="200" Padding="5">
                         <StackPanel Orientation="Vertical" Spacing="5" Margin="5">
                             <StackPanel Orientation="Horizontal" Spacing="3" VerticalAlignment="Center">
-                                <TextBlock Text="{x:Static assets:Strings.Scale_to_Fit_}"/>
+                                <TextBlock Text="{x:Static assets:Strings.IcrScaleToFit}"/>
                                 <Button Content="{x:Static assets:Strings.Apply}" Command="{Binding ScaleToFitCommand}"
                                         CommandParameter="{Binding #IcrDialog}"/>
                             </StackPanel>

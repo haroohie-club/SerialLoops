@@ -11,7 +11,7 @@
     <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
         <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.EditorBackgroundCGItemLabel}" VerticalAlignment="Center"/>
         <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" Orientation="Horizontal" Spacing="10">
-            <Button Content="{x:Static assets:Strings.Select___}" Command="{Binding ReplaceCgCommand}"/>
+            <Button Content="{x:Static assets:Strings.SelectButtonLabel}" Command="{Binding ReplaceCgCommand}"/>
             <controls:ItemLink Tabs="{Binding Tabs}" Item="{Binding Cg}"/>
         </StackPanel>
 

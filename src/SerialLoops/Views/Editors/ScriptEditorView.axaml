@@ -89,12 +89,12 @@
             <TabControl Grid.Column="1" Grid.Row="0">
                 <TabControl.Items>
 
-                    <TabItem Header="{x:Static assets:Strings.Starting_Chibis}">
+                    <TabItem Header="{x:Static assets:Strings.ScriptEditorStartingChibis}">
                         <ScrollViewer>
                             <Panel>
                                 <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,Auto" IsVisible="{Binding HasStartingChibis}"
                                       Margin="0 0 0 10">
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.Starting_Chibis}"
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.ScriptEditorStartingChibis}"
                                                VerticalAlignment="Center"/>
                                     <ItemsRepeater Grid.Row="0" Grid.Column="1" ItemsSource="{Binding StartingChibis}" Width="256" Height="86">
                                         <ItemsRepeater.Layout>
@@ -136,7 +136,7 @@
                                         </ItemsRepeater.ItemTemplate>
                                     </ItemsRepeater>
 
-                                    <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="{x:Static assets:Strings.Remove_Starting_Chibis}"
+                                    <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="{x:Static assets:Strings.ScriptEditorRemoveStartingChibis}"
                                             Command="{Binding RemoveStartingChibisCommand}"/>
                                 </Grid>
 
@@ -201,7 +201,7 @@
                                         </ListBox.ItemTemplate>
                                     </ListBox>
                                     <Button Grid.Row="1" Grid.Column="0" Content="{x:Static assets:Strings.ScriptEditorAddInteractableObjectLabel}" Command="{Binding AddInteractableObjectCommand}"/>
-                                    <Button Grid.Row="1" Grid.Column="1" Content="{x:Static assets:Strings.Remove_Interactable_Object}" Command="{Binding RemoveInteractableObjectCommand}"/>
+                                    <Button Grid.Row="1" Grid.Column="1" Content="{x:Static assets:Strings.ScriptEditorRemoveInteractableObject}" Command="{Binding RemoveInteractableObjectCommand}"/>
                                 </Grid>
                             </Panel>
                         </ScrollViewer>

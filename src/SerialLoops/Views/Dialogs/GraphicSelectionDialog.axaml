@@ -17,7 +17,7 @@
         ExtendClientAreaToDecorationsHint="True"
         Loaded="Window_Loaded"
         Icon="/Assets/serial-loops.ico"
-        Title="{x:Static assets:Strings.Select_Graphic}"
+        Title="{x:Static assets:Strings.GraphicSelectionTitle}"
         Name="GraphicSelector">
     <Panel>
         <controls:AcrylicBorderHandler/>

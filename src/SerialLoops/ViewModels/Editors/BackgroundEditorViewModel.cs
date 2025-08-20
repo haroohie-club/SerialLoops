@@ -40,8 +40,8 @@ public class BackgroundEditorViewModel : EditorViewModel
     public ICommand CgNameChangeCommand { get; set; }
     public bool ShowExtras => Bg.BackgroundType != BgType.TEX_BG && Bg.BackgroundType != BgType.KINETIC_SCREEN;
     public string FlagDescription => string.Format(Strings.EditorFlagIdLabel, Bg.Flag - 1);
-    public string UnknownExtrasShortDescription => string.Format(Strings.Unknown_Extras_Short___0_, Bg.ExtrasShort);
-    public string UnknownExtrasByteDescription => string.Format(Strings.Unknown_Extras_Byte___0_, Bg.ExtrasByte);
+    public string UnknownExtrasShortDescription => string.Format(Strings.BgEditorUnknownExtrasShort, Bg.ExtrasShort);
+    public string UnknownExtrasByteDescription => string.Format(Strings.BgEditorUnknownExtrasByte, Bg.ExtrasByte);
 
     public BackgroundEditorViewModel(BackgroundItem item, MainWindowViewModel window, Project project, ILogger log) : base(item, window, log, project)
     {
@@ -85,7 +85,7 @@ public class BackgroundEditorViewModel : EditorViewModel
 
     private async Task ReplaceButton_Click()
     {
-        IStorageFile openFile = await Window.Window.ShowOpenFilePickerAsync(Strings.Replace_Background_Image, [new(Strings.Supported_Images) { Patterns = Shared.SupportedImageFiletypes }]);
+        IStorageFile openFile = await Window.Window.ShowOpenFilePickerAsync(Strings.BackgroundEditorReplaceBackgroundImage, [new(Strings.FiletypeSupportedImages) { Patterns = Shared.SupportedImageFiletypes }]);
         if (openFile is not null)
         {
             SKBitmap original = Bg.GetBackground();
@@ -98,7 +98,7 @@ public class BackgroundEditorViewModel : EditorViewModel
             {
                 try
                 {
-                    ProgressDialogViewModel tracker = new(string.Format(Strings.Replacing__0____, Bg.DisplayName));
+                    ProgressDialogViewModel tracker = new(string.Format(Strings.ReplacingItemProgressMessage, Bg.DisplayName));
                     bool success = false;
                     tracker.InitializeTasks(
                         () => success = Bg.SetBackground(finalImage, tracker, _log, _project.Localize),

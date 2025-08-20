@@ -123,7 +123,7 @@
   <data name="UiMessage127Label" xml:space="preserve">
     <value>Caixa de mensagem 100% do jogo</value>
   </data>
-  <data name="_Tools" xml:space="preserve">
+  <data name="MenuTools" xml:space="preserve">
     <value>_Ferramentas</value>
   </data>
   <data name="ScriptEditorAddCommandLabel" xml:space="preserve">
@@ -156,13 +156,13 @@
     <value>Adicionar</value>
     <comment>As in add/subtract</comment>
   </data>
-  <data name="_File" xml:space="preserve">
+  <data name="MenuFile" xml:space="preserve">
     <value>_Arquivo</value>
   </data>
   <data name="ProjectMissingLabel" xml:space="preserve">
     <value> (Faltando)</value>
   </data>
-  <data name="_Build" xml:space="preserve">
+  <data name="MenuBuild" xml:space="preserve">
     <value>_Construir</value>
   </data>
   <data name="UpdaterTitleMessage" xml:space="preserve">
@@ -175,13 +175,13 @@
   <data name="PercentSign" xml:space="preserve">
     <value>%</value>
   </data>
-  <data name="_Edit" xml:space="preserve">
+  <data name="MenuEdit" xml:space="preserve">
     <value>_Editar</value>
   </data>
-  <data name="_Check for Updates..." xml:space="preserve">
+  <data name="MenuCheckForUpdates" xml:space="preserve">
     <value>_Procurar por atualizações…</value>
   </data>
-  <data name="_Preferences..." xml:space="preserve">
+  <data name="MenuPreferences" xml:space="preserve">
     <value>_Configurações…</value>
   </data>
   <data name="ChibiAndSpriteEditorAddFramesLabel" xml:space="preserve">

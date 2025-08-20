@@ -12,7 +12,7 @@
         <ComboBox Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" ItemsSource="{Binding PaletteEffects}"
                   SelectedItem="{Binding PaletteEffect}"/>
 
-        <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Text="{x:Static assets:Strings.Time__Frames_}"/>
+        <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptParamTime}"/>
         <NumericUpDown Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Value="{Binding TransitionTime}"
                        Minimum="0" Maximum="{Binding MaxShort}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 

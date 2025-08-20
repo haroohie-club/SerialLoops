@@ -36,14 +36,14 @@
                         <StackPanel Spacing="5" Orientation="Vertical">
                             <Grid ColumnDefinitions="Auto,*,Auto" Width="450">
                                 <TextBlock Grid.Column="0" Text="Jonko"/>
-                                <TextBlock Grid.Column="2" Text="{x:Static assets:Strings.Systems_architect___reverse_engineering_work}"/>
+                                <TextBlock Grid.Column="2" Text="{x:Static assets:Strings.AboutDialogCreditsJonkoRole}"/>
                             </Grid>
                             <Grid ColumnDefinitions="Auto,*,Auto" Width="450">
                                 <TextBlock Grid.Column="0" Text="William278"/>
-                                <TextBlock Grid.Column="2" Text="{x:Static assets:Strings.UX_architect___design_work}"/>
+                                <TextBlock Grid.Column="2" Text="{x:Static assets:Strings.AboutDialogCreditsWillRole}"/>
                             </Grid>
                         </StackPanel>
-                        <TextBlock Classes="h2" Text="{x:Static assets:Strings.Translation}"/>
+                        <TextBlock Classes="h2" Text="{x:Static assets:Strings.AboutDialogTranslationCredits}"/>
                         <StackPanel Spacing="5" Orientation="Vertical">
                             <Grid ColumnDefinitions="Auto,*,Auto" Width="450">
                                 <TextBlock Grid.Column="0" Text="Xzonn"/>
