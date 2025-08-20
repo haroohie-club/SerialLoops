@@ -59,7 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -1372,9 +1372,6 @@
   </data>
   <data name="ScriptTemplateToolbarText" xml:space="preserve">
     <value>Template</value>
-  </data>
-  <data name="ProjectCreationSelectBaseRom" xml:space="preserve">
-    <value>Seleziona ROM di base</value>
   </data>
   <data name="ScreenSelectorTopScreen" xml:space="preserve">
     <value>Schermo superiore</value>
