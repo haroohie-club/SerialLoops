@@ -252,41 +252,38 @@ public class BackgroundItem : Item, IPreviewableGraphic
 
         SKBitmap centeredBitmap;
         SKCanvas canvas;
+        SKPaint paint = new() { IsAntialias = true, IsDither = true };
         switch (BackgroundType)
         {
             case BgType.TEX_CG:
             {
                 centeredBitmap = new(96, 128);
-                SKBitmap actualSizeBitmap = image.Resize(new SKSizeI(96, 72), SKSamplingOptions.Default);
                 canvas = new(centeredBitmap);
-                canvas.DrawBitmap(actualSizeBitmap, 0, 12);
+                canvas.DrawImage(SKImage.FromBitmap(image), new(0, 0, image.Width, image.Height), new SKRect(0, 12, 96, 84), new(SKCubicResampler.Mitchell), paint);
                 break;
             }
 
             case BgType.TEX_CG_SINGLE:
             {
                 centeredBitmap = new(96, 128);
-                SKBitmap actualSizeBitmap = image.Resize(new SKSizeI(96, 96), SKSamplingOptions.Default);
                 canvas = new(centeredBitmap);
-                canvas.DrawBitmap(actualSizeBitmap, 0, 0);
+                canvas.DrawImage(SKImage.FromBitmap(image), new(0, 0, image.Width, image.Height), new SKRect(0, 0, 96, 96), new(SKCubicResampler.Mitchell), paint);
                 break;
             }
 
             case BgType.TEX_CG_WIDE:
             {
                 centeredBitmap = new(128, 128);
-                SKBitmap actualSizeBitmap = image.Resize(new SKSizeI(128, 72), SKSamplingOptions.Default);
                 canvas = new(centeredBitmap);
-                canvas.DrawBitmap(actualSizeBitmap, 0, 12);
+                canvas.DrawImage(SKImage.FromBitmap(image), new(0, 0, image.Width, image.Height), new SKRect(0, 12, 128, 84), new(SKCubicResampler.Mitchell), paint);
                 break;
             }
 
             case BgType.TEX_CG_DUAL_SCREEN:
             {
                 centeredBitmap = new(96, 128);
-                SKBitmap actualSizeBitmap = image.Resize(new SKSizeI(112, 124), SKSamplingOptions.Default);
                 canvas = new(centeredBitmap);
-                canvas.DrawBitmap(actualSizeBitmap, 8, 2);
+                canvas.DrawImage(SKImage.FromBitmap(image), new(0, 0, image.Width, image.Height), new SKRect(8, 2, 120, 126), new(SKCubicResampler.Mitchell), paint);
                 break;
             }
 
