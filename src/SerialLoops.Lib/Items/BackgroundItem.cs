@@ -19,7 +19,7 @@ public class BackgroundItem : Item, IPreviewableGraphic
     public BgType BackgroundType { get; set; }
     public string CgName { get; set; }
     public int Flag { get; set; }
-    public short ExtrasShort { get; set; }
+    public GraphicsFile Thumbnail { get; set; }
     public byte ExtrasByte { get; set; }
 
     public BackgroundItem(string name) : base(name, ItemType.Background)
@@ -34,10 +34,10 @@ public class BackgroundItem : Item, IPreviewableGraphic
         CgExtraData cgEntry = project.Extra.Cgs.AsParallel().FirstOrDefault(c => c.BgId == Id);
         if (cgEntry is not null)
         {
-            CgName = cgEntry?.Name?.GetSubstitutedString(project);
-            Flag = cgEntry?.Flag ?? 0;
-            ExtrasShort = cgEntry?.Unknown02 ?? 0;
-            ExtrasByte = cgEntry?.Unknown04 ?? 0;
+            CgName = cgEntry.Name?.GetSubstitutedString(project);
+            Flag = cgEntry.Flag;
+            Thumbnail = project.Grp.GetFileByIndex(cgEntry.ThumbnailIndex);
+            ExtrasByte = cgEntry.Unknown04;
         }
     }
 
@@ -211,6 +211,109 @@ public class BackgroundItem : Item, IPreviewableGraphic
                 break;
             }
         }
+
+        if (Thumbnail is not null)
+        {
+            SetThumbnail(image, log);
+        }
+        return true;
+    }
+
+    public SKBitmap GetThumbnail()
+    {
+        if (Thumbnail is null)
+        {
+            return null;
+        }
+        SKBitmap tileBitmap = new(Graphic1.Width == 512 ? 192 : 96, (Graphic1.Height + Graphic2?.Height ?? 0) >= 256 ? 128 : 96);
+        SKBitmap tiles = Thumbnail.GetImage(width: 32, transparentIndex: 0);
+        using SKCanvas tileCanvas = new(tileBitmap);
+        int currentTile = 0;
+        for (int y = 0; y < tileBitmap.Height; y += 32)
+        {
+            for (int x = 0; x < tileBitmap.Width; x += 32)
+            {
+                SKRect crop = new(0, currentTile * 32, 32, (currentTile + 1) * 32);
+                SKRect dest = new(x, y, x + 32, y + 32);
+                tileCanvas.DrawBitmap(tiles, crop, dest);
+                currentTile++;
+            }
+        }
+        tileCanvas.Flush();
+
+        return tileBitmap;
+    }
+
+    private bool SetThumbnail(SKBitmap image, ILogger log)
+    {
+        List<SKColor> replacedPalette = Helpers.GetPaletteFromImage(image, 255, log);
+        replacedPalette.Insert(0, SKColors.Transparent);
+        Thumbnail.SetPalette(replacedPalette);
+
+        SKBitmap centeredBitmap;
+        SKCanvas canvas;
+        switch (BackgroundType)
+        {
+            case BgType.TEX_CG:
+            {
+                centeredBitmap = new(96, 128);
+                SKBitmap actualSizeBitmap = image.Resize(new SKSizeI(96, 72), SKSamplingOptions.Default);
+                canvas = new(centeredBitmap);
+                canvas.DrawBitmap(actualSizeBitmap, 0, 12);
+                break;
+            }
+
+            case BgType.TEX_CG_SINGLE:
+            {
+                centeredBitmap = new(96, 128);
+                SKBitmap actualSizeBitmap = image.Resize(new SKSizeI(96, 96), SKSamplingOptions.Default);
+                canvas = new(centeredBitmap);
+                canvas.DrawBitmap(actualSizeBitmap, 0, 0);
+                break;
+            }
+
+            case BgType.TEX_CG_WIDE:
+            {
+                centeredBitmap = new(128, 128);
+                SKBitmap actualSizeBitmap = image.Resize(new SKSizeI(128, 72), SKSamplingOptions.Default);
+                canvas = new(centeredBitmap);
+                canvas.DrawBitmap(actualSizeBitmap, 0, 12);
+                break;
+            }
+
+            case BgType.TEX_CG_DUAL_SCREEN:
+            {
+                centeredBitmap = new(96, 128);
+                SKBitmap actualSizeBitmap = image.Resize(new SKSizeI(112, 124), SKSamplingOptions.Default);
+                canvas = new(centeredBitmap);
+                canvas.DrawBitmap(actualSizeBitmap, 8, 2);
+                break;
+            }
+
+            default:
+                return false;
+        }
+
+        canvas.Flush();
+
+        SKBitmap tileBitmap = new(32, centeredBitmap.Width / 32 * centeredBitmap.Height);
+        using SKCanvas tileCanvas = new(tileBitmap);
+
+        int currentTile = 0;
+        for (int y = 0; y < centeredBitmap.Height; y += 32)
+        {
+            for (int x = 0; x < centeredBitmap.Width; x += 32)
+            {
+                SKRect crop = new(x, y, x + 32, y + 32);
+                SKRect dest = new(0, currentTile * 32, 32, (currentTile + 1) * 32);
+                tileCanvas.DrawBitmap(centeredBitmap, crop, dest);
+                currentTile++;
+            }
+        }
+        tileCanvas.Flush();
+
+        Thumbnail.SetImage(tileBitmap, newSize: true);
+
         return true;
     }
 
@@ -231,6 +334,14 @@ public class BackgroundItem : Item, IPreviewableGraphic
         else if (BackgroundType == BgType.KINETIC_SCREEN)
         {
             IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Graphic2.Index:X3}.scr"), JsonSerializer.Serialize(Graphic2.ScreenData), project, log);
+        }
+
+        if (Thumbnail is not null)
+        {
+            using MemoryStream thumbStream = new();
+            Thumbnail.GetImage().Encode(thumbStream, SKEncodedImageFormat.Png, 1);
+            IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{Thumbnail.Index:X3}.png"), thumbStream.ToArray(), project, log);
+            IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Thumbnail.Index:X3}.gi"), Thumbnail.GetGraphicInfoFile(), project, log);
         }
     }
 

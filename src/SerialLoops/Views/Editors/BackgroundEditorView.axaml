@@ -36,10 +36,13 @@
                     <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
                          ToolTip.Tip="{x:Static assets:Strings.BackgroundEditorHelpCgName}"/>
                 </StackPanel>
-                <StackPanel Orientation="Vertical" Spacing="3">
-                    <TextBlock Text="{Binding FlagDescription}"/>
-                    <TextBlock Text="{Binding UnknownExtrasShortDescription}"/>
-                    <TextBlock Text="{Binding UnknownExtrasByteDescription}"/>
+                <StackPanel Orientation="Horizontal" Spacing="20">
+                    <StackPanel Orientation="Vertical" Spacing="3">
+                        <TextBlock Text="{Binding FlagDescription}"/>
+                        <TextBlock Text="{Binding UnknownExtrasByteDescription}"/>
+                    </StackPanel>
+                    <Image Source="{Binding ThumbnailBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                           Width="{Binding ThumbnailBitmap.Width}" Height="{Binding ThumbnailBitmap.Height}"/>
                 </StackPanel>
             </StackPanel>
         </StackPanel>
