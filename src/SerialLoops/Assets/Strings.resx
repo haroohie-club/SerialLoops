@@ -3354,4 +3354,19 @@ item in the dropdown!</value>
   <data name="Conditional" xml:space="preserve">
     <value>Search scope</value>
   </data>
+  <data name="MenuToolsDumpAssets" xml:space="preserve">
+    <value>Dump Assets</value>
+  </data>
+  <data name="MenuToolsDumpAllBGs" xml:space="preserve">
+    <value>All Backgrounds</value><comment>Dump Assets -&gt; All Backgrounds</comment>
+  </data>
+  <data name="MenuToolsDumpAllBGMs" xml:space="preserve">
+    <value>All BGMs</value><comment>Dump Assets -&gt; All BGMs</comment>
+  </data>
+  <data name="MenuToolsDumpAllVoices" xml:space="preserve">
+    <value>All Voiced Lines</value><comment>Dump Assets -&gt; All Voiced Lines</comment>
+  </data>
+  <data name="VoicedLinesDumpProgressMessage" xml:space="preserve">
+    <value>Dumping voiced lines to folder...</value>
+  </data>
 </root>

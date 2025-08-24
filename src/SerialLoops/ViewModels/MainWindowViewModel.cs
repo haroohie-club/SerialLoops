@@ -21,6 +21,7 @@ using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using MiniToolbar.Avalonia;
 using MsBox.Avalonia.Enums;
+using NAudio.Wave;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
@@ -119,6 +120,9 @@ public partial class MainWindowViewModel : ViewModelBase
     public ICommand EditDialogueColorsCommand { get; }
     public ICommand EditTutorialMappingsCommand { get; }
     public ICommand SearchProjectCommand { get; }
+    public ICommand DumpBgsCommand { get; }
+    public ICommand DumpBgmsCommand { get; }
+    public ICommand DumpVoicesCommand { get; }
 
     public ICommand BuildIterativeCommand { get; }
     public ICommand BuildBaseCommand { get; }
@@ -169,6 +173,64 @@ public partial class MainWindowViewModel : ViewModelBase
         BuildIterativeCommand = ReactiveCommand.CreateFromTask(BuildIterative_Executed);
         BuildBaseCommand = ReactiveCommand.CreateFromTask(BuildBase_Executed);
         BuildAndRunCommand = ReactiveCommand.CreateFromTask(BuildAndRun_Executed);
+
+        DumpBgsCommand = ReactiveCommand.CreateFromTask(async Task () =>
+        {
+            string folder = (await Window.ShowOpenFolderPickerAsync(Strings.MenuToolsDumpAllBGs))?.TryGetLocalPath();
+            if (!string.IsNullOrEmpty(folder))
+            {
+                foreach (BackgroundItem bg in OpenProject.Items
+                             .Where(i => i.Type == ItemDescription.ItemType.Background).Cast<BackgroundItem>())
+                {
+                    await using FileStream fs = File.Create(Path.Combine(folder, $"{bg.DisplayName}.png"));
+                    bg.GetBackground().Encode(fs, SKEncodedImageFormat.Png, GraphicsFile.PNG_QUALITY);
+                }
+            }
+        });
+        DumpBgmsCommand = ReactiveCommand.CreateFromTask(async Task () =>
+        {
+            string folder = (await Window.ShowOpenFolderPickerAsync(Strings.MenuToolsDumpAllBGMs))?.TryGetLocalPath();
+            if (!string.IsNullOrEmpty(folder))
+            {
+                ProgressDialogViewModel tracker = new(Strings.BgmEditorExportingProgressMessage);
+                tracker.InitializeTasks(
+                    () =>
+                    {
+                        foreach (BackgroundMusicItem bgm in OpenProject.Items
+                                     .Where(i => i.Type == ItemDescription.ItemType.BGM)
+                                     .Cast<BackgroundMusicItem>())
+                        {
+                            WaveFileWriter.CreateWaveFile(Path.Combine(folder, $"{bgm.DisplayName}.wav"), bgm.GetWaveProvider(Log, false));
+                            tracker.Finished++;
+                        }
+                    },
+                    () => { });
+                tracker.Total = OpenProject.Items.Count(i => i.Type == ItemDescription.ItemType.BGM);
+                await new ProgressDialog { DataContext = tracker }.ShowDialog(Window);
+            }
+        });
+        DumpVoicesCommand = ReactiveCommand.CreateFromTask(async Task () =>
+        {
+            string folder = (await Window.ShowOpenFolderPickerAsync(Strings.MenuToolsDumpAllBGMs))?.TryGetLocalPath();
+            if (!string.IsNullOrEmpty(folder))
+            {
+                ProgressDialogViewModel tracker = new(Strings.VoicedLinesDumpProgressMessage);
+                tracker.InitializeTasks(
+                    () =>
+                    {
+                        foreach (VoicedLineItem voice in OpenProject.Items
+                                     .Where(i => i.Type == ItemDescription.ItemType.Voice)
+                                     .Cast<VoicedLineItem>())
+                        {
+                            WaveFileWriter.CreateWaveFile(Path.Combine(folder, $"{voice.DisplayName}.wav"), voice.GetWaveProvider(Log, false));
+                            tracker.Finished++;
+                        }
+                    },
+                    () => { });
+                tracker.Total = OpenProject.Items.Count(i => i.Type == ItemDescription.ItemType.Voice);
+                await new ProgressDialog { DataContext = tracker }.ShowDialog(Window);
+            }
+        });
 
         ViewLogsCommand = ReactiveCommand.CreateFromTask(async Task () =>
         {
@@ -1540,6 +1602,28 @@ public partial class MainWindowViewModel : ViewModelBase
                 Command = SearchProjectCommand,
                 Icon = ControlGenerator.GetIcon("Search", Log),
                 Gesture = SearchHotKey,
+            },
+            new NativeMenuItem
+            {
+                Header = Strings.MenuToolsDumpAssets,
+                Menu =
+                [
+                    new NativeMenuItem
+                    {
+                        Header = Strings.MenuToolsDumpAllBGs,
+                        Command = DumpBgsCommand,
+                    },
+                    new NativeMenuItem
+                    {
+                        Header = Strings.MenuToolsDumpAllBGMs,
+                        Command = DumpBgmsCommand,
+                    },
+                    new NativeMenuItem
+                    {
+                        Header = Strings.MenuToolsDumpAllVoices,
+                        Command = DumpVoicesCommand,
+                    },
+                ],
             },
         ];
         menu.Items.Insert(insertionPoint, WindowMenu[MenuHeader.TOOLS]);

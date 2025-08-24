@@ -3858,6 +3858,42 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All BGMs.
+        /// </summary>
+        public static string MenuToolsDumpAllBGMs {
+            get {
+                return ResourceManager.GetString("MenuToolsDumpAllBGMs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Backgrounds.
+        /// </summary>
+        public static string MenuToolsDumpAllBGs {
+            get {
+                return ResourceManager.GetString("MenuToolsDumpAllBGs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Voiced Lines.
+        /// </summary>
+        public static string MenuToolsDumpAllVoices {
+            get {
+                return ResourceManager.GetString("MenuToolsDumpAllVoices", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dump Assets.
+        /// </summary>
+        public static string MenuToolsDumpAssets {
+            get {
+                return ResourceManager.GetString("MenuToolsDumpAssets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View Crash Log.
         /// </summary>
         public static string MenuViewCrashLog {
@@ -9454,6 +9490,15 @@ namespace SerialLoops.Assets {
         public static string VoicedLineEditorSubtitleWatermark {
             get {
                 return ResourceManager.GetString("VoicedLineEditorSubtitleWatermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dumping voiced lines to folder....
+        /// </summary>
+        public static string VoicedLinesDumpProgressMessage {
+            get {
+                return ResourceManager.GetString("VoicedLinesDumpProgressMessage", resourceCulture);
             }
         }
         
