@@ -192,7 +192,7 @@ public partial class MainWindowViewModel : ViewModelBase
             string folder = (await Window.ShowOpenFolderPickerAsync(Strings.MenuToolsDumpAllBGMs))?.TryGetLocalPath();
             if (!string.IsNullOrEmpty(folder))
             {
-                ProgressDialogViewModel tracker = new(Strings.BgmEditorExportingProgressMessage);
+                ProgressDialogViewModel tracker = new(Strings.BgmEditorExportingProgressMessage, Strings.ProcessVerbExtracting);
                 tracker.InitializeTasks(
                     () =>
                     {
@@ -214,7 +214,7 @@ public partial class MainWindowViewModel : ViewModelBase
             string folder = (await Window.ShowOpenFolderPickerAsync(Strings.MenuToolsDumpAllBGMs))?.TryGetLocalPath();
             if (!string.IsNullOrEmpty(folder))
             {
-                ProgressDialogViewModel tracker = new(Strings.VoicedLinesDumpProgressMessage);
+                ProgressDialogViewModel tracker = new(Strings.VoicedLinesDumpProgressMessage, Strings.ProcessVerbExtracting);
                 tracker.InitializeTasks(
                     () =>
                     {
@@ -222,7 +222,7 @@ public partial class MainWindowViewModel : ViewModelBase
                                      .Where(i => i.Type == ItemDescription.ItemType.Voice)
                                      .Cast<VoicedLineItem>())
                         {
-                            WaveFileWriter.CreateWaveFile(Path.Combine(folder, $"{voice.DisplayName}.wav"), voice.GetWaveProvider(Log, false));
+                            WaveFileWriter.CreateWaveFile(Path.Combine(folder, $"{voice.DisplayName}.wav"), voice.GetWaveProvider(Log));
                             tracker.Finished++;
                         }
                     },

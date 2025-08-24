@@ -4282,6 +4282,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Extracting:.
+        /// </summary>
+        public static string ProcessVerbExtracting {
+            get {
+                return ResourceManager.GetString("ProcessVerbExtracting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A project of that name already exists! Please choose a different name for your project..
         /// </summary>
         public static string ProjectAlreadyExistsErrorText {

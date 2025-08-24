@@ -3369,4 +3369,7 @@ item in the dropdown!</value>
   <data name="VoicedLinesDumpProgressMessage" xml:space="preserve">
     <value>Dumping voiced lines to folder...</value>
   </data>
+  <data name="ProcessVerbExtracting" xml:space="preserve">
+    <value>Extracting:</value>
+  </data>
 </root>
