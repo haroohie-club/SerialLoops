@@ -6,7 +6,7 @@ using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using ReactiveHistory;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
@@ -15,7 +15,7 @@ using SerialLoops.ViewModels.Panels;
 
 namespace SerialLoops.ViewModels.Editors;
 
-public class TopicEditorViewModel : EditorViewModel
+public partial class TopicEditorViewModel : EditorViewModel
 {
     public EditorTabsPanelViewModel Tabs { get; }
 
@@ -98,7 +98,7 @@ public class TopicEditorViewModel : EditorViewModel
 
     private short _kyonTimePercentage;
     [Reactive]
-    public double KyonTime { get; set; }
+    public partial double KyonTime { get; set; }
     public short KyonTimePercentage
     {
         get => _kyonTimePercentage;
@@ -113,7 +113,7 @@ public class TopicEditorViewModel : EditorViewModel
 
     private short _mikuruTimePercentage;
     [Reactive]
-    public double MikuruTime { get; set; }
+    public partial double MikuruTime { get; set; }
     public short MikuruTimePercentage
     {
         get => _mikuruTimePercentage;
@@ -128,7 +128,7 @@ public class TopicEditorViewModel : EditorViewModel
 
     private short _nagatoTimePercentage;
     [Reactive]
-    public double NagatoTime { get; set; }
+    public partial double NagatoTime { get; set; }
     public short NagatoTimePercentage
     {
         get => _nagatoTimePercentage;
@@ -143,7 +143,7 @@ public class TopicEditorViewModel : EditorViewModel
 
     private short _koizumiTimePercentage;
     [Reactive]
-    public double KoizumiTime { get; set; }
+    public partial double KoizumiTime { get; set; }
     public short KoizumiTimePercentage
     {
         get => _koizumiTimePercentage;

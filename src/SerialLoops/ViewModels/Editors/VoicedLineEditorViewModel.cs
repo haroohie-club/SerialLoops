@@ -13,7 +13,7 @@ using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using ReactiveHistory;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
@@ -28,7 +28,7 @@ using static SerialLoops.Lib.Script.Parameters.ScreenScriptParameter;
 
 namespace SerialLoops.ViewModels.Editors;
 
-public class VoicedLineEditorViewModel : EditorViewModel
+public partial class VoicedLineEditorViewModel : EditorViewModel
 {
     private VoicedLineItem _vce;
     private VoiceMapEntry _voiceMapEntry;
@@ -40,10 +40,10 @@ public class VoicedLineEditorViewModel : EditorViewModel
     public ICommand RestoreCommand { get; set; }
 
     [Reactive]
-    public SoundPlayerPanelViewModel VcePlayer { get; set; }
+    public partial SoundPlayerPanelViewModel VcePlayer { get; set; }
     public ScreenSelectorViewModel ScreenSelector { get; set; }
     [Reactive]
-    public SKBitmap SubtitlesPreview { get; set; } = new(256, 384);
+    public partial SKBitmap SubtitlesPreview { get; set; } = new(256, 384);
 
     public DialogueColorPalette DialogueColorPalette { get; }
     private int _subtitleColor;
@@ -287,10 +287,10 @@ public class VoicedLineEditorViewModel : EditorViewModel
     }
 }
 
-public class LocalizedSubtitlePosition(VoiceMapEntry.YPosition position) : ReactiveObject
+public partial class LocalizedSubtitlePosition(VoiceMapEntry.YPosition position) : ReactiveObject
 {
     [Reactive]
-    public VoiceMapEntry.YPosition Position { get; set; } = position;
+    public partial VoiceMapEntry.YPosition Position { get; set; } = position;
 
     public override string ToString() => Strings.ResourceManager.GetString($"Y_{Position}");
 }

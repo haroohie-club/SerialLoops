@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows.Input;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
@@ -16,7 +16,7 @@ using SixLabors.Fonts;
 
 namespace SerialLoops.ViewModels.Dialogs;
 
-public class PreferencesDialogViewModel : ViewModelBase
+public partial class PreferencesDialogViewModel : ViewModelBase
 {
     public ICommand SaveCommand { get; private set; }
     public ICommand CancelCommand { get; private set; }
@@ -25,7 +25,7 @@ public class PreferencesDialogViewModel : ViewModelBase
     public ConfigUser Configuration { get; set; }
     private ILogger Log { get; set; }
     [Reactive]
-    public bool RequireRestart { get; set; }
+    public partial bool RequireRestart { get; set; }
     public bool Saved { get; set; }
     private PreferencesDialog _preferencesDialog;
 

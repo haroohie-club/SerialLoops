@@ -5,7 +5,7 @@ using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia.Enums;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Util;
@@ -24,7 +24,7 @@ public partial class ProjectCreationDialogViewModel : ViewModelBase
     public ComboBoxItem LanguageTemplateItem { get; set; }
     public string LanguageTemplateCode => (string)LanguageTemplateItem?.Tag ?? "";
     [Reactive]
-    public string RomPath { get; set; } = Strings.ProjectCreationNoRomSelected;
+    public partial string RomPath { get; set; } = Strings.ProjectCreationNoRomSelected;
 
     public bool Migrate { get; set; }
 

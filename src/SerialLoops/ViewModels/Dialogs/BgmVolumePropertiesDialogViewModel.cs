@@ -4,7 +4,7 @@ using System.Windows.Input;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Util;
 using SerialLoops.Lib.Util.WaveformRenderer;
@@ -15,17 +15,17 @@ using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Dialogs;
 
-public class BgmVolumePropertiesDialogViewModel : ViewModelBase, IDisposable
+public partial class BgmVolumePropertiesDialogViewModel : ViewModelBase, IDisposable
 {
     private ILogger _log;
     private WaveStream _wav;
     private long _waveLength;
 
     [Reactive]
-    public string Title { get; set; }
+    public partial string Title { get; set; }
     public BgmVolumePreviewItem VolumePreview { get; set; }
     [Reactive]
-    public SKBitmap Waveform { get; set; }
+    public partial SKBitmap Waveform { get; set; }
     public SoundPlayerPanelViewModel VolumePreviewPlayer { get; set; }
 
     private double _volume;

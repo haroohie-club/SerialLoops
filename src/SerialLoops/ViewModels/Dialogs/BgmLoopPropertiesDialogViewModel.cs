@@ -3,7 +3,7 @@ using System.Windows.Input;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Util.WaveformRenderer;
 using SerialLoops.Models;
@@ -13,12 +13,12 @@ using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Dialogs;
 
-public class BgmLoopPropertiesDialogViewModel : ViewModelBase, IDisposable
+public partial class BgmLoopPropertiesDialogViewModel : ViewModelBase, IDisposable
 {
     public ILogger Log { get; set; }
 
     [Reactive]
-    public string Title { get; set; }
+    public partial string Title { get; set; }
     public uint MaxSample => (uint)(LoopPreview.Wave.Length / LoopPreview.Wave.WaveFormat.BitsPerSample * 8 / LoopPreview.Wave.WaveFormat.Channels);
 
     public BgmLoopPreviewItem LoopPreview { get; set; }

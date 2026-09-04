@@ -10,15 +10,17 @@ using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
+using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Selection;
 using Avalonia.Controls.Templates;
+using Avalonia.Data;
 using Avalonia.Input;
-using DynamicData;
+using AvaloniaEdit.Utils;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia.Enums;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
@@ -32,12 +34,11 @@ using SerialLoops.ViewModels.Editors.ScriptCommandEditors;
 using SerialLoops.Views;
 using SerialLoops.Views.Dialogs;
 using SkiaSharp;
-using SoftCircuits.Collections;
 using static HaruhiChokuretsuLib.Archive.Event.EventFile;
 
 namespace SerialLoops.ViewModels.Editors;
 
-public class ScriptEditorViewModel : EditorViewModel
+public partial class ScriptEditorViewModel : EditorViewModel
 {
     private readonly ScriptItem _script;
     private ScriptItemCommand _selectedCommand;
@@ -80,12 +81,12 @@ public class ScriptEditorViewModel : EditorViewModel
     }
 
     [Reactive]
-    public ReactiveScriptSection SelectedSection { get; set; }
+    public partial ReactiveScriptSection SelectedSection { get; set; }
 
     public ScriptPreviewCanvasViewModel ScriptPreviewCanvas { get; set; }
 
     [Reactive]
-    public ScriptCommandEditorViewModel CurrentCommandViewModel { get; set; }
+    public partial ScriptCommandEditorViewModel CurrentCommandViewModel { get; set; }
 
     public ObservableCollection<ReactiveScriptSection> ScriptSections { get; }
 
@@ -95,18 +96,13 @@ public class ScriptEditorViewModel : EditorViewModel
         set
         {
             this.RaiseAndSetIfChanged(ref _commands, value);
-            Source = new(_commands?.Keys.Select(s => new ScriptSectionTreeItem(ScriptSections[_script.Event.ScriptSections.IndexOf(s)], _commands[s])) ?? [])
+            TreeDataGridTemplateColumn commandColumn = new()
             {
-                Columns =
-                {
-                    new HierarchicalExpanderColumn<ITreeItem>(
-                        new TemplateColumn<ITreeItem>(null,
-                            new FuncDataTemplate<ITreeItem>((val, namescope) => val?.GetDisplay()),
-                            options: new() { IsTextSearchEnabled = true }),
-                        i => i.Children
-                    ),
-                },
+                CellTemplate = new FuncDataTemplate<ITreeItem>((val, namescope) => val?.GetDisplay()),
             };
+            TextSearch.SetTextBinding(commandColumn, new Binding(nameof(ITreeItem.Text)));
+            Source = new HierarchicalTreeDataGridSource<ITreeItem>(_commands?.Keys.Select(s => new ScriptSectionTreeItem(ScriptSections[_script.Event.ScriptSections.IndexOf(s)], _commands[s])) ?? [])
+                .WithHierarchicalExpanderColumn(null, commandColumn, i => i.Children);
 
             Source.RowSelection!.SingleSelect = true;
             Source.RowSelection.SelectionChanged += RowSelection_SelectionChanged;
@@ -115,7 +111,7 @@ public class ScriptEditorViewModel : EditorViewModel
     }
 
     [Reactive]
-    public HierarchicalTreeDataGridSource<ITreeItem> Source { get; private set; }
+    public partial HierarchicalTreeDataGridSource<ITreeItem> Source { get; private set; }
 
     public enum ClipboardMode
     {
@@ -125,13 +121,13 @@ public class ScriptEditorViewModel : EditorViewModel
     }
 
     [Reactive]
-    public ScriptItemCommand ClipboardCommand { get; set; }
+    public partial ScriptItemCommand ClipboardCommand { get; set; }
     private ClipboardMode _clipboardMode = ClipboardMode.None;
 
     public Vector? ScrollPosition { get; set; }
 
     [Reactive]
-    public ChessPuzzleItem CurrentChessBoard { get; set; }
+    public partial ChessPuzzleItem CurrentChessBoard { get; set; }
     public ObservableCollection<short> CurrentGuidePieces { get; } = [];
     public ObservableCollection<short> CurrentHighlightedSpaces { get; } = [];
     public ObservableCollection<short> CurrentCrossedSpaces { get; } = [];
@@ -140,18 +136,18 @@ public class ScriptEditorViewModel : EditorViewModel
     public ObservableCollection<StartingChibiWithImage> StartingChibis { get; } = [];
 
     [Reactive]
-    public bool HasStartingChibis { get; set; }
+    public partial bool HasStartingChibis { get; set; }
     public MapCharactersSubEditorViewModel MapCharactersSubEditorVm { get; set; }
 
     public ObservableCollection<ReactiveInteractableObject> InteractableObjects { get; } = [];
     [Reactive]
-    public ReactiveInteractableObject SelectedInteractableObject { get; set; }
+    public partial ReactiveInteractableObject SelectedInteractableObject { get; set; }
     public ObservableCollection<ReactiveInteractableObject> UnusedInteractableObjects { get; } = [];
 
     public ObservableCollection<ReactiveChoice> Choices { get; } = [];
 
     [Reactive]
-    public bool Script00TipVisible { get; set; }
+    public partial bool Script00TipVisible { get; set; }
 
     private Timer Script00TipTimer { get; set; }
 
@@ -439,7 +435,7 @@ public class ScriptEditorViewModel : EditorViewModel
         return true;
     }
 
-    private void RowSelection_SelectionChanged(object sender, TreeSelectionModelSelectionChangedEventArgs<ITreeItem> e)
+    private void RowSelection_SelectionChanged(object sender, TreeDataGridSelectionChangedEventArgs<ITreeItem> e)
     {
         if (e.SelectedIndexes.Count == 0 || e.SelectedIndexes[0].Count == 0)
         {
@@ -1089,12 +1085,12 @@ public class ReactiveScriptSection(ScriptSection section, ILogger log, MainWindo
     public override string ToString() => DisplayName;
 }
 
-public class StartingChibiWithImage : ReactiveObject
+public partial class StartingChibiWithImage : ReactiveObject
 {
     public StartingChibiEntry StartingChibi { get; }
 
     [Reactive]
-    public SKBitmap ChibiBitmap { get; set; }
+    public partial SKBitmap ChibiBitmap { get; set; }
 
     public ICommand AddStartingChibiCommand { get; }
 

@@ -82,7 +82,7 @@ public static class GuiExtensions
             CanResize = false,
             CloseOnClickAway = false,
             SizeToContent = SizeToContent.WidthAndHeight,
-            SystemDecorations = SystemDecorations.Full,
+            WindowDecorations = WindowDecorations.Full,
         };
 
         return await MessageBoxManager.GetMessageBoxStandard(msgParams).ShowAsPopupAsync(window);

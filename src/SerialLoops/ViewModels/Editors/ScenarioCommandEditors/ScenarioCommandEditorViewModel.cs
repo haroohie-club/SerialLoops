@@ -1,17 +1,17 @@
 ﻿using ReactiveHistory;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Models;
 using SerialLoops.ViewModels.Panels;
 
 namespace SerialLoops.ViewModels.Editors.ScenarioCommandEditors;
 
-public class ScenarioCommandEditorViewModel : ViewModelBase
+public partial class ScenarioCommandEditorViewModel : ViewModelBase
 {
     public EditorTabsPanelViewModel Tabs { get; private set; }
 
     [Reactive]
-    public PrettyScenarioCommand SelectedScenarioCommand { get; set; }
+    public partial PrettyScenarioCommand SelectedScenarioCommand { get; set; }
 
     protected int _parameter;
     public int Parameter

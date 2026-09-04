@@ -2,21 +2,21 @@
 using System.Linq;
 using HaruhiChokuretsuLib.Archive.Event;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace SerialLoops.Lib.Items;
 
 public partial class ItemDescription : ReactiveObject
 {
     [Reactive]
-    public string Name { get; set; }
+    public partial string Name { get; set; }
     [Reactive]
-    public bool CanRename { get; set; }
+    public partial bool CanRename { get; set; }
     [Reactive]
-    public string DisplayName { get; set; }
+    public partial string DisplayName { get; set; }
     public ItemType Type { get; private set; }
     [Reactive]
-    public bool UnsavedChanges { get; set; }
+    public partial bool UnsavedChanges { get; set; }
 
     public ItemDescription(string name, ItemType type, string displayName)
     {

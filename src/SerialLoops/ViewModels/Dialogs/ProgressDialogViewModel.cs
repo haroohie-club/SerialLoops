@@ -3,28 +3,28 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Threading;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Util;
 
 namespace SerialLoops.ViewModels.Dialogs;
 
-public class ProgressDialogViewModel : ViewModelBase, IProgressTracker
+public partial class ProgressDialogViewModel : ViewModelBase, IProgressTracker
 {
     private Action _loadingTask;
     private Action _onComplete;
 
     [Reactive]
-    public string Title { get; set; }
+    public partial string Title { get; set; }
 
     [Reactive]
-    public string ProcessVerb { get; set; }
+    public partial string ProcessVerb { get; set; }
     [Reactive]
-    public string CurrentlyLoading { get; set; }
+    public partial string CurrentlyLoading { get; set; }
     [Reactive]
-    public int Finished { get; set; }
+    public partial int Finished { get; set; }
     [Reactive]
-    public int Total { get; set; }
+    public partial int Total { get; set; }
 
     public ICommand InitializedCommand { get; }
 

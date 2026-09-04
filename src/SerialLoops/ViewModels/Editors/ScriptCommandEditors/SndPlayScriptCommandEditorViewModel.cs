@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
@@ -12,12 +12,12 @@ using SerialLoops.ViewModels.Panels;
 
 namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors;
 
-public class SndPlayScriptCommandEditorViewModel : ScriptCommandEditorViewModel
+public partial class SndPlayScriptCommandEditorViewModel : ScriptCommandEditorViewModel
 {
     public EditorTabsPanelViewModel Tabs { get; }
 
     [Reactive]
-    public ObservableCollection<SfxItem> SfxChoices { get; set; }
+    public partial ObservableCollection<SfxItem> SfxChoices { get; set; }
     private SfxItem _selectedSfx;
     public SfxItem SelectedSfx
     {
@@ -89,10 +89,10 @@ public class SndPlayScriptCommandEditorViewModel : ScriptCommandEditorViewModel
     }
 
     [Reactive]
-    public short CrossfadeMin { get; set; } = 0;
+    public partial short CrossfadeMin { get; set; } = 0;
 
     [Reactive]
-    public short CrossfadeMax { get; set; } = short.MaxValue;
+    public partial short CrossfadeMax { get; set; } = short.MaxValue;
 
     private short _crossfadeTime;
     public short CrossfadeTime

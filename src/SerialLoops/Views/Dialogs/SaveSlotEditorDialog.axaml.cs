@@ -11,7 +11,7 @@ public partial class SaveSlotEditorDialog : Window
         InitializeComponent();
     }
 
-    private void CharacterPortraitTab_OnGotFocus(object sender, GotFocusEventArgs e)
+    private void CharacterPortraitTab_OnGotFocus(object sender, FocusChangedEventArgs e)
     {
         ((SaveSlotEditorDialogViewModel)DataContext)?.LoadCharacterPortraits();
     }

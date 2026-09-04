@@ -9,7 +9,7 @@ using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia.Enums;
 using ReactiveHistory;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Models;
@@ -21,7 +21,7 @@ using static HaruhiChokuretsuLib.Archive.Event.ScenarioCommand;
 
 namespace SerialLoops.ViewModels.Editors;
 
-public class ScenarioEditorViewModel : EditorViewModel
+public partial class ScenarioEditorViewModel : EditorViewModel
 {
     private ScenarioItem _scenario;
     private PrettyScenarioCommand _selectedCommand;
@@ -45,7 +45,7 @@ public class ScenarioEditorViewModel : EditorViewModel
         }
     }
     [Reactive]
-    public ScenarioCommandEditorViewModel CurrentCommandViewModel { get; set; }
+    public partial ScenarioCommandEditorViewModel CurrentCommandViewModel { get; set; }
 
     private StackHistory _history;
 

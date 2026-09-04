@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>net8.0;net8.0-windows</TargetFrameworks>
+    <TargetFrameworks>net10.0;net10.0-windows</TargetFrameworks>
     <Nullable>disable</Nullable>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -26,14 +26,14 @@
   </ItemGroup>
 
   <Target Name="PreBuildSTH" BeforeTargets="PreBuildEvent" Condition="'$(RuntimeIdentifier)' != ''">
-    <Exec Command="dotnet publish submodules/NitroPacker.SymTableHelper/HaroohieClub.NitroPacker.SymTableHelper.csproj -c Release -f net8.0 -r $(RuntimeIdentifier) --self-contained /p:DebugType=None /p:DebugSymbols=false" WorkingDirectory="../.."/>
+    <Exec Command="dotnet publish submodules/NitroPacker.SymTableHelper/HaroohieClub.NitroPacker.SymTableHelper.csproj -c Release -f net10.0 -r $(RuntimeIdentifier) --self-contained /p:DebugType=None /p:DebugSymbols=false" WorkingDirectory="../.."/>
   </Target>
   <ItemGroup>
-    <None Condition="'$(RuntimeIdentifier)' != '' And $([System.OperatingSystem]::IsWindows())" Include="..\..\submodules\NitroPacker.SymTableHelper\bin\Release\net8.0\$(RuntimeIdentifier)\publish\NitroPacker.SymTableHelper.exe">
+    <None Condition="'$(RuntimeIdentifier)' != '' And $([System.OperatingSystem]::IsWindows())" Include="..\..\submodules\NitroPacker.SymTableHelper\bin\Release\net10.0\$(RuntimeIdentifier)\publish\NitroPacker.SymTableHelper.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CopyToPublishDirectory>Always</CopyToPublishDirectory>
     </None>
-    <None Condition="'$(RuntimeIdentifier)' != '' And !$([System.OperatingSystem]::IsWindows())" Include="..\..\submodules\NitroPacker.SymTableHelper\bin\Release\net8.0\$(RuntimeIdentifier)\publish\NitroPacker.SymTableHelper">
+    <None Condition="'$(RuntimeIdentifier)' != '' And !$([System.OperatingSystem]::IsWindows())" Include="..\..\submodules\NitroPacker.SymTableHelper\bin\Release\net10.0\$(RuntimeIdentifier)\publish\NitroPacker.SymTableHelper">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CopyToPublishDirectory>Always</CopyToPublishDirectory>
     </None>
@@ -93,44 +93,50 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.3.4" />
-    <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.3.0" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.4" />
-    <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.1.5" />
+    <PackageReference Include="Avalonia" Version="12.1.2" />
+    <PackageReference Include="Avalonia.AvaloniaEdit" Version="12.0.0" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="12.1.2" />
+    <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="12.0.0" />
     <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="11.3.0" />
-    <PackageReference Include="Avalonia.Controls.TreeDataGrid" Version="11.1.1" />
-    <PackageReference Include="Avalonia.Controls.ColorPicker" Version="11.3.4" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.3.4" />
-    <PackageReference Include="Avalonia.Labs.Controls" Version="11.3.1" />
-    <PackageReference Include="Avalonia.Labs.Panels" Version="11.3.1" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="11.3.4" />
-    <PackageReference Include="Avalonia.Skia" Version="11.3.4" />
+    <PackageReference Include="Avalonia.Controls.TreeDataGrid" Version="12.2.1" />
+    <PackageReference Include="Avalonia.Controls.ColorPicker" Version="12.1.2" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.1.2" />
+    <PackageReference Include="Avalonia.Labs.Controls" Version="12.0.2" />
+    <PackageReference Include="Avalonia.Labs.Panels" Version="12.0.2" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.3.8" />
+    <PackageReference Include="Avalonia.Skia" Version="12.1.2" />
     <PackageReference Include="Avalonia.Svg" Version="11.3.0" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.4" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.4" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.2" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.2" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.4" />
     <!--The behaviors packages past 11.1.0.4 break our middle click to close functionality, so we're staying on that package for now.-->
     <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.3.0.6" />
-    <PackageReference Include="DialogHost.Avalonia" Version="0.9.3" />
+    <PackageReference Include="DialogHost.Avalonia" Version="0.12.3" />
     <PackageReference Include="Emik.Rubbish" Version="1.1.0" />
     <PackageReference Include="HaroohieClub.DotNet.Bundle" Version="1.0.3" />
-    <PackageReference Include="Markdown.Avalonia" Version="11.0.2" />
-    <PackageReference Include="MessageBox.Avalonia" Version="3.2.0" />
-    <PackageReference Include="MiniToolbar.Avalonia" Version="1.1.0.216" />
+    <PackageReference Include="Markdown.Avalonia" Version="11.0.3" />
+    <PackageReference Include="MessageBox.Avalonia" Version="12.0.0" />
+    <PackageReference Include="MiniToolbar.Avalonia" Version="2.0.0.7" />
     <PackageReference Include="ReactiveHistory" Version="0.10.7" />
-    <PackageReference Include="ReactiveUI" Version="20.4.1" />
-    <PackageReference Include="ReactiveUI.Fody" Version="19.5.41" />
+    <PackageReference Include="ReactiveUI" Version="24.1.0" />
+    <PackageReference Include="ReactiveUI.SourceGenerators" Version="3.2.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="SixLabors.Fonts" Version="2.1.3" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" />
-    <PackageReference Include="Tabalonia" Version="0.10.5.1" />
+    <PackageReference Include="Tabalonia" Version="12.0.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <AvaloniaUILicenseKey Include="avln_on_key:v1:4d99629b51b147a2ac2f592f9915c234" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0-windows'">
     <PackageReference Include="NAudio" Version="2.2.1" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' != 'net8.0-windows'">
+  <ItemGroup Condition="'$(TargetFramework)' != 'net10.0-windows'">
     <PackageReference Include="NAudio.Sdl2" Version="2.2.6" />
   </ItemGroup>
 

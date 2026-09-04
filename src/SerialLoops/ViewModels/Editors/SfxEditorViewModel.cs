@@ -6,7 +6,7 @@ using GotaSequenceLib.Playback;
 using HaruhiChokuretsuLib.Audio.SDAT;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
@@ -14,16 +14,16 @@ using SerialLoops.ViewModels.Controls;
 
 namespace SerialLoops.ViewModels.Editors;
 
-public class SfxEditorViewModel : EditorViewModel
+public partial class SfxEditorViewModel : EditorViewModel
 {
     [Reactive]
-    public SfxItem Sfx { get; set; }
+    public partial SfxItem Sfx { get; set; }
     private SequenceArchive _archive;
     private SequenceArchiveSequence _sequence;
     private Player _player;
 
     [Reactive]
-    public SfxPlayerPanelViewModel SfxPlayerPanel { get; set; }
+    public partial SfxPlayerPanelViewModel SfxPlayerPanel { get; set; }
     public string Groups => string.Format(Strings.SfxEditorGroupsList, string.Join(", ", Sfx.AssociatedGroups));
 
     public ICommand ExtractCommand { get; }

@@ -13,7 +13,7 @@
         TransparencyLevelHint="AcrylicBlur"
         Background="{DynamicResource FallbackBackgroundColor}"
         ExtendClientAreaToDecorationsHint="True"
-        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="0"
         Title="{x:Static assets:Strings.ScriptEditorAddCommandLabel}"
         Name="AddCommandDialog">
 

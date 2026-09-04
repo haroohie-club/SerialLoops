@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Lib.Items;
 
 namespace SerialLoops.ViewModels.Controls;
@@ -74,10 +74,10 @@ public class ChibiDirectionSelectorViewModel : ViewModelBase
     }
 }
 
-public class DirectionWithButton(ChibiItem.Direction direction) : ReactiveObject
+public partial class DirectionWithButton(ChibiItem.Direction direction) : ReactiveObject
 {
     public ChibiItem.Direction Direction { get; } = direction;
     public string IconPath => $"avares://SerialLoops/Assets/Icons/Chibi_{Direction}.svg";
     [Reactive]
-    public bool Enabled { get; set; } = true;
+    public partial bool Enabled { get; set; } = true;
 }

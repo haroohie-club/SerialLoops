@@ -8,7 +8,7 @@ using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Save;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
@@ -21,11 +21,10 @@ using SerialLoops.ViewModels.Controls;
 using SerialLoops.ViewModels.Panels;
 using SerialLoops.Views.Dialogs;
 using SkiaSharp;
-using SoftCircuits.Collections;
 
 namespace SerialLoops.ViewModels.Dialogs;
 
-public class SaveSlotEditorDialogViewModel : ViewModelBase
+public partial class SaveSlotEditorDialogViewModel : ViewModelBase
 {
     private SaveItem _save;
     private CommonSaveData _commonSaveData;
@@ -44,11 +43,11 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
     public bool IsQuickSave { get; }
 
     [Reactive]
-    public bool HideUnsetFlags { get; set; }
+    public partial bool HideUnsetFlags { get; set; }
     [Reactive]
-    public string FlagFilter { get; set; }
+    public partial string FlagFilter { get; set; }
     [Reactive]
-    public string ResultsLabel { get; set; }
+    public partial string ResultsLabel { get; set; }
 
     public ICommand FilterFlagsCommand { get; }
     public ICommand PreviousFlagsCommand { get; }
@@ -450,87 +449,87 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
 
     // Common Save Data
     [Reactive]
-    public int NumSaves { get; set; }
+    public partial int NumSaves { get; set; }
 
     [Reactive]
-    public int BgmVolume { get; set; }
+    public partial int BgmVolume { get; set; }
     [Reactive]
-    public int SfxVolume { get; set; }
+    public partial int SfxVolume { get; set; }
     [Reactive]
-    public int WordsVolume { get; set; }
+    public partial int WordsVolume { get; set; }
     [Reactive]
-    public int VoiceVolume { get; set; }
+    public partial int VoiceVolume { get; set; }
 
-    [Reactive] public SKBitmap KyonVoicePortrait { get; private set; }
-    [Reactive] public string KyonName { get; private set; }
-    [Reactive] public SKBitmap HaruhiVoicePortrait { get; private set; }
-    [Reactive] public string HaruhiName { get; private set; }
-    [Reactive] public SKBitmap AsahinaVoicePortrait { get; private set; }
-    [Reactive] public string AsahinaName { get; private set; }
-    [Reactive] public SKBitmap NagatoVoicePortrait { get; private set; }
-    [Reactive] public string NagatoName { get; private set; }
-    [Reactive] public SKBitmap KoizumiVoicePortrait { get; private set; }
-    [Reactive] public string KoizumiName { get; private set; }
-    [Reactive] public SKBitmap SisterVoicePortrait { get; private set; }
-    [Reactive] public string SisterName { get; private set; }
-    [Reactive] public SKBitmap TsuruyaVoicePortrait { get; private set; }
-    [Reactive] public string TsuruyaName { get; private set; }
-    [Reactive] public SKBitmap TaniguchiVoicePortrait { get; private set; }
-    [Reactive] public string TaniguchiName { get; private set; }
-    [Reactive] public SKBitmap KunikidaVoicePortrait { get; private set; }
-    [Reactive] public string KunikidaName { get; private set; }
-    [Reactive] public SKBitmap MysteryGirlVoicePortrait { get; private set; }
-    [Reactive] public string MysteryGirlName { get; private set; }
-
-    [Reactive]
-    public bool KyonVoiceEnabled { get; set; }
-    [Reactive]
-    public bool HaruhiVoiceEnabled { get; set; }
-    [Reactive]
-    public bool AsahinaVoiceEnabled { get; set; }
-    [Reactive]
-    public bool NagatoVoiceEnabled { get; set; }
-    [Reactive]
-    public bool KoizumiVoiceEnabled { get; set; }
-    [Reactive]
-    public bool SisterVoiceEnabled { get; set; }
-    [Reactive]
-    public bool TsuruyaVoiceEnabled { get; set; }
-    [Reactive]
-    public bool TaniguchiVoiceEnabled { get; set; }
-    [Reactive]
-    public bool KunikidaVoiceEnabled { get; set; }
-    [Reactive]
-    public bool MysteryGirlVoiceEnabled { get; set; }
+    [Reactive] public partial SKBitmap KyonVoicePortrait { get; private set; }
+    [Reactive] public partial string KyonName { get; private set; }
+    [Reactive] public partial SKBitmap HaruhiVoicePortrait { get; private set; }
+    [Reactive] public partial string HaruhiName { get; private set; }
+    [Reactive] public partial SKBitmap AsahinaVoicePortrait { get; private set; }
+    [Reactive] public partial string AsahinaName { get; private set; }
+    [Reactive] public partial SKBitmap NagatoVoicePortrait { get; private set; }
+    [Reactive] public partial string NagatoName { get; private set; }
+    [Reactive] public partial SKBitmap KoizumiVoicePortrait { get; private set; }
+    [Reactive] public partial string KoizumiName { get; private set; }
+    [Reactive] public partial SKBitmap SisterVoicePortrait { get; private set; }
+    [Reactive] public partial string SisterName { get; private set; }
+    [Reactive] public partial SKBitmap TsuruyaVoicePortrait { get; private set; }
+    [Reactive] public partial string TsuruyaName { get; private set; }
+    [Reactive] public partial SKBitmap TaniguchiVoicePortrait { get; private set; }
+    [Reactive] public partial string TaniguchiName { get; private set; }
+    [Reactive] public partial SKBitmap KunikidaVoicePortrait { get; private set; }
+    [Reactive] public partial string KunikidaName { get; private set; }
+    [Reactive] public partial SKBitmap MysteryGirlVoicePortrait { get; private set; }
+    [Reactive] public partial string MysteryGirlName { get; private set; }
 
     [Reactive]
-    public bool PuzzleInterruptScenesOff { get; set; }
+    public partial bool KyonVoiceEnabled { get; set; }
     [Reactive]
-    public bool PuzzleInterruptScenesUnseenOnly { get; set; }
+    public partial bool HaruhiVoiceEnabled { get; set; }
     [Reactive]
-    public bool PuzzleInterruptScenesOn { get; set; }
+    public partial bool AsahinaVoiceEnabled { get; set; }
     [Reactive]
-    public bool TopicStockMode { get; set; }
+    public partial bool NagatoVoiceEnabled { get; set; }
     [Reactive]
-    public bool DialogueSkipping { get; set; }
+    public partial bool KoizumiVoiceEnabled { get; set; }
     [Reactive]
-    public bool BatchDialogueDisplay { get; set; }
+    public partial bool SisterVoiceEnabled { get; set; }
+    [Reactive]
+    public partial bool TsuruyaVoiceEnabled { get; set; }
+    [Reactive]
+    public partial bool TaniguchiVoiceEnabled { get; set; }
+    [Reactive]
+    public partial bool KunikidaVoiceEnabled { get; set; }
+    [Reactive]
+    public partial bool MysteryGirlVoiceEnabled { get; set; }
+
+    [Reactive]
+    public partial bool PuzzleInterruptScenesOff { get; set; }
+    [Reactive]
+    public partial bool PuzzleInterruptScenesUnseenOnly { get; set; }
+    [Reactive]
+    public partial bool PuzzleInterruptScenesOn { get; set; }
+    [Reactive]
+    public partial bool TopicStockMode { get; set; }
+    [Reactive]
+    public partial bool DialogueSkipping { get; set; }
+    [Reactive]
+    public partial bool BatchDialogueDisplay { get; set; }
 
     // Save Slot Data
     [Reactive]
-    public DateTime SaveDate { get; set; }
+    public partial DateTime SaveDate { get; set; }
     [Reactive]
-    public TimeSpan SaveTime { get; set; }
+    public partial TimeSpan SaveTime { get; set; }
     public ScenarioCommandPickerViewModel ScenarioCommandPickerVm { get; set; }
     [Reactive]
-    public short Episode { get; set; }
+    public partial short Episode { get; set; }
 
-    [Reactive] public byte HaruhiFriendshipLevel { get; set; }
-    [Reactive] public byte AsahinaFriendshipLevel { get; set; }
-    [Reactive] public byte NagatoFriendshipLevel { get; set; }
-    [Reactive] public byte KoizumiFriendshipLevel { get; set; }
-    [Reactive] public byte TsuruyaFriendshipLevel { get; set; }
-    [Reactive] public byte UnknownFriendshipLevel { get; set; }
+    [Reactive] public partial byte HaruhiFriendshipLevel { get; set; }
+    [Reactive] public partial byte AsahinaFriendshipLevel { get; set; }
+    [Reactive] public partial byte NagatoFriendshipLevel { get; set; }
+    [Reactive] public partial byte KoizumiFriendshipLevel { get; set; }
+    [Reactive] public partial byte TsuruyaFriendshipLevel { get; set; }
+    [Reactive] public partial byte UnknownFriendshipLevel { get; set; }
 
     public List<RecentObjective> RecentObjectives { get; set; }
     public List<ReactivePowerStatus> PowerStatuses { get; set; }
@@ -581,9 +580,9 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
     }
     private ScriptPreview _scriptPreview;
     [Reactive]
-    public SKBitmap ScriptPreview { get; set; }
+    public partial SKBitmap ScriptPreview { get; set; }
     [Reactive]
-    public string ErrorImagePath { get; set; }
+    public partial string ErrorImagePath { get; set; }
 
     // Flag Data
     private LocalizedFlag[] _flags;
@@ -607,7 +606,7 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
     }
 
     [Reactive]
-    public int NumPages { get; set; } = Flags.NUM_FLAGS / 12 + 1;
+    public partial int NumPages { get; set; } = Flags.NUM_FLAGS / 12 + 1;
 
 }
 
@@ -618,23 +617,23 @@ public class LocalizedFlag(int id, Project project, bool isSet)
     public bool IsSet { get; set; } = isSet;
 }
 
-public class RecentObjective(string letter, CharacterMask objective) : ReactiveObject
+public partial class RecentObjective(string letter, CharacterMask objective) : ReactiveObject
 {
     public string Letter { get; } = letter;
     [Reactive]
-    public bool FirstSelection { get; set; } = objective.HasFlag(CharacterMask.SELECTION1);
+    public partial bool FirstSelection { get; set; } = objective.HasFlag(CharacterMask.SELECTION1);
     [Reactive]
-    public bool SecondSelection { get; set; } = objective.HasFlag(CharacterMask.SELECTION2);
+    public partial bool SecondSelection { get; set; } = objective.HasFlag(CharacterMask.SELECTION2);
     [Reactive]
-    public bool KyonPresent { get; set; } = objective.HasFlag(CharacterMask.KYON);
+    public partial bool KyonPresent { get; set; } = objective.HasFlag(CharacterMask.KYON);
     [Reactive]
-    public bool HaruhiPresent { get; set; } = objective.HasFlag(CharacterMask.HARUHI);
+    public partial bool HaruhiPresent { get; set; } = objective.HasFlag(CharacterMask.HARUHI);
     [Reactive]
-    public bool AsahinaPresent { get; set; } = objective.HasFlag(CharacterMask.MIKURU);
+    public partial bool AsahinaPresent { get; set; } = objective.HasFlag(CharacterMask.MIKURU);
     [Reactive]
-    public bool NagatoPresent { get; set; } = objective.HasFlag(CharacterMask.NAGATO);
+    public partial bool NagatoPresent { get; set; } = objective.HasFlag(CharacterMask.NAGATO);
     [Reactive]
-    public bool KoizumiPresent { get; set; } = objective.HasFlag(CharacterMask.KOIZUMI);
+    public partial bool KoizumiPresent { get; set; } = objective.HasFlag(CharacterMask.KOIZUMI);
 
     public CharacterMask GetCharacterMask()
     {
@@ -650,13 +649,13 @@ public class RecentObjective(string letter, CharacterMask objective) : ReactiveO
     }
 }
 
-public class ReactivePowerStatus(string name, CharacterPowerStatus status) : ReactiveObject
+public partial class ReactivePowerStatus(string name, CharacterPowerStatus status) : ReactiveObject
 {
     public string Name { get; } = name;
-    [Reactive] public byte Level { get; set; } = status.Level;
-    [Reactive] public byte RemainingUses { get; set; } = status.RemainingUses;
-    [Reactive] public byte UsesSinceLevelUp { get; set; } = status.UsesSinceLevelUp;
-    [Reactive] public byte UsesToLevelUp { get; set; } = status.UsesToLevelUp;
+    [Reactive] public partial byte Level { get; set; } = status.Level;
+    [Reactive] public partial byte RemainingUses { get; set; } = status.RemainingUses;
+    [Reactive] public partial byte UsesSinceLevelUp { get; set; } = status.UsesSinceLevelUp;
+    [Reactive] public partial byte UsesToLevelUp { get; set; } = status.UsesToLevelUp;
 
     public void SetStatus(CharacterPowerStatus status)
     {

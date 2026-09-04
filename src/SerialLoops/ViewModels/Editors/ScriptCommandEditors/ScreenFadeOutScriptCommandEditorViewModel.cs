@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.ViewModels.Controls;
@@ -11,7 +11,7 @@ using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors;
 
-public class ScreenFadeOutScriptCommandEditorViewModel : ScriptCommandEditorViewModel
+public partial class ScreenFadeOutScriptCommandEditorViewModel : ScriptCommandEditorViewModel
 {
     private short _fadeTime;
     public short FadeTime
@@ -62,7 +62,7 @@ public class ScreenFadeOutScriptCommandEditorViewModel : ScriptCommandEditorView
     }
 
     [Reactive]
-    public ScreenSelectorViewModel ScreenSelector { get; set; }
+    public partial ScreenSelectorViewModel ScreenSelector { get; set; }
 
     public ObservableCollection<ColorMonochromeLocalized> Colors { get; } =
         new(Enum.GetValues<ColorMonochromeScriptParameter.ColorMonochrome>().Select(c => new ColorMonochromeLocalized(c)));

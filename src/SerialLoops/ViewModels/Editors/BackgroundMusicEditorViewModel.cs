@@ -8,7 +8,7 @@ using HaruhiChokuretsuLib.Audio.ADX;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
@@ -21,11 +21,11 @@ using SerialLoops.Views.Dialogs;
 
 namespace SerialLoops.ViewModels.Editors;
 
-public class BackgroundMusicEditorViewModel : EditorViewModel
+public partial class BackgroundMusicEditorViewModel : EditorViewModel
 {
     public BackgroundMusicItem Bgm { get; }
     [Reactive]
-    public SoundPlayerPanelViewModel BgmPlayer { get; set; }
+    public partial SoundPlayerPanelViewModel BgmPlayer { get; set; }
     private bool _loopEnabled;
     private uint _loopStartSample;
     private uint _loopEndSample;

@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia.Threading;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Models;
 using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Controls;
 
-public class AnimatedImageViewModel : ViewModelBase
+public partial class AnimatedImageViewModel : ViewModelBase
 {
     [Reactive]
-    public SKBitmap CurrentFrame { get; set; }
+    public partial SKBitmap CurrentFrame { get; set; }
     public int CurrentFrameIndex { get; set; }
 
     public ObservableCollection<ReactiveFrameWithTiming> FramesWithTimings { get; }

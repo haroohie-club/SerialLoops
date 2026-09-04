@@ -9,7 +9,7 @@ using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
@@ -20,7 +20,7 @@ using Path = System.IO.Path;
 
 namespace SerialLoops.ViewModels.Editors;
 
-public class MapEditorViewModel : EditorViewModel
+public partial class MapEditorViewModel : EditorViewModel
 {
     private MapItem _map;
     public LayoutItem Layout { get; }
@@ -65,52 +65,52 @@ public class MapEditorViewModel : EditorViewModel
         }
     }
     [Reactive]
-    public bool ObjectLayerDisplayed { get; set; } = true;
+    public partial bool ObjectLayerDisplayed { get; set; } = true;
     [Reactive]
-    public bool BgOcclusionLayerDisplayed { get; set; } = true;
+    public partial bool BgOcclusionLayerDisplayed { get; set; } = true;
     [Reactive]
-    public bool ScrollingBgDisplayed { get; set; }
+    public partial bool ScrollingBgDisplayed { get; set; }
     [Reactive]
-    public bool InfoLayerDisplayed { get; set; }
+    public partial bool InfoLayerDisplayed { get; set; }
     [Reactive]
-    public bool BgJunkLayerDisplayed { get; set; }
+    public partial bool BgJunkLayerDisplayed { get; set; }
     [Reactive]
-    public bool ObjectJunkLayerDisplayed { get; set; }
+    public partial bool ObjectJunkLayerDisplayed { get; set; }
 
     [Reactive]
-    public bool InteractableObjectsDisplayed { get; set; }
+    public partial bool InteractableObjectsDisplayed { get; set; }
     [Reactive]
-    public bool Unknown2sDisplayed { get; set; }
+    public partial bool Unknown2sDisplayed { get; set; }
     [Reactive]
-    public bool ObjectPositionsDisplayed { get; set; }
+    public partial bool ObjectPositionsDisplayed { get; set; }
 
     [Reactive]
-    public bool DrawPathingMap { get; set; }
+    public partial bool DrawPathingMap { get; set; }
     [Reactive]
-    public bool DrawStartingPoint { get; set; }
+    public partial bool DrawStartingPoint { get; set; }
     [Reactive]
-    public bool DrawOrigin { get; set; }
+    public partial bool DrawOrigin { get; set; }
     [Reactive]
-    public bool DrawBoundary { get; set; }
+    public partial bool DrawBoundary { get; set; }
     [Reactive]
-    public bool DrawCameraTruckingDefinitions { get; set; }
+    public partial bool DrawCameraTruckingDefinitions { get; set; }
 
     [Reactive]
-    public int CanvasWidth { get; set; }
+    public partial int CanvasWidth { get; set; }
     [Reactive]
-    public int CanvasHeight { get; set; }
+    public partial int CanvasHeight { get; set; }
     [Reactive]
-    public int ScrollingBgTileWidth { get; set; }
+    public partial int ScrollingBgTileWidth { get; set; }
     [Reactive]
-    public int ScrollingBgTileHeight { get; set; }
+    public partial int ScrollingBgTileHeight { get; set; }
     [Reactive]
-    public int ScrollingBgHorizontalTileCount { get; set; }
+    public partial int ScrollingBgHorizontalTileCount { get; set; }
     public ObservableCollection<ScrollingBgWrapper> ScrollingBgTileSource { get; } = [];
 
     [Reactive]
-    public int StartingPointX { get; set; }
+    public partial int StartingPointX { get; set; }
     [Reactive]
-    public int StartingPointY { get; set; }
+    public partial int StartingPointY { get; set; }
 
     private LayoutEntryWithImage _origin;
     public short OriginX
@@ -343,11 +343,11 @@ public class MapEditorViewModel : EditorViewModel
     }
 }
 
-public class ScrollingBgWrapper(ObservableCollection<LayoutEntryWithImage> scrollingBg, int tileWidth, int tileHeight, int scaleX, int scaleY) : ReactiveObject
+public partial class ScrollingBgWrapper(ObservableCollection<LayoutEntryWithImage> scrollingBg, int tileWidth, int tileHeight, int scaleX, int scaleY) : ReactiveObject
 {
     public ObservableCollection<LayoutEntryWithImage> ScrollingBg { get; set; } = scrollingBg;
-    [Reactive] public int TileWidth { get; set; } = tileWidth;
-    [Reactive] public int TileHeight { get; set; } = tileHeight;
-    [Reactive] public int ScaleX { get; set; } = scaleX;
-    [Reactive] public int ScaleY { get; set; } = scaleY;
+    [Reactive] public partial int TileWidth { get; set; } = tileWidth;
+    [Reactive] public partial int TileHeight { get; set; } = tileHeight;
+    [Reactive] public partial int ScaleX { get; set; } = scaleX;
+    [Reactive] public partial int ScaleY { get; set; } = scaleY;
 }

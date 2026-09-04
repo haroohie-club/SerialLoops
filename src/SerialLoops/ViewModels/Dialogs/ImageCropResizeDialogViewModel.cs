@@ -5,38 +5,38 @@ using Avalonia.Media.Imaging;
 using Avalonia.Skia.Helpers;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Views.Dialogs;
 using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Dialogs;
 
-public class ImageCropResizeDialogViewModel : ViewModelBase
+public partial class ImageCropResizeDialogViewModel : ViewModelBase
 {
     private ILogger _log;
 
     [Reactive]
-    public Bitmap StartImage { get; set; }
+    public partial Bitmap StartImage { get; set; }
     [Reactive]
-    public SKBitmap FinalImage { get; set; }
+    public partial SKBitmap FinalImage { get; set; }
     [Reactive]
-    public double SourceWidth { get; set; }
+    public partial double SourceWidth { get; set; }
     [Reactive]
-    public double SourceHeight { get; set; }
+    public partial double SourceHeight { get; set; }
     [Reactive]
-    public float BoxWidth { get; set; }
+    public partial float BoxWidth { get; set; }
     [Reactive]
-    public float BoxHeight { get; set; }
+    public partial float BoxHeight { get; set; }
     [Reactive]
-    public float PreviewWidth { get; set; }
+    public partial float PreviewWidth { get; set; }
     [Reactive]
-    public float PreviewHeight { get; set; }
+    public partial float PreviewHeight { get; set; }
     [Reactive]
-    public SKPoint ImageLocation { get; set; }
+    public partial SKPoint ImageLocation { get; set; }
     [Reactive]
-    public SKPoint SelectionLocation { get; set; }
+    public partial SKPoint SelectionLocation { get; set; }
     [Reactive]
-    public bool PreserveAspectRatio { get; set; }
+    public partial bool PreserveAspectRatio { get; set; }
 
     public ICommand ScaleToFitCommand { get; set; }
     public ICommand ResetPositionCommand { get; set; }

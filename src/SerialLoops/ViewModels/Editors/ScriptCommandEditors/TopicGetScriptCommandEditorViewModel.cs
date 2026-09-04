@@ -3,7 +3,7 @@ using System.Linq;
 using System.Windows.Input;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
@@ -11,12 +11,12 @@ using SerialLoops.ViewModels.Panels;
 
 namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors;
 
-public class TopicGetScriptCommandEditorViewModel : ScriptCommandEditorViewModel
+public partial class TopicGetScriptCommandEditorViewModel : ScriptCommandEditorViewModel
 {
     public EditorTabsPanelViewModel Tabs { get; }
 
     [Reactive]
-    public short TopicId { get; set; }
+    public partial short TopicId { get; set; }
 
     public ObservableCollection<TopicItem> Topics { get; }
     private TopicItem _selectedTopic;

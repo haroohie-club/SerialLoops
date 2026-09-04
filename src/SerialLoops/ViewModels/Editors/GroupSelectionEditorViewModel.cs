@@ -7,7 +7,7 @@ using Avalonia.Media;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
@@ -16,14 +16,14 @@ using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Editors;
 
-public class GroupSelectionEditorViewModel : EditorViewModel
+public partial class GroupSelectionEditorViewModel : EditorViewModel
 {
     [Reactive]
-    public GroupSelectionItem GroupSelection { get; set; }
+    public partial GroupSelectionItem GroupSelection { get; set; }
     [Reactive]
-    public ObservableCollection<ScenarioActivityViewModel> Activities { get; set; }
+    public partial ObservableCollection<ScenarioActivityViewModel> Activities { get; set; }
     [Reactive]
-    public ScenarioActivityViewModel SelectedActivity { get; set; }
+    public partial ScenarioActivityViewModel SelectedActivity { get; set; }
     public Project OpenProject { get; }
     public EditorTabsPanelViewModel Tabs { get; }
     public Dictionary<Speaker, SKBitmap> CharacterPortraits { get; } = [];
@@ -55,15 +55,15 @@ public class GroupSelectionEditorViewModel : EditorViewModel
     }
 }
 
-public class ScenarioActivityViewModel : ViewModelBase
+public partial class ScenarioActivityViewModel : ViewModelBase
 {
     private GroupSelectionEditorViewModel _selection;
 
     [Reactive]
-    public bool Selected { get; set; }
+    public partial bool Selected { get; set; }
 
     [Reactive]
-    public ScenarioActivity Activity { get; set; }
+    public partial ScenarioActivity Activity { get; set; }
 
     public ICommand SelectActivityCommand { get; }
     public ICommand SelectFutureDescCommand { get; }
@@ -125,10 +125,10 @@ public class ScenarioActivityViewModel : ViewModelBase
     }
 
     [Reactive]
-    public SKBitmap SelectedDescriptionImage { get; set; }
+    public partial SKBitmap SelectedDescriptionImage { get; set; }
 
     [Reactive]
-    public ObservableCollection<ScenarioRouteViewModel> Routes { get; set; }
+    public partial ObservableCollection<ScenarioRouteViewModel> Routes { get; set; }
 
     public ScenarioActivityViewModel(GroupSelectionEditorViewModel selection, ScenarioActivity activity, int index)
     {
@@ -191,24 +191,24 @@ public class ScenarioActivityViewModel : ViewModelBase
     private SKBitmap _layoutSource;
 
     [Reactive]
-    public SolidColorBrush BackgroundColor { get; private set; }
+    public partial SolidColorBrush BackgroundColor { get; private set; }
 
     [Reactive]
-    public double CanvasLeft { get; private set; }
+    public partial double CanvasLeft { get; private set; }
     [Reactive]
-    public double CanvasTop { get; private set; }
+    public partial double CanvasTop { get; private set; }
     [Reactive]
-    public double CanvasWidth { get; private set; }
+    public partial double CanvasWidth { get; private set; }
     [Reactive]
-    public double CanvasHeight { get; private set; }
+    public partial double CanvasHeight { get; private set; }
 
     [Reactive]
-    public SKBitmap Letter { get; private set; }
+    public partial SKBitmap Letter { get; private set; }
 
     public SKBitmap TitlePlateSlope { get; }
     public SKBitmap TitlePlateMain { get; }
     [Reactive]
-    public SKBitmap TitlePlateText { get; set; }
+    public partial SKBitmap TitlePlateText { get; set; }
 
     public ObservableCollection<SKBitmap> LockedIcons { get; }
 
@@ -294,14 +294,14 @@ public class ScenarioActivityViewModel : ViewModelBase
     }
 }
 
-public class ScenarioRouteViewModel : ViewModelBase
+public partial class ScenarioRouteViewModel : ViewModelBase
 {
     private GroupSelectionEditorViewModel _selection;
 
     public EditorTabsPanelViewModel Tabs => _selection.Tabs;
 
     [Reactive]
-    public ScenarioRoute Route { get; set; }
+    public partial ScenarioRoute Route { get; set; }
 
     private string _title;
     public string Title

@@ -10,7 +10,7 @@
         TransparencyLevelHint="AcrylicBlur"
         Background="{DynamicResource FallbackBackgroundColor}"
         ExtendClientAreaToDecorationsHint="True"
-        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="0"
         x:DataType="vm:AddScriptSectionDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.AddScriptSectionDialog"
         Title="{x:Static assets:Strings.ScriptEditorAddScriptSectionToolTip}"

@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using HaruhiChokuretsuLib.Save;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib.SaveFile;
 using SerialLoops.ViewModels.Dialogs;
@@ -11,14 +11,14 @@ using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Controls;
 
-public class SaveSlotPreviewViewModel : ViewModelBase
+public partial class SaveSlotPreviewViewModel : ViewModelBase
 {
     private SaveItem _save;
     private int _slotNum;
     public SaveSlotData SlotData { get; }
 
     [Reactive]
-    public SKBitmap SaveSlotPreview { get; set; }
+    public partial SKBitmap SaveSlotPreview { get; set; }
     public string SlotName => _slotNum == 3 ? Strings.SaveEditorQuickSaveTab : string.Format(Strings.SaveEditorSlotName, _slotNum);
 
     private MainWindowViewModel _window;

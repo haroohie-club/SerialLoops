@@ -48,19 +48,20 @@ public partial class MapCharactersSubEditor : UserControl
 
             de.DragEffects = DragDropEffects.Move;
 
-            ReactiveMapCharacter character = de.Data.Get(nameof(ReactiveMapCharacter)) as ReactiveMapCharacter;
+            ReactiveMapCharacter character = de.DataTransfer.TryGetValue(ReactiveMapCharacter.MapCharacterFormat);
             Point point = de.GetPosition(MapCanvas);
             SKPoint gridPoint = ((MapCharactersSubEditorViewModel)DataContext)!.AllGridPositions
                 .MinBy(p => p.Key.Distance(point)).Value;
-            ((MapCharactersSubEditorViewModel)DataContext).UpdateMapCharacter(character, (short)gridPoint.X, (short)gridPoint.Y);
+            ((MapCharactersSubEditorViewModel)DataContext).UpdateMapCharacter(character, (short)gridPoint.X,
+                (short)gridPoint.Y);
         }
     }
 
     private async void DoDrag(object sender, PointerPressedEventArgs e)
     {
-        DataObject dragData = new();
-        ReactiveMapCharacter character = ((Panel)sender).DataContext as ReactiveMapCharacter;;
-        dragData.Set(nameof(ReactiveMapCharacter), character!);
+        DataTransfer dragData = new();
+        ReactiveMapCharacter character = ((Panel)sender).DataContext as ReactiveMapCharacter;
+        dragData.Add(DataTransferItem.Create(ReactiveMapCharacter.MapCharacterFormat, character));
         ((MapCharactersSubEditorViewModel)DataContext)!.SelectedMapCharacter = character;
 
         // This makes it so that drag/drop doesn't start immediately after clicking
@@ -69,7 +70,7 @@ public partial class MapCharactersSubEditor : UserControl
         if (_cts.IsCancellationRequested)
             return;
 
-        await DragDrop.DoDragDrop(e, dragData, DragDropEffects.Move);
+        await DragDrop.DoDragDropAsync(e, dragData, DragDropEffects.Move);
     }
 
     private void MapCharacter_OnPointerReleased(object sender, PointerReleasedEventArgs e)
@@ -85,9 +86,7 @@ public partial class MapCharactersSubEditor : UserControl
 
     private void MapCharacter_OnPointerExited(object sender, PointerEventArgs e)
     {
-
         Panel characterBg = sender as Panel;
         characterBg!.Background = Brushes.Transparent;
     }
 }
-

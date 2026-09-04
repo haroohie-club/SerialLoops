@@ -1,25 +1,25 @@
 ﻿using System;
 using ReactiveHistory;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Lib.Items;
 using SkiaSharp;
 
 namespace SerialLoops.Models;
 
-public class LayoutEntryWithImage : ReactiveObject
+public partial class LayoutEntryWithImage : ReactiveObject
 {
     private StackHistory _history;
     private LayoutItem _layout;
     public int Index { get; }
     public SKBitmap FullImage { get; }
     [Reactive]
-    public SKBitmap CroppedImage { get; set; }
+    public partial SKBitmap CroppedImage { get; set; }
     [Reactive]
-    public bool IsSelected { get; set; }
+    public partial bool IsSelected { get; set; }
 
     [Reactive]
-    public bool HitTestVisible { get; set; } = true;
+    public partial bool HitTestVisible { get; set; } = true;
 
     private short _screenX;
     public short ScreenX
@@ -159,13 +159,13 @@ public class LayoutEntryWithImage : ReactiveObject
     }
 
     [Reactive]
-    public string ToolTip { get; set; }
+    public partial string ToolTip { get; set; }
 
     // Used for maps to filter within layers
     [Reactive]
-    public int Layer { get; set; }
+    public partial int Layer { get; set; }
     [Reactive]
-    public bool IsVisible { get; set; } = true;
+    public partial bool IsVisible { get; set; } = true;
 
     public LayoutEntryWithImage(LayoutItem layout, int idx, string tooltip = null, StackHistory history = null)
     {

@@ -7,7 +7,7 @@ using Avalonia.Input;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia.Enums;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
@@ -18,7 +18,7 @@ using SerialLoops.ViewModels.Editors;
 
 namespace SerialLoops.ViewModels.Panels;
 
-public class EditorTabsPanelViewModel : ViewModelBase
+public partial class EditorTabsPanelViewModel : ViewModelBase
 {
     private readonly Project _project;
     private readonly ILogger _log;
@@ -26,9 +26,9 @@ public class EditorTabsPanelViewModel : ViewModelBase
     public MainWindowViewModel MainWindow { get; private set; }
 
     [Reactive]
-    public EditorViewModel SelectedTab { get; set; }
+    public partial EditorViewModel SelectedTab { get; set; }
     [Reactive]
-    public bool ShowTabsPanel { get; set; }
+    public partial bool ShowTabsPanel { get; set; }
 
     public ObservableCollection<EditorViewModel> Tabs { get; set; } = [];
     private readonly DropOutStack<EditorViewModel> _closedTabs = new(20);
@@ -37,9 +37,9 @@ public class EditorTabsPanelViewModel : ViewModelBase
     public ICommand ReopenTabCommand { get; }
 
     [Reactive]
-    public KeyGesture CloseTabKeyGesture { get; set; }
+    public partial KeyGesture CloseTabKeyGesture { get; set; }
     [Reactive]
-    public KeyGesture ReopenTabKeyGesture { get; set; }
+    public partial KeyGesture ReopenTabKeyGesture { get; set; }
 
     public EditorTabsPanelViewModel(MainWindowViewModel mainWindow, Project project, ILogger log)
     {

@@ -3,16 +3,16 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using HaruhiChokuretsuLib.Archive.Event;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Views.Dialogs;
 
 namespace SerialLoops.ViewModels.Dialogs;
 
-public class AddScenarioCommandDialogViewModel : ViewModelBase
+public partial class AddScenarioCommandDialogViewModel : ViewModelBase
 {
     public ObservableCollection<ScenarioCommand.ScenarioVerb> Verbs => new(Enum.GetValues<ScenarioCommand.ScenarioVerb>());
     [Reactive]
-    public ScenarioCommand.ScenarioVerb SelectedVerb { get; set; }
+    public partial ScenarioCommand.ScenarioVerb SelectedVerb { get; set; }
 
     public ICommand CreateCommand { get; set; }
     public ICommand CancelCommand { get; set; }

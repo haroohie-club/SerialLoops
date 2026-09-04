@@ -9,7 +9,6 @@ using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
 using SkiaSharp;
-using SoftCircuits.Collections;
 using static HaruhiChokuretsuLib.Archive.Event.EventFile;
 
 namespace SerialLoops.Lib.Items;

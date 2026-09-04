@@ -6,7 +6,7 @@ using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Templates;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Models;
@@ -14,7 +14,7 @@ using SerialLoops.Utility;
 
 namespace SerialLoops.ViewModels.Panels;
 
-public class ItemExplorerPanelViewModel : ViewModelBase
+public partial class ItemExplorerPanelViewModel : ViewModelBase
 {
     private Project _project;
     private EditorTabsPanelViewModel _tabs;
@@ -22,33 +22,30 @@ public class ItemExplorerPanelViewModel : ViewModelBase
     private MainWindowViewModel _window;
 
     private ObservableCollection<ItemDescription> _items;
+
     public ObservableCollection<ItemDescription> Items
     {
         get => _items;
         set
         {
             this.RaiseAndSetIfChanged(ref _items, value);
-            Source = new(GetSections())
-            {
-                Columns =
+            Source = new HierarchicalTreeDataGridSource<ITreeItem>(GetSections()).WithHierarchicalExpanderColumn(
+                null,
+                new TreeDataGridTemplateColumn
                 {
-                    new HierarchicalExpanderColumn<ITreeItem>(
-                        new TemplateColumn<ITreeItem>(null, new FuncDataTemplate<ITreeItem>((val, namescope) =>
+                    CellTemplate = new FuncDataTemplate<ITreeItem>((val, namescope) => val?.GetDisplay()),
+                    CellEditingTemplate = new FuncDataTemplate<ITreeItem>((val, namescope) =>
+                    {
+                        if (val is ItemDescriptionTreeItem item)
                         {
-                            return val?.GetDisplay();
-                        }), cellEditingTemplate: new FuncDataTemplate<ITreeItem>((val, namescope) =>
-                        {
-                            if (val is ItemDescriptionTreeItem item)
-                            {
-                                return item.GetEditableDisplay();
-                            }
+                            return item.GetEditableDisplay();
+                        }
 
-                            return val?.GetDisplay();
-                        }), options: new() { BeginEditGestures = BeginEditGestures.F2 }),
-                        i => i.Children
-                    ),
+                        return val?.GetDisplay();
+                    }),
+                    BeginEditGestures = BeginEditGestures.F2,
                 },
-            };
+                i => i.Children);
 
             if (ExpandItems)
             {
@@ -61,10 +58,8 @@ public class ItemExplorerPanelViewModel : ViewModelBase
         }
     }
 
-    [Reactive]
-    public HierarchicalTreeDataGridSource<ITreeItem> Source { get; private set; }
-    [Reactive]
-    public bool ExpandItems { get; set; }
+    [Reactive] public partial HierarchicalTreeDataGridSource<ITreeItem> Source { get; private set; }
+    [Reactive] public partial bool ExpandItems { get; set; }
 
     public ICommand SearchCommand { get; set; }
     public ICommand SearchProjectCommand { get; set; }
@@ -85,7 +80,7 @@ public class ItemExplorerPanelViewModel : ViewModelBase
 
     public void OpenItem(TreeDataGrid viewer)
     {
-        ItemDescription item = _project.FindItem(((ITreeItem)viewer.RowSelection?.SelectedItem)?.Text);
+        ItemDescription item = _project.FindItem((viewer.SelectedItem as ITreeItem)?.Text);
         if (item is not null)
         {
             _tabs.OpenTab(item);
@@ -115,7 +110,8 @@ public class ItemExplorerPanelViewModel : ViewModelBase
         else
         {
             ExpandItems = true;
-            Items = new(_project.Items.Where(i => i.DisplayName.Contains(query, System.StringComparison.OrdinalIgnoreCase)));
+            Items = new(_project.Items.Where(i =>
+                i.DisplayName.Contains(query, System.StringComparison.OrdinalIgnoreCase)));
         }
     }
 }

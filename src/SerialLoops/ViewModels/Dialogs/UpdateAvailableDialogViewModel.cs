@@ -2,20 +2,20 @@
 using System.Windows.Input;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Views.Dialogs;
 
 namespace SerialLoops.ViewModels.Dialogs;
 
-public class UpdateAvailableDialogViewModel : ViewModelBase
+public partial class UpdateAvailableDialogViewModel : ViewModelBase
 {
     public string Version { get; }
     public string Url { get; }
 
     [Reactive]
-    public string Changelog { get; set; }
+    public partial string Changelog { get; set; }
 
     public string Title { get; set; }
     public string Header { get; set; }
@@ -25,9 +25,9 @@ public class UpdateAvailableDialogViewModel : ViewModelBase
     private ILogger _log;
 
     [Reactive]
-    public bool CheckForUpdates { get; set; }
+    public partial bool CheckForUpdates { get; set; }
     [Reactive]
-    public bool UsePreReleaseChannel { get; set; }
+    public partial bool UsePreReleaseChannel { get; set; }
 
     public UpdateAvailableDialogViewModel(MainWindowViewModel mainWindowViewModel, string version, string url, string changelog)
     {

@@ -5,10 +5,10 @@ using System.Linq;
 using System.Windows.Input;
 using Avalonia.Media;
 using Avalonia.Skia;
-using DynamicData;
+using AvaloniaEdit.Utils;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Util;
@@ -96,12 +96,12 @@ public class EditDialogueColorsDialogViewModel : ViewModelBase
     }
 }
 
-public class DialogueColorWithInfo(Color color, int index) : ReactiveObject
+public partial class DialogueColorWithInfo(Color color, int index) : ReactiveObject
 {
     public string IndexHeader { get; } = string.Format(Strings.DialogueColorHeader, index);
 
     [Reactive]
-    public Color Color { get; set; } = color;
+    public partial Color Color { get; set; } = color;
     [Reactive]
-    public string Info { get; set; }
+    public partial string Info { get; set; }
 }

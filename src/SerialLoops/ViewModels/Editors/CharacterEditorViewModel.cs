@@ -11,7 +11,7 @@ using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Util;
 using ReactiveHistory;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
@@ -22,7 +22,7 @@ using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Editors;
 
-public class CharacterEditorViewModel : EditorViewModel
+public partial class CharacterEditorViewModel : EditorViewModel
 {
     private readonly CharacterItem _character;
 
@@ -124,7 +124,7 @@ public class CharacterEditorViewModel : EditorViewModel
     }
 
     [Reactive]
-    public SKBitmap NameplateBitmap { get; set; }
+    public partial SKBitmap NameplateBitmap { get; set; }
 
     private readonly SKBitmap _blankNameplateBitmap;
     private readonly SKBitmap _blankNameplateBaseArrowBitmap;

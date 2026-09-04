@@ -12,7 +12,7 @@ using AvaloniaEdit.Utils;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
@@ -25,7 +25,7 @@ using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Controls;
 
-public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
+public partial class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
 {
     public ScriptPreviewCanvas PreviewCanvas { get; set; }
 
@@ -438,99 +438,99 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
     }
 
     [Reactive]
-    public bool FadeTopScreen { get; set; }
+    public partial bool FadeTopScreen { get; set; }
     [Reactive]
-    public bool FadeBottomScreen { get; set; }
+    public partial bool FadeBottomScreen { get; set; }
     [Reactive]
-    public IImmutableSolidColorBrush FadeColor { get; set; }
+    public partial IImmutableSolidColorBrush FadeColor { get; set; }
     [Reactive]
-    public TimeSpan FadeTime { get; set; }
+    public partial TimeSpan FadeTime { get; set; }
     [Reactive]
-    public double StartFadeOpacity { get; set; }
+    public partial double StartFadeOpacity { get; set; }
     [Reactive]
-    public double EndFadeOpacity { get; set; }
+    public partial double EndFadeOpacity { get; set; }
     [Reactive]
-    public double ConstantFadeOpacity { get; set; }
+    public partial double ConstantFadeOpacity { get; set; }
 
     [Reactive]
-    public TimeSpan FlashTime { get; set; }
+    public partial TimeSpan FlashTime { get; set; }
     [Reactive]
-    public double Hold1Percentage { get; set; }
+    public partial double Hold1Percentage { get; set; }
     [Reactive]
-    public double Hold2Percentage { get; set; }
+    public partial double Hold2Percentage { get; set; }
 
     [Reactive]
-    public SKAvaloniaImage EpisodeHeader { get; set; }
+    public partial SKAvaloniaImage EpisodeHeader { get; set; }
     [Reactive]
-    public bool EpisodeHeaderVisible { get; set; }
+    public partial bool EpisodeHeaderVisible { get; set; }
 
     [Reactive]
-    public SKAvaloniaImage Kbg { get; set; }
+    public partial SKAvaloniaImage Kbg { get; set; }
     [Reactive]
-    public bool KbgVisible { get; set; }
+    public partial bool KbgVisible { get; set; }
 
     [Reactive]
-    public SKAvaloniaImage Place { get; set; }
+    public partial SKAvaloniaImage Place { get; set; }
     [Reactive]
-    public bool PlaceVisible { get; set; }
+    public partial bool PlaceVisible { get; set; }
 
     public ObservableCollection<AnimatedPositionedChibi> TopScreenChibis { get; set; } = [];
     [Reactive]
-    public bool TopScreenChibisVisible { get; set; }
+    public partial bool TopScreenChibisVisible { get; set; }
     [Reactive]
-    public PositionedChibiEmote ChibiEmote { get; set; }
+    public partial PositionedChibiEmote ChibiEmote { get; set; }
 
     [Reactive]
-    public SKAvaloniaImage TopScreenCg { get; set; }
+    public partial SKAvaloniaImage TopScreenCg { get; set; }
     [Reactive]
-    public SKAvaloniaImage BottomScreenCg { get; set; }
+    public partial SKAvaloniaImage BottomScreenCg { get; set; }
     [Reactive]
-    public SKAvaloniaImage Bg { get; set; }
+    public partial SKAvaloniaImage Bg { get; set; }
     [Reactive]
-    public Point BgOrigin { get; set; }
+    public partial Point BgOrigin { get; set; }
     [Reactive]
-    public SKAvaloniaImage PreviousBg { get; set; }
+    public partial SKAvaloniaImage PreviousBg { get; set; }
     [Reactive]
-    public TimeSpan BgFadeTime { get; set; }
+    public partial TimeSpan BgFadeTime { get; set; }
 
     [Reactive]
-    public AnimatedPositionedItem Item { get; set; }
+    public partial AnimatedPositionedItem Item { get; set; }
 
     public ObservableCollection<AnimatedPositionedSprite> Sprites { get; set; } = [];
     [Reactive]
-    public int VerticalOffset { get; set; }
+    public partial int VerticalOffset { get; set; }
 
     [Reactive]
-    public SKAvaloniaImage Dialogue { get; set; }
+    public partial SKAvaloniaImage Dialogue { get; set; }
     [Reactive]
-    public int DialogueY { get; set; }
+    public partial int DialogueY { get; set; }
 
     [Reactive]
-    public SKAvaloniaImage TopicFlyout { get; set; }
+    public partial SKAvaloniaImage TopicFlyout { get; set; }
     [Reactive]
-    public int TopicFlyoutY { get; set; }
+    public partial int TopicFlyoutY { get; set; }
 
     public ObservableCollection<PositionedChoice> CurrentChoices { get; set; } = [];
 
     public SKAvaloniaImage HaruhiMeter { get; } = new(((SystemTextureItem)project.Items.First(i => i.Name == "SYSTEX_SYS_CMN_B14")).GetTexture());
     [Reactive]
-    public bool HaruhiMeterVisible { get; set; }
+    public partial bool HaruhiMeterVisible { get; set; }
 
     [Reactive]
-    public bool ChessMode { get; set; }
+    public partial bool ChessMode { get; set; }
     [Reactive]
-    public SKAvaloniaImage ChessBoard { get; set; }
+    public partial SKAvaloniaImage ChessBoard { get; set; }
     public ObservableCollection<Point> ChessHighlightedSpaces { get; set; } = [];
     public ObservableCollection<Point> ChessGuideSpaces { get; set; } = [];
     public ObservableCollection<Point> ChessCrossedSpaces { get; set; } = [];
 
     [Reactive]
-    public Bitmap ErrorImage { get; set; }
+    public partial Bitmap ErrorImage { get; set; }
     [Reactive]
-    public bool DisplayError { get; set; }
+    public partial bool DisplayError { get; set; }
 }
 
-public class AnimatedPositionedChibi(PositionedChibi chibi) : ReactiveObject
+public partial class AnimatedPositionedChibi(PositionedChibi chibi) : ReactiveObject
 {
     private PositionedChibi _chibi = chibi;
     public PositionedChibi Chibi
@@ -544,10 +544,10 @@ public class AnimatedPositionedChibi(PositionedChibi chibi) : ReactiveObject
     }
 
     [Reactive]
-    public AnimatedImageViewModel AnimatedImage { get; set; } = new(chibi.Chibi.ChibiAnimations.ElementAt(0).Value);
+    public partial AnimatedImageViewModel AnimatedImage { get; set; } = new(chibi.Chibi.ChibiAnimations.ElementAt(0).Value);
 }
 
-public class AnimatedPositionedSprite : ReactiveObject
+public partial class AnimatedPositionedSprite : ReactiveObject
 {
     private Project _project;
     private PositionedSprite _sprite;
@@ -562,23 +562,23 @@ public class AnimatedPositionedSprite : ReactiveObject
     }
 
     [Reactive]
-    public int YPosition { get; set; }
+    public partial int YPosition { get; set; }
 
     [Reactive]
-    public double StartXPosition { get; set; }
+    public partial double StartXPosition { get; set; }
     [Reactive]
-    public double EndXPosition { get; set; }
+    public partial double EndXPosition { get; set; }
     [Reactive]
-    public Easing AnimEasing { get; set; }
+    public partial Easing AnimEasing { get; set; }
     [Reactive]
-    public double StartOpacity { get; set; }
+    public partial double StartOpacity { get; set; }
     [Reactive]
-    public double EndOpacity { get; set; }
+    public partial double EndOpacity { get; set; }
     [Reactive]
-    public TimeSpan AnimDuration { get; set; }
+    public partial TimeSpan AnimDuration { get; set; }
 
     [Reactive]
-    public AnimatedImageViewModel AnimatedImage { get; set; }
+    public partial AnimatedImageViewModel AnimatedImage { get; set; }
 
     public AnimatedPositionedSprite(PositionedSprite sprite, Project project)
     {

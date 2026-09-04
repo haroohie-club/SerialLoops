@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Reactive;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -23,25 +24,22 @@ public partial class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             _desktop = desktop;
-            // Line below is needed to remove Avalonia data validation.
-            // Without this line you will get duplicate validations from both Avalonia and CT
-            BindingPlugins.DataValidators.RemoveAt(0);
             desktop.MainWindow = new MainWindow
             {
                 DataContext = new MainWindowViewModel(),
             };
 
-            // We don't care that this is obsolete; the replacement doesn't seem to work? or at least I can't get it to
-#pragma warning disable CS0618 // Type or member is obsolete
-            UrlsOpened += (_, args) =>
-#pragma warning restore CS0618 // Type or member is obsolete
+            if (this.TryGetFeature<IActivatableLifetime>() is { } activatableLifetime)
             {
-                if (args?.Urls is not null && args.Urls.Length > 0)
+                activatableLifetime.Activated += (_, e) =>
                 {
-                    ((MainWindowViewModel)desktop.MainWindow.DataContext).Args = args.Urls;
-                    ((MainWindowViewModel)desktop.MainWindow.DataContext).HandleFilesAndPreviousProjects();
-                }
-            };
+                    if (e is FileActivatedEventArgs { Files.Count: > 0 } args)
+                    {
+                        ((MainWindowViewModel)desktop.MainWindow.DataContext).Args = args.Files.Select(f => f.Path.LocalPath).ToArray();
+                        ((MainWindowViewModel)desktop.MainWindow.DataContext).HandleFilesAndPreviousProjects();
+                    }
+                };
+            }
 
             if (!OperatingSystem.IsMacOS())
             {

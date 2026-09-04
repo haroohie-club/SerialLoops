@@ -3,7 +3,7 @@ using System.Windows.Input;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia.Enums;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Utility;
@@ -11,13 +11,13 @@ using SerialLoops.Views.Dialogs;
 
 namespace SerialLoops.ViewModels.Dialogs;
 
-public class ProjectRenameDuplicateDialogViewModel : ViewModelBase
+public partial class ProjectRenameDuplicateDialogViewModel : ViewModelBase
 {
     public string Title { get; }
     public string SubmitText { get; }
 
     [Reactive]
-    public string NewName { get; set; }
+    public partial string NewName { get; set; }
 
     public ICommand CancelCommand { get; }
     public ICommand SubmitCommand { get; }

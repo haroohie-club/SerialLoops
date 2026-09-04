@@ -3,33 +3,33 @@ using System.Windows.Input;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
 using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Controls;
 
-public class SoundPlayerPanelViewModel : ViewModelBase, IDisposable
+public partial class SoundPlayerPanelViewModel : ViewModelBase, IDisposable
 {
     private ILogger _log;
     private ISoundItem _item;
     internal BgmVceMixer _player;
 
     [Reactive]
-    public IWaveProvider Sound { get; set; }
+    public partial IWaveProvider Sound { get; set; }
     [Reactive]
-    public SKBitmap Waveform { get; set; }
+    public partial SKBitmap Waveform { get; set; }
     [Reactive]
-    public bool StopButtonEnabled { get; set; }
+    public partial bool StopButtonEnabled { get; set; }
     [Reactive]
-    public string PlayPauseImagePath { get; set; }
+    public partial string PlayPauseImagePath { get; set; }
     [Reactive]
-    public string TrackName { get; set; }
+    public partial string TrackName { get; set; }
     public ICommand TrackNameCommand { get; set; }
     public bool UseTextBoxForTrackName => TrackNameCommand is not null;
     [Reactive]
-    public string TrackDetails { get; set; }
+    public partial string TrackDetails { get; set; }
     public short? TrackFlag { get; set; }
 
     public ICommand PlayPauseCommand { get; private set; }

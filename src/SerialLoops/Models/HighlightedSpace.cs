@@ -3,24 +3,24 @@ using Avalonia.Media;
 using Avalonia.Skia;
 using HaruhiChokuretsuLib.Archive.Data;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Lib.Items;
 using SkiaSharp;
 
 namespace SerialLoops.Models;
 
-public class HighlightedSpace : ReactiveObject
+public partial class HighlightedSpace : ReactiveObject
 {
     [Reactive]
-    public Point Top { get; set; }
+    public partial Point Top { get; set; }
     [Reactive]
-    public Point Left { get; set; }
+    public partial Point Left { get; set; }
     [Reactive]
-    public Point Right { get; set; }
+    public partial Point Right { get; set; }
     [Reactive]
-    public Point Bottom { get; set; }
+    public partial Point Bottom { get; set; }
     [Reactive]
-    public SolidColorBrush Color { get; set; }
+    public partial SolidColorBrush Color { get; set; }
 
     public HighlightedSpace(byte[][] walkabilityMap, int x, int y, Point gridZero, bool slgMode)
     {

@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace SerialLoops.Lib.Hacks;
 
-public class AsmHack : ReactiveObject
+public partial class AsmHack : ReactiveObject
 {
     public string Name { get; set; }
     public string Description { get; set; }
@@ -18,7 +18,7 @@ public class AsmHack : ReactiveObject
     public bool ValueChanged { get; set; }
     [JsonIgnore]
     [Reactive]
-    public bool IsApplied { get; set; }
+    public partial bool IsApplied { get; set; }
 
     public bool Applied(Project project)
     {

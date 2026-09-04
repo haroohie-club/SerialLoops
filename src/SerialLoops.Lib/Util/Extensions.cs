@@ -17,7 +17,6 @@ using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
 using SkiaSharp;
-using SoftCircuits.Collections;
 using static HaruhiChokuretsuLib.Archive.Event.EventFile;
 using static SerialLoops.Lib.Script.SpritePositioning;
 
@@ -57,7 +56,7 @@ public static partial class Extensions
         {
             try
             {
-                read = sampleProvider.Read(buffer, 0, buffer.Length);
+                read = sampleProvider.Read(buffer);
                 max = Math.Max(max, buffer.Max());
             }
             catch (Exception ex)
@@ -642,10 +641,10 @@ public static partial class Extensions
             return false;
         }
 
-        T item1Key = orderedDict.Keys[firstIndex];
-        TS item1Value = orderedDict.ByIndex[firstIndex];
-        T item2Key = orderedDict.Keys[secondIndex];
-        TS item2Value = orderedDict.ByIndex[secondIndex];
+        T item1Key = orderedDict.GetAt(firstIndex).Key;
+        TS item1Value = orderedDict.GetAt(firstIndex).Value;
+        T item2Key = orderedDict.GetAt(secondIndex).Key;
+        TS item2Value = orderedDict.GetAt(secondIndex).Value;
 
         orderedDict.RemoveAt(firstIndex);
         orderedDict.RemoveAt(firstIndex < secondIndex ? secondIndex - 1 : secondIndex);
@@ -665,8 +664,8 @@ public static partial class Extensions
             return false;
         }
 
-        T itemKey = orderedDict.Keys[firstIndex];
-        TS itemValue = orderedDict.ByIndex[firstIndex];
+        T itemKey = orderedDict.GetAt(firstIndex).Key;
+        TS itemValue = orderedDict.GetAt(firstIndex).Value;
 
         orderedDict.RemoveAt(firstIndex);
         orderedDict.Insert(secondIndex, itemKey, itemValue);
@@ -683,6 +682,14 @@ public static partial class Extensions
         T item = list[firstIndex];
         list.RemoveAt(firstIndex);
         list.Insert(secondIndex, item);
+    }
+
+    public static void AddRange<T>(this ICollection<T> list, IEnumerable<T> items)
+    {
+        foreach (T item in items)
+        {
+            list.Add(item);
+        }
     }
 
     [GeneratedRegex(@"#x(?<offset>\d{2})")]

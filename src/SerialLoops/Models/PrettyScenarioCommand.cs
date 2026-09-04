@@ -1,11 +1,11 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Models;
 
-public class PrettyScenarioCommand(
+public partial class PrettyScenarioCommand(
     (ScenarioCommand.ScenarioVerb Verb, string Parameter) scenarioCommand,
     int index,
     ScenarioItem scenario) : ReactiveObject
@@ -15,5 +15,5 @@ public class PrettyScenarioCommand(
 
     public ScenarioCommand.ScenarioVerb Verb { get; set; } = scenarioCommand.Verb;
     [Reactive]
-    public string Parameter { get; set; } = scenarioCommand.Parameter;
+    public partial string Parameter { get; set; } = scenarioCommand.Parameter;
 }
