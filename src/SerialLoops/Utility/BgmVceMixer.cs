@@ -14,7 +14,7 @@ public class BgmVceMixer : IDisposable
 #if WINDOWS
     private readonly WaveOut _player;
 #elif MACOS
-
+    private readonly AVFoundationOut _player;
 #else
 #pragma warning disable CA1416
     private readonly AlsaOut _player;
@@ -51,14 +51,16 @@ public class BgmVceMixer : IDisposable
         WaveProvider = waveProvider;
 #if WINDOWS
         _player = new() { DeviceNumber = -1 };
-        _player.Init(WaveProvider);
 #elif MACOS
+        _player = new();
 #else
 #pragma warning disable CA1416
         _player = new();
-        _player.Init(WaveProvider);
 #pragma warning restore CA1416
 #endif
+#pragma warning disable CA1416
+        _player.Init(WaveProvider);
+#pragma warning restore CA1416
     }
 
     public void Pause()
