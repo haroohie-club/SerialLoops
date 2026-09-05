@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Headless;
@@ -155,7 +156,7 @@ public class BackgroundMusicEditorTests
         originalWaveStream.Close();
 
         string replacedFile = $"{bgmName}_replaced.wav";
-        bgm.Replace(Path.Combine(_uiVals.AssetsDirectory, "music.wav"), _project, replacedFile, false, 0, 0, _log, new TestProgressTracker(), new());
+        bgm.Replace(Path.Combine(_uiVals.AssetsDirectory, "music.wav"), _project, replacedFile, false, 0, 0, _log, new TestProgressTracker(), CancellationToken.None);
         using MemoryStream replacedStream = new();
         using WaveFileReader replacedWaveStream = new(replacedFile);
         Assert.That(File.Exists(replacedFile), Is.True);

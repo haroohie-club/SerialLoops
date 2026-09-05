@@ -20,6 +20,11 @@ public static class WaveformRenderer
         int bytesPerSample = waveStream.WaveFormat.BitsPerSample / 8;
         long numSamples = waveStream.Length / bytesPerSample;
         int samplesPerPixel = (int)(numSamples / settings.Width);
+        int rest = samplesPerPixel % bytesPerSample;
+        if (rest > 0)
+        {
+            samplesPerPixel += rest;
+        }
         int stepSize = settings.PixelsPerPeak + settings.SpacerPixels;
         MaxPeakProvider peakProvider = new();
         peakProvider.Init(waveStream.ToSampleProvider(), samplesPerPixel * stepSize);
@@ -31,6 +36,11 @@ public static class WaveformRenderer
         int bytesPerSample = sampleProvider.WaveFormat.BitsPerSample / 8;
         long numSamples = length / bytesPerSample;
         int samplesPerPixel = (int)(numSamples / settings.Width);
+        int rest = samplesPerPixel % bytesPerSample;
+        if (rest > 0)
+        {
+            samplesPerPixel += rest;
+        }
         int stepSize = settings.PixelsPerPeak + settings.SpacerPixels;
         MaxPeakProvider peakProvider = new();
         peakProvider.Init(sampleProvider, samplesPerPixel * stepSize);
