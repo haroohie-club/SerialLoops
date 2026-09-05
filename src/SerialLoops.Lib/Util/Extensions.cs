@@ -56,7 +56,7 @@ public static partial class Extensions
         {
             try
             {
-                read = sampleProvider.Read(buffer);
+                read = sampleProvider.Read(buffer, 0, buffer.Length);
                 max = Math.Max(max, buffer.Max());
             }
             catch (Exception ex)
@@ -684,7 +684,7 @@ public static partial class Extensions
         list.Insert(secondIndex, item);
     }
 
-    public static void AddRange<T>(this ICollection<T> list, IEnumerable<T> items)
+    public static void AddObservableRange<T>(this ICollection<T> list, IEnumerable<T> items)
     {
         foreach (T item in items)
         {

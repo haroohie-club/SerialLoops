@@ -96,7 +96,7 @@ public partial class ItemExplorerPanelViewModel : ViewModelBase
             .Select(g => new SectionTreeItem(
                 ControlGenerator.LocalizeItemTypes(g.Key),
                 g.Select(i => new ItemDescriptionTreeItem(i, _window)),
-                ControlGenerator.GetVectorIcon(g.Key.ToString(), _log, size: 16)
+                ControlGenerator.GetSvg(g.Key.ToString(), _log, size: 16)
             )));
     }
 

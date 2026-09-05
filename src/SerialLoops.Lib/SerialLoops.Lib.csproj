@@ -17,9 +17,9 @@
     <PackageReference Include="HaruhiChokuretsuLib" Version="0.56.0" />
     <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
     <PackageReference Include="NLayer" Version="3.0.0" />
-    <PackageReference Include="NLayer.NAudioSupport" Version="3.0.0" />
+    <PackageReference Include="NLayer.NAudioSupport" Version="2.0.1" />
     <PackageReference Include="QuikGraph" Version="2.5.0" />
-    <PackageReference Include="ReactiveUI" Version="24.1.0" />
+    <PackageReference Include="ReactiveUI" Version="24.2.0" />
     <PackageReference Include="ReactiveUI.SourceGenerators" Version="3.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

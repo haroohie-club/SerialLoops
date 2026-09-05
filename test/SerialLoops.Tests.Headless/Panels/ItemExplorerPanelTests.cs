@@ -89,7 +89,7 @@ public class ItemExplorerPanelTests
         window.CaptureAndSaveFrame(Path.Combine(_uiVals.AssetsDirectory, "artifacts"), TestContext.CurrentContext.Test.Name, ref currentFrame);
 
         TreeDataGrid viewer = ((OpenProjectPanel)mainWindow.Window.MainContent.Content)?.ItemExplorer.Viewer;
-        viewer!.RowSelection!.Select(new(0, 1));
+        viewer!.SelectedIndex = new(0, 1);
         mainWindow.ItemExplorer.OpenItemCommand.Execute(viewer);
         window.CaptureAndSaveFrame(Path.Combine(_uiVals.AssetsDirectory, "artifacts"), TestContext.CurrentContext.Test.Name, ref currentFrame);
 
@@ -119,7 +119,7 @@ public class ItemExplorerPanelTests
         mainWindow.ItemExplorer.OpenItemCommand.Execute(viewer);
         window.CaptureAndSaveFrame(Path.Combine(_uiVals.AssetsDirectory, "artifacts"), TestContext.CurrentContext.Test.Name, ref currentFrame);
 
-        Assert.That(((ITreeItem)viewer.RowSelection!.SelectedItem)!.Text, Is.EqualTo(mainWindow.EditorTabs.Tabs[0].Description.DisplayName));
+        Assert.That(((ITreeItem)viewer.SelectedItem)!.Text, Is.EqualTo(mainWindow.EditorTabs.Tabs[0].Description.DisplayName));
 
         window.KeyPress(Key.F2, RawInputModifiers.None, PhysicalKey.F2, "F2");
         if (OperatingSystem.IsMacOS())
@@ -139,7 +139,7 @@ public class ItemExplorerPanelTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(((ITreeItem)viewer.RowSelection!.SelectedItem)!.Text, Is.EqualTo("NewName"));
+            Assert.That(((ITreeItem)viewer.SelectedItem)!.Text, Is.EqualTo("NewName"));
             Assert.That(mainWindow.EditorTabs.Tabs[0].Description.DisplayName, Is.EqualTo("NewName"));
         });
     }

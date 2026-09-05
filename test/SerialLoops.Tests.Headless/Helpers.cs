@@ -5,6 +5,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Headless;
 using Avalonia.Layout;
+using Avalonia.Media.Imaging;
 using NUnit.Framework;
 
 namespace SerialLoops.Tests.Headless;
@@ -19,7 +20,7 @@ public static class Helpers
             Directory.CreateDirectory(Path.Combine(artifactsDir, nameOfTest));
         }
         string file = Path.Combine(artifactsDir, nameOfTest, $"{currentFrame++:D2}.png");
-        window.CaptureRenderedFrame()?.Save(file);
+        window.CaptureRenderedFrame()?.Save(file, new PngBitmapEncoderOptions());
         TestContext.AddTestAttachment(file, $"{currentFrame}");
     }
 

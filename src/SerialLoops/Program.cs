@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Avalonia;
-using Avalonia.ReactiveUI;
+using ReactiveUI.Avalonia;
 using SerialLoops.Lib;
 using SerialLoops.Utility;
 
@@ -41,7 +41,7 @@ internal sealed class Program
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
-            .UseReactiveUI()
+            .UseReactiveUI(builder => builder.WithAvalonia())
             .WithInterFont()
             .LogToTrace();
 
