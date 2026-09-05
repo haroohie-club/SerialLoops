@@ -25,7 +25,7 @@ jobs:
         with:
           dotnet-version: '10.0.x'
       - name: Install macOS workload
-        run: dotnet install workload macos
+        run: dotnet workload install macos
         if: ${{ matrix.platform.tfm == 'net10.0-macos' }}
       - name: Build
         run: dotnet build src/SerialLoops/SerialLoops.csproj -f ${{ matrix.platform.tfm }}
