@@ -14,7 +14,7 @@
     <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" Version="14.2.1.102" />
     <PackageReference Include="HarfBuzzSharp.NativeAssets.macOS" Version="14.2.1.102" />
     <PackageReference Include="HaroohieClub.NitroPacker" Version="3.3.5" />
-    <PackageReference Include="HaruhiChokuretsuLib" Version="0.56.0" />
+    <PackageReference Include="HaruhiChokuretsuLib" Version="0.57.0" />
     <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
     <PackageReference Include="NLayer" Version="3.0.0" />
     <PackageReference Include="NLayer.NAudioSupport" Version="2.0.1" />
