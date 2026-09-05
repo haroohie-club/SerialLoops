@@ -3,7 +3,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Avalonia;
 using ReactiveUI.Avalonia;
-using SerialLoops.Lib;
 using SerialLoops.Utility;
 
 namespace SerialLoops;
@@ -18,13 +17,6 @@ internal sealed class Program
     {
         try
         {
-#if !WINDOWS
-            if ((Environment.GetEnvironmentVariable(EnvironmentVariables.Flatpak) ?? bool.FalseString).Equals(
-                    bool.TrueString, StringComparison.OrdinalIgnoreCase))
-            {
-                NativeLibrary.SetDllImportResolver(Assembly.GetAssembly(typeof(NAudio.Sdl2.WaveInSdl))!, DllImportResolver);
-            }
-#endif
             BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
         }
         catch (Exception ex)

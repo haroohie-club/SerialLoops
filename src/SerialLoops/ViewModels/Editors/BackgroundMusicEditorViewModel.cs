@@ -163,13 +163,6 @@ public partial class BackgroundMusicEditorViewModel : EditorViewModel
             }
             loopPropertiesDialog.Dispose();
         }
-#if !WINDOWS
-        catch (NAudio.Sdl2.Structures.SdlException ex)
-        {
-            _log.LogWarning($"SDL Exception: {ex.Message}\n{ex.StackTrace}");
-            _log.LogError(Strings.SdlExceptionTooManyDevicesText);
-        }
-#endif
         catch (Exception ex)
         {
             _log.LogException(Strings.BgmLoopErrorMessage, ex);
@@ -227,13 +220,6 @@ public partial class BackgroundMusicEditorViewModel : EditorViewModel
             }
             volumeDialog.Dispose();
         }
-#if !WINDOWS
-        catch (NAudio.Sdl2.Structures.SdlException ex)
-        {
-            _log.LogWarning($"SDL Exception: {ex.Message}\n{ex.StackTrace}");
-            _log.LogError(Strings.SdlExceptionTooManyDevicesText);
-        }
-#endif
         catch (Exception ex)
         {
             _log.LogException(Strings.BgmAdjustVolumeError, ex);

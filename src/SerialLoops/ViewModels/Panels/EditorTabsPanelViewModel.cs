@@ -99,20 +99,7 @@ public partial class EditorTabsPanelViewModel : ViewModelBase
             case ItemDescription.ItemType.Background:
                 return new BackgroundEditorViewModel((BackgroundItem)item, MainWindow, _project, _log);
             case ItemDescription.ItemType.BGM:
-#if !WINDOWS
-                try
-                {
-#endif
-                    return new BackgroundMusicEditorViewModel((BackgroundMusicItem)item, MainWindow, _project, _log);
-#if !WINDOWS
-                }
-                catch (NAudio.Sdl2.Structures.SdlException ex)
-                {
-                    _log.LogWarning($"SDL Exception: {ex.Message}\n{ex.StackTrace}");
-                    _log.LogError(Strings.SdlExceptionTooManyDevicesText);
-                    return null;
-                }
-#endif
+                return new BackgroundMusicEditorViewModel((BackgroundMusicItem)item, MainWindow, _project, _log);
             case ItemDescription.ItemType.Character:
                 return new CharacterEditorViewModel((CharacterItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Character_Sprite:
@@ -138,39 +125,13 @@ public partial class EditorTabsPanelViewModel : ViewModelBase
             case ItemDescription.ItemType.Script:
                 return new ScriptEditorViewModel((ScriptItem)item, MainWindow, _log);
             case ItemDescription.ItemType.SFX:
-#if !WINDOWS
-                try
-                {
-#endif
-                    return new SfxEditorViewModel((SfxItem)item, MainWindow, _log);
-#if !WINDOWS
-                }
-                catch (NAudio.Sdl2.Structures.SdlException ex)
-                {
-                    _log.LogWarning($"SDL Exception: {ex.Message}\n{ex.StackTrace}");
-                    _log.LogError(Strings.SdlExceptionTooManyDevicesText);
-                    return null;
-                }
-#endif
+                return new SfxEditorViewModel((SfxItem)item, MainWindow, _log);
             case ItemDescription.ItemType.System_Texture:
                 return new SystemTextureEditorViewModel((SystemTextureItem)item, MainWindow, _project, _log);
             case ItemDescription.ItemType.Topic:
                 return new TopicEditorViewModel((TopicItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Voice:
-#if !WINDOWS
-                try
-                {
-#endif
-                    return new VoicedLineEditorViewModel((VoicedLineItem)item, MainWindow, _log);
-#if !WINDOWS
-                }
-                catch (NAudio.Sdl2.Structures.SdlException ex)
-                {
-                    _log.LogWarning($"SDL Exception: {ex.Message}\n{ex.StackTrace}");
-                    _log.LogError(Strings.SdlExceptionTooManyDevicesText);
-                    return null;
-                }
-#endif
+                return new VoicedLineEditorViewModel((VoicedLineItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Save:
                 return new SaveEditorViewModel((SaveItem)item, MainWindow, _log);
             default:

@@ -1,7 +1,8 @@
-﻿#if !WINDOWS
-using NAudio.Sdl2;
+﻿using System;
+#if MACOS
+#elif !WINDOWS
+using NAudio.Wave.Alsa;
 #endif
-using System;
 using NAudio.Wave;
 
 namespace SerialLoops.Utility;
@@ -10,8 +11,9 @@ public class SfxMixer : IDisposable
 {
 #if WINDOWS
     private WaveOut _player;
+#elif MACOS
 #else
-    private WaveOutSdl _player;
+    private AlsaOut _player;
 #endif
 
     public IWavePlayer Player => _player;
@@ -19,9 +21,11 @@ public class SfxMixer : IDisposable
     public SfxMixer()
     {
 #if WINDOWS
-        _player = new() { DesiredLatency = 100 };
+        _player = new() { BufferMilliseconds = 100 };
+#elif MACOS
+
 #else
-        _player = new() { DesiredLatency = 10 };
+        _player = new();
 #endif
     }
 

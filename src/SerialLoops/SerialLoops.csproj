@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>net10.0;net10.0-windows</TargetFrameworks>
+    <TargetFrameworks>net10.0;net10.0-macos;net10.0-windows</TargetFrameworks>
     <Nullable>disable</Nullable>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -11,19 +11,6 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <ApplicationIcon>Assets\serial-loops.ico</ApplicationIcon>
   </PropertyGroup>
-
-  <Target Name="PreBuildSDL" BeforeTargets="PreBuildEvent" Condition="$([System.OperatingSystem]::IsMacOS()) And !Exists('libSDL2.dylib') And '$(CIBuild)' != 'true'">
-    <Exec Command="/bin/bash -C install-sdl-macos.sh ../src/SerialLoops/libSDL2.dylib" WorkingDirectory="../.."/>
-  </Target>
-  <ItemGroup Condition="$([System.OperatingSystem]::IsMacOS())">
-    <None Include="libSDL2.dylib">
-      <TargetPath>runtimes/osx/native/libSDL2.dylib</TargetPath>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="libSDL2.dylib">
-      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
-    </None>
-  </ItemGroup>
 
   <Target Name="PreBuildSTH" BeforeTargets="PreBuildEvent" Condition="'$(RuntimeIdentifier)' != ''">
     <Exec Command="dotnet publish submodules/NitroPacker.SymTableHelper/HaroohieClub.NitroPacker.SymTableHelper.csproj -c Release -f net10.0 -r $(RuntimeIdentifier) --self-contained /p:DebugType=None /p:DebugSymbols=false" WorkingDirectory="../.."/>
@@ -136,8 +123,8 @@
     <PackageReference Include="NAudio" Version="2.2.1" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' != 'net10.0-windows'">
-    <PackageReference Include="NAudio.Sdl2" Version="2.2.6" />
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <PackageReference Include="NAudio.Alsa" Version="3.0.1" />
   </ItemGroup>
 
   <ItemGroup>

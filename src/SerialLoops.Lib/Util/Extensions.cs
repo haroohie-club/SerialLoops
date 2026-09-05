@@ -56,7 +56,7 @@ public static partial class Extensions
         {
             try
             {
-                read = sampleProvider.Read(buffer, 0, buffer.Length);
+                read = sampleProvider.Read(buffer);
                 max = Math.Max(max, buffer.Max());
             }
             catch (Exception ex)

@@ -1,7 +1,8 @@
 ﻿using System;
 using HaruhiChokuretsuLib.Util;
-#if !WINDOWS
-using NAudio.Sdl2;
+#if MACOS
+#elif !WINDOWS
+using NAudio.Wave.Alsa;
 #endif
 using NAudio.Wave;
 
@@ -12,8 +13,10 @@ public class BgmVceMixer : IDisposable
     private ILogger _log;
 #if WINDOWS
     private WaveOut _player;
+#elif MACOS
+
 #else
-    private WaveOutSdl _player;
+    private AlsaOut _player;
 #endif
     public IWaveProvider WaveProvider { get; set; }
     public PlaybackState PlaybackState => _player.PlaybackState;
@@ -43,8 +46,10 @@ public class BgmVceMixer : IDisposable
 #if WINDOWS
         _player = new() { DeviceNumber = -1 };
         _player.Init(WaveProvider);
+#elif MACOS
 #else
-        _player = new() { DesiredLatency = 10 };
+        _player = new();
+        _player.Init(WaveProvider);
 #endif
     }
 
@@ -57,12 +62,6 @@ public class BgmVceMixer : IDisposable
     {
         try
         {
-#if !WINDOWS
-            if (_player.PlaybackState == PlaybackState.Stopped)
-            {
-                _player.Init(WaveProvider);
-            }
-#endif
             _player.Play();
         }
         catch (Exception ex)
@@ -74,9 +73,6 @@ public class BgmVceMixer : IDisposable
     public void Stop()
     {
         _player.Stop();
-#if !WINDOWS
-        _player.Dispose();
-#endif
     }
 
     public void Dispose() => _player?.Dispose();

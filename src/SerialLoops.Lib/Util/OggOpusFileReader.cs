@@ -20,10 +20,10 @@ public class OggOpusFileReader : IWaveProvider, IDisposable, IAsyncDisposable
         _opusOggReadStream = new(OpusCodecFactory.CreateDecoder(48000, 2, new ChokuLogTextWriter(log)), _oggFileStream);
     }
 
-    public int Read(byte[] buffer, int offset, int count)
+    public int Read(Span<byte> buffer)
     {
         int i = 0;
-        while (i < count)
+        while (i < buffer.Length)
         {
             if (!_opusOggReadStream.HasNextPacket)
             {
@@ -36,7 +36,7 @@ public class OggOpusFileReader : IWaveProvider, IDisposable, IAsyncDisposable
                 return i;
             }
             byte[] bytes = nextSample.SelectMany(BitConverter.GetBytes).ToArray();
-            Array.Copy(bytes, 0, buffer, offset, count);
+            bytes.CopyTo(buffer);
             i += bytes.Length;
         }
         return i;
