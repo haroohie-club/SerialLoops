@@ -38,9 +38,9 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4.1.0
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '10.0.x'
       - name: Build & Publish Serial Loops
-        run: dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 -r ${{ matrix.type.rid }} --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
+        run: dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net10.0 -r ${{ matrix.type.rid }} --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
       - name: Set up AppDir
         run: |
           sed -i "s/#VERSION#/$SLVersion/g" ./install/linux/appimage/AppImageBuilder.yml
@@ -48,9 +48,9 @@ jobs:
           sed -i "s/#URI#/${{ matrix.type.apt_uri }}/g" ./install/linux/appimage/AppImageBuilder.yml
           sed -i "s/#ARCH#/${{ matrix.type.arch }}/g" ./install/linux/appimage/AppImageBuilder.yml
           mkdir -p ./install/linux/appimage/AppDir/usr/bin
-          chmod +x ./src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/SerialLoops
-          chmod +x ./src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/NitroPacker.SymTableHelper
-          mv ./src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/* ./install/linux/appimage/AppDir/usr/bin/
+          chmod +x ./src/SerialLoops/bin/Release/net10.0/${{ matrix.type.rid }}/publish/SerialLoops
+          chmod +x ./src/SerialLoops/bin/Release/net10.0/${{ matrix.type.rid }}/publish/NitroPacker.SymTableHelper
+          mv ./src/SerialLoops/bin/Release/net10.0/${{ matrix.type.rid }}/publish/* ./install/linux/appimage/AppDir/usr/bin/
           mkdir -p ./install/linux/appimage/AppDir/usr/share/icons/default/scalable/apps/
           cp ./src/SerialLoops/Assets/Icons/AppIcon.svg ./install/linux/appimage/AppDir/usr/share/icons/default/scalable/apps/club.haroohie.SerialLoops.svg
       - name: Build AppImage
@@ -79,21 +79,21 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4.1.0
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '10.0.x'
       - name: Build & Publish Serial Loops
-        run: dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 -r ${{ matrix.type.rid }} --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
+        run: dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net10.0 -r ${{ matrix.type.rid }} --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
       - name: Create tarball
         run: |
-          chmod +x ./src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/SerialLoops
-          chmod +x ./src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/NitroPacker.SymTableHelper
-          pushd ./src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish
+          chmod +x ./src/SerialLoops/bin/Release/net10.0/${{ matrix.type.rid }}/publish/SerialLoops
+          chmod +x ./src/SerialLoops/bin/Release/net10.0/${{ matrix.type.rid }}/publish/NitroPacker.SymTableHelper
+          pushd ./src/SerialLoops/bin/Release/net10.0/${{ matrix.type.rid }}/publish
           tar -czvf ../SerialLoops-${{ matrix.type.rid }}.tar.gz --transform "s,^\.\/,SerialLoops-$SLVersion/," .
           popd
       - name: Upload tarball
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.type.rid }}-tarball
-          path: src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/SerialLoops-${{ matrix.type.rid }}.tar.gz
+          path: src/SerialLoops/bin/Release/net10.0/${{ matrix.type.rid }}/SerialLoops-${{ matrix.type.rid }}.tar.gz
           retention-days: 1
       - name: Create deb package
         shell: pwsh
@@ -104,7 +104,7 @@ jobs:
           ((Get-Content -Path DEBIAN/control) -replace '#VERSION#', "$env:SLVersion") | Set-Content -Path DEBIAN/control
           ((Get-Content -Path DEBIAN/control) -replace '#ARCH#', '${{ matrix.type.arch }}') | Set-Content -Path DEBIAN/control
           ((Get-Content -Path usr/share/applications/SerialLoops.desktop) -replace '#VERSION#', "$env:SLVersion") | Set-Content -Path usr/share/applications/SerialLoops.desktop
-          Copy-Item -Path ../../src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/* -Destination ./usr/lib/SerialLoops -Recurse
+          Copy-Item -Path ../../src/SerialLoops/bin/Release/net10.0/${{ matrix.type.rid }}/publish/* -Destination ./usr/lib/SerialLoops -Recurse
           ln -s /usr/lib/SerialLoops/SerialLoops usr/bin/SerialLoops
           Copy-Item -Path ../../src/SerialLoops/Assets/Icons/AppIcon.png usr/lib/SerialLoops/SerialLoops.png
           Set-Location ..
@@ -139,7 +139,7 @@ jobs:
           sed -i "s/#VERSION#/$SLVersion/g" ~/rpmbuild/SPECS/SerialLoops.spec
           sed -i "s/#RID#/${{ matrix.type.rid }}/g" ~/rpmbuild/SPECS/SerialLoops.spec
           sed -i "s/#ARCH#/${{ matrix.type.arch }}/g" ~/rpmbuild/SPECS/SerialLoops.spec
-          dnf install -y rpmdevtools rpmlint dotnet-sdk-8.0
+          dnf install -y rpmdevtools rpmlint dotnet-sdk-10.0
           pushd ~
           rpmbuild -bb rpmbuild/SPECS/SerialLoops.spec
           popd
@@ -174,7 +174,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4.1.0
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '10.0.x'
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -185,11 +185,11 @@ jobs:
       - name: Restore
         run: dotnet restore src/SerialLoops/SerialLoops.csproj -r ${{ matrix.type.rid }}
       - name: Build .app
-        run: dotnet msbuild src/SerialLoops/SerialLoops.csproj -t:BundleApp -p:Configuration=Release -p:TargetFramework=net8.0 -p:RuntimeIdentifier=${{ matrix.type.rid }} -p:UseAppHost=true -p:SelfContained=true -p:DebugType=None -p:DebugSymbols=false -p:PublishSingleFile=true -p:CIBuild=true
+        run: dotnet msbuild src/SerialLoops/SerialLoops.csproj -t:BundleApp -p:Configuration=Release -p:TargetFramework=net10.0 -p:RuntimeIdentifier=${{ matrix.type.rid }} -p:UseAppHost=true -p:SelfContained=true -p:DebugType=None -p:DebugSymbols=false -p:PublishSingleFile=true -p:CIBuild=true
       - name: Build pkg installer
         run: |
           mkdir "install/macos/Serial Loops.app"
-          cp -r "src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/Serial Loops.app" "install/macos/"
+          cp -r "src/SerialLoops/bin/Release/net10.0/${{ matrix.type.rid }}/publish/Serial Loops.app" "install/macos/"
           cd install/macos/
           chmod +x "./Serial Loops.app/Contents/MacOS/SerialLoops"
           chmod +x "./Serial Loops.app/Contents/MacOS/NitroPacker.SymTableHelper"
@@ -218,17 +218,17 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4.1.0
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '10.0.x'
       - name: Build & Publish Serial Loops
         shell: pwsh
         run: |
-          dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0-windows -r ${{ matrix.type.rid }} --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
-          Compress-Archive -Path src/SerialLoops/bin/Release/net8.0-windows/${{ matrix.type.rid }}/publish/ -DestinationPath src/SerialLoops/bin/Release/net8.0-windows/${{ matrix.type.rid }}/SerialLoops-${{ matrix.type.rid  }}.zip
+          dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net10.0-windows -r ${{ matrix.type.rid }} --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
+          Compress-Archive -Path src/SerialLoops/bin/Release/net10.0-windows/${{ matrix.type.rid }}/publish/ -DestinationPath src/SerialLoops/bin/Release/net10.0-windows/${{ matrix.type.rid }}/SerialLoops-${{ matrix.type.rid  }}.zip
       - name: Upload Windows zip
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.type.rid }}-zip
-          path: src/SerialLoops/bin/Release/net8.0-windows/${{ matrix.type.rid }}/SerialLoops-${{ matrix.type.rid }}.zip
+          path: src/SerialLoops/bin/Release/net10.0-windows/${{ matrix.type.rid }}/SerialLoops-${{ matrix.type.rid }}.zip
           retention-days: 1
       - name: Download ISCC, Ninja, and LLVM Installer
         shell: pwsh
