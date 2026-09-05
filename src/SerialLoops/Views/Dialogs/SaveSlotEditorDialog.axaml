@@ -338,7 +338,7 @@
                             <StackPanel Grid.Row="0" HorizontalAlignment="Center" Orientation="Horizontal" Spacing="3">
                                 <CheckBox IsChecked="{Binding HideUnsetFlags}"/>
                                 <TextBlock Text="{x:Static assets:Strings.SaveEditorHideUnsetFlagsLabel}" Margin="0,5,0,0"/>
-                                <TextBox UseLayoutRounding="True" Watermark="{x:Static assets:Strings.FilterByName}"
+                                <TextBox UseLayoutRounding="True" PlaceholderText="{x:Static assets:Strings.FilterByName}"
                                          Text="{Binding FlagFilter}"/>
                                 <Button Command="{Binding FilterFlagsCommand}">
                                     <StackPanel Orientation="Horizontal" Spacing="6">

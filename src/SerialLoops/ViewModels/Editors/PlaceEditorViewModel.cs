@@ -2,19 +2,19 @@ using System.IO;
 using Avalonia.Platform;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Lib.Items;
 using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Editors;
 
-public class PlaceEditorViewModel : EditorViewModel
+public partial class PlaceEditorViewModel : EditorViewModel
 {
     private PlaceItem _place;
     private SKTypeface _msGothicHaruhi;
 
     [Reactive]
-    public SKBitmap Preview { get; set; }
+    public partial SKBitmap Preview { get; set; }
 
     public string PlaceName
     {

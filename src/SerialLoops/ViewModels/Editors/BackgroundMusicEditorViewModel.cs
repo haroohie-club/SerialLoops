@@ -8,7 +8,7 @@ using HaruhiChokuretsuLib.Audio.ADX;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
@@ -21,11 +21,11 @@ using SerialLoops.Views.Dialogs;
 
 namespace SerialLoops.ViewModels.Editors;
 
-public class BackgroundMusicEditorViewModel : EditorViewModel
+public partial class BackgroundMusicEditorViewModel : EditorViewModel
 {
     public BackgroundMusicItem Bgm { get; }
     [Reactive]
-    public SoundPlayerPanelViewModel BgmPlayer { get; set; }
+    public partial SoundPlayerPanelViewModel BgmPlayer { get; set; }
     private bool _loopEnabled;
     private uint _loopStartSample;
     private uint _loopEndSample;
@@ -163,13 +163,6 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
             }
             loopPropertiesDialog.Dispose();
         }
-#if !WINDOWS
-        catch (NAudio.Sdl2.Structures.SdlException ex)
-        {
-            _log.LogWarning($"SDL Exception: {ex.Message}\n{ex.StackTrace}");
-            _log.LogError(Strings.SdlExceptionTooManyDevicesText);
-        }
-#endif
         catch (Exception ex)
         {
             _log.LogException(Strings.BgmLoopErrorMessage, ex);
@@ -227,13 +220,6 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
             }
             volumeDialog.Dispose();
         }
-#if !WINDOWS
-        catch (NAudio.Sdl2.Structures.SdlException ex)
-        {
-            _log.LogWarning($"SDL Exception: {ex.Message}\n{ex.StackTrace}");
-            _log.LogError(Strings.SdlExceptionTooManyDevicesText);
-        }
-#endif
         catch (Exception ex)
         {
             _log.LogException(Strings.BgmAdjustVolumeError, ex);

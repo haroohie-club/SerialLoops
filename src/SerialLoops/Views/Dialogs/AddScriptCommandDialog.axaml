@@ -11,7 +11,7 @@
         TransparencyLevelHint="AcrylicBlur"
         Background="{DynamicResource FallbackBackgroundColor}"
         ExtendClientAreaToDecorationsHint="True"
-        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="0"
         x:DataType="vm:AddScriptCommandDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.AddScriptCommandDialog"
         Title="{x:Static assets:Strings.ScriptEditorAddCommandLabel}"

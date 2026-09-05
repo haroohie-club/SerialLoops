@@ -3,11 +3,11 @@ using System.Windows.Input;
 using GotaSequenceLib.Playback;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace SerialLoops.ViewModels.Controls;
 
-public class SfxPlayerPanelViewModel : ViewModelBase, IDisposable
+public partial class SfxPlayerPanelViewModel : ViewModelBase, IDisposable
 {
     private ILogger _log;
     private Player _player;
@@ -15,9 +15,9 @@ public class SfxPlayerPanelViewModel : ViewModelBase, IDisposable
     public ICommand PlayPauseCommand { get; }
     public ICommand StopCommand { get; }
     [Reactive]
-    public string PlayPauseImagePath { get; set; } = "avares://SerialLoops/Assets/Icons/Play.svg";
+    public partial string PlayPauseImagePath { get; set; } = "avares://SerialLoops/Assets/Icons/Play.svg";
     [Reactive]
-    public bool StopButtonEnabled { get; set; } = false;
+    public partial bool StopButtonEnabled { get; set; } = false;
 
     public SfxPlayerPanelViewModel(Player player, ILogger log)
     {

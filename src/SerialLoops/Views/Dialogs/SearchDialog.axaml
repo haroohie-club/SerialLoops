@@ -28,7 +28,7 @@
                     <Button Command="{Binding DeepSearchCommand}" CommandParameter="{Binding #Dialog}" HotKey="{Binding DeepSearchHotKey}"></Button>
                 </StackPanel>
                 <TextBox Grid.Row="0" Name="Search" Width="520" Margin="0 10" Text="{Binding SearchText}"
-                         Watermark="{x:Static assets:Strings.MenuSearch}">
+                         PlaceholderText="{x:Static assets:Strings.MenuSearch}">
                     <i:Interaction.Behaviors>
                         <ia:EventTriggerBehavior EventName="TextChanged" SourceObject="{Binding #Search}">
                             <ia:InvokeCommandAction Command="{Binding SearchCommand}"

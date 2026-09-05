@@ -5,16 +5,16 @@ using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Models;
 
-public class BgmVolumePreviewItem : ReactiveObject, ISoundItem, IDisposable, IAsyncDisposable
+public partial class BgmVolumePreviewItem : ReactiveObject, ISoundItem, IDisposable, IAsyncDisposable
 {
     private WaveStream _wav;
     [Reactive]
-    public VolumeSampleProvider Provider { get; set; }
+    public partial VolumeSampleProvider Provider { get; set; }
 
     public BgmVolumePreviewItem(WaveStream wav)
     {

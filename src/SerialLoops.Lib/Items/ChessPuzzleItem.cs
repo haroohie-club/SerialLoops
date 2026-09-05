@@ -32,10 +32,10 @@ public class ChessPuzzleItem : Item
         using SKCanvas canvas = new(board);
         SKBitmap chs1 = grp.GetFileByName("CHS_SYS_01DNX").GetImage(transparentIndex: 0);
 
-        canvas.DrawBitmap(chs1, new(0,0,80,80), new SKRect(0,16,80,96));
-        canvas.DrawBitmap(chs1, new(1,0,81,80), new SKRect(80,16,160,96));
-        canvas.DrawBitmap(chs1, new(0,1,80,81), new SKRect(0,96,80,186));
-        canvas.DrawBitmap(chs1, new(1,1,81,81), new SKRect(80,96,160,186));
+        canvas.DrawBitmap(chs1, new(0, 0, 80, 80), new SKRect(0, 16, 80, 96), SKSamplingOptions.Default);
+        canvas.DrawBitmap(chs1, new(1, 0, 81, 80), new SKRect(80, 16, 160, 96), SKSamplingOptions.Default);
+        canvas.DrawBitmap(chs1, new(0, 1, 80, 81), new SKRect(0, 96, 80, 186), SKSamplingOptions.Default);
+        canvas.DrawBitmap(chs1, new(1, 1, 81, 81), new SKRect(80, 96, 160, 186), SKSamplingOptions.Default);
         canvas.Flush();
 
         return board;
@@ -47,7 +47,7 @@ public class ChessPuzzleItem : Item
         using SKCanvas canvas = new(board);
 
         SKBitmap emptyBoard = GetEmptyChessboard(project.Grp);
-        canvas.DrawBitmap(emptyBoard, 0, 0);
+        canvas.DrawBitmap(emptyBoard, 0, 0, SKSamplingOptions.Default);
 
         for (int i = 0; i < ChessPuzzle.Chessboard.Length; i++)
         {
@@ -67,7 +67,8 @@ public class ChessPuzzleItem : Item
             : grp.GetFileByName("CHS_SYS_00DNX").GetImage(transparentIndex: 16, paletteOffset: 16);
 
         int pieceOffset = GetChessPieceOffset(piece);
-        canvas.DrawBitmap(chs0, new(pieceOffset, 0, pieceOffset + 16, 32), new SKRect(0, 0, 16, 32));
+        canvas.DrawBitmap(chs0, new(pieceOffset, 0, pieceOffset + 16, 32), new SKRect(0, 0, 16, 32),
+            SKSamplingOptions.Default);
         canvas.Flush();
 
         return pieceBitmap;
@@ -132,7 +133,7 @@ public class ChessPuzzleItem : Item
     {
         SKPoint destPoint = GetChessPiecePosition(destPos);
         canvas.DrawBitmap(source, new(0, 0, 16, 32),
-            new SKRect(destPoint.X, destPoint.Y,destPoint.X + 16, destPoint.Y + 32));
+            new SKRect(destPoint.X, destPoint.Y, destPoint.X + 16, destPoint.Y + 32), SKSamplingOptions.Default);
     }
 
     public static int ConvertSpaceIndexToPieceIndex(int spacePos)
@@ -198,6 +199,7 @@ public class ChessPuzzleItem : Item
                         }
                     }
                 }
+
                 break;
 
             case ChessFile.ChessPiece.WhiteQueen:
@@ -212,6 +214,7 @@ public class ChessPuzzleItem : Item
                         }
                     }
                 }
+
                 break;
 
             case ChessFile.ChessPiece.WhiteRookLeft:
@@ -228,6 +231,7 @@ public class ChessPuzzleItem : Item
                         }
                     }
                 }
+
                 break;
 
             case ChessFile.ChessPiece.WhiteBishopLeft:
@@ -244,6 +248,7 @@ public class ChessPuzzleItem : Item
                         }
                     }
                 }
+
                 break;
 
             case ChessFile.ChessPiece.WhiteKnightLeft:
@@ -257,12 +262,13 @@ public class ChessPuzzleItem : Item
                         if (y >= 0 && x >= 0 && y < 8 && x < 8 &&
                             ((Math.Abs(y - rank) == 1 && Math.Abs(x - file) == 2) ||
                              (Math.Abs(y - rank) == 2 && Math.Abs(x - file) == 1)) &&
-                             !(x == file && y == rank))
+                            !(x == file && y == rank))
                         {
                             guideSpaces.Add(RankAndFileToPieceIndex(x, y));
                         }
                     }
                 }
+
                 break;
 
             case ChessFile.ChessPiece.WhitePawnA:
@@ -277,6 +283,7 @@ public class ChessPuzzleItem : Item
                 {
                     guideSpaces.Add(RankAndFileToPieceIndex(file, rank - 2));
                 }
+
                 guideSpaces.Add(RankAndFileToPieceIndex(file, rank - 1));
                 break;
             case ChessFile.ChessPiece.BlackPawnA:
@@ -290,6 +297,7 @@ public class ChessPuzzleItem : Item
                 {
                     guideSpaces.Add(RankAndFileToPieceIndex(file, rank + 2));
                 }
+
                 guideSpaces.Add(RankAndFileToPieceIndex(file, rank + 1));
                 break;
 

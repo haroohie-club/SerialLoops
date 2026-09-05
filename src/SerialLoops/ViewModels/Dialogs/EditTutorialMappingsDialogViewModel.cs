@@ -5,7 +5,7 @@ using System.Windows.Input;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.ViewModels.Panels;
@@ -41,7 +41,7 @@ public class EditTutorialMappingsDialogViewModel : ViewModelBase
     }
 }
 
-public class TutorialMapping(Tutorial tutorial, Project project, EditorTabsPanelViewModel tabs) : ReactiveObject
+public partial class TutorialMapping(Tutorial tutorial, Project project, EditorTabsPanelViewModel tabs) : ReactiveObject
 {
     public EditorTabsPanelViewModel Tabs { get; } = tabs;
 
@@ -50,11 +50,11 @@ public class TutorialMapping(Tutorial tutorial, Project project, EditorTabsPanel
         .Cast<ScriptItem>());
 
     [Reactive]
-    public int Flag { get; set; } = tutorial.Id;
+    public partial int Flag { get; set; } = tutorial.Id;
 
     public string TutorialName => $"Tutorial {Flag}";
 
     [Reactive]
-    public ScriptItem Script { get; set; } = (ScriptItem)project.Items.First(i =>
+    public partial ScriptItem Script { get; set; } = (ScriptItem)project.Items.First(i =>
         i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == tutorial.AssociatedScript);
 }

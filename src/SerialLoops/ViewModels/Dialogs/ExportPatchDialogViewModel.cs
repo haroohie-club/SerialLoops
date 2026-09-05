@@ -8,7 +8,7 @@ using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia.Enums;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Utility;
@@ -16,20 +16,20 @@ using SerialLoops.Views.Dialogs;
 
 namespace SerialLoops.ViewModels.Dialogs;
 
-public class ExportPatchDialogViewModel : ViewModelBase
+public partial class ExportPatchDialogViewModel : ViewModelBase
 {
     private Project _project;
     private ILogger _log;
     private const string EXPECTED_HASH = "81D5C6316DBCEF9F4C51984ADCAAE171124EBB08";
 
     [Reactive]
-    public string RomPath { get; set; }
+    public partial string RomPath { get; set; }
     [Reactive]
-    public string BaseRomHash { get; set; }
+    public partial string BaseRomHash { get; set; }
     [Reactive]
-    public string MatchSvgPath { get; set; }
+    public partial string MatchSvgPath { get; set; }
     [Reactive]
-    public string XDeltaPath { get; set; }
+    public partial string XDeltaPath { get; set; }
 
     public string ExpectedRomHashString { get; } = string.Format(Strings.ExpectedRomHashLabel, EXPECTED_HASH);
 

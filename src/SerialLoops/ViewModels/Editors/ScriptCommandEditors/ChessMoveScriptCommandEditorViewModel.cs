@@ -2,7 +2,7 @@ using System.Windows.Input;
 using Avalonia;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
@@ -10,10 +10,10 @@ using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors;
 
-public class ChessMoveScriptCommandEditorViewModel : ScriptCommandEditorViewModel
+public partial class ChessMoveScriptCommandEditorViewModel : ScriptCommandEditorViewModel
 {
     [Reactive]
-    public SKBitmap Chessboard { get; set; }
+    public partial SKBitmap Chessboard { get; set; }
 
     private SKPoint? _move1BeginPoint;
     public SKPoint? Move1BeginPoint
@@ -62,22 +62,22 @@ public class ChessMoveScriptCommandEditorViewModel : ScriptCommandEditorViewMode
     }
 
     [Reactive]
-    public float Move1BeginX { get; set; }
+    public partial float Move1BeginX { get; set; }
     [Reactive]
-    public float Move1BeginY { get; set; }
+    public partial float Move1BeginY { get; set; }
     [Reactive]
-    public float Move1EndX { get; set; }
+    public partial float Move1EndX { get; set; }
     [Reactive]
-    public float Move1EndY { get; set; }
+    public partial float Move1EndY { get; set; }
 
     [Reactive]
-    public float Move2BeginX { get; set; }
+    public partial float Move2BeginX { get; set; }
     [Reactive]
-    public float Move2BeginY { get; set; }
+    public partial float Move2BeginY { get; set; }
     [Reactive]
-    public float Move2EndX { get; set; }
+    public partial float Move2EndX { get; set; }
     [Reactive]
-    public float Move2EndY { get; set; }
+    public partial float Move2EndY { get; set; }
 
     public ICommand ClearMove1Command { get; }
     public ICommand ClearMove2Command { get; }

@@ -3,17 +3,17 @@ using System.Collections.ObjectModel;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace SerialLoops.Models;
 
-public class SectionTreeItem(string sectionName, IEnumerable<ITreeItem> children, Avalonia.Svg.Svg icon) : ReactiveObject, ITreeItem
+public partial class SectionTreeItem(string sectionName, IEnumerable<ITreeItem> children, Avalonia.Svg.Svg icon) : ReactiveObject, ITreeItem
 {
     public string Text { get; set; } = sectionName;
     public Avalonia.Svg.Svg Icon { get; set; } = icon;
     public ObservableCollection<ITreeItem> Children { get; set; } = new(children);
     [Reactive]
-    public bool IsExpanded { get; set; }
+    public partial bool IsExpanded { get; set; }
 
     public Control GetDisplay()
     {

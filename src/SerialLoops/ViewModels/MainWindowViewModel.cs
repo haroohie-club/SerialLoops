@@ -23,7 +23,7 @@ using MiniToolbar.Avalonia;
 using MsBox.Avalonia.Enums;
 using NAudio.Wave;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Factories;
@@ -52,14 +52,14 @@ public partial class MainWindowViewModel : ViewModelBase
     private bool _alreadyHandledStartup = false;
 
     [Reactive]
-    public string Title { get; set; } = BaseTitle;
+    public partial string Title { get; set; } = BaseTitle;
     public Size MinSize => new(769, 420);
     [Reactive]
-    public Size ClientSize { get; set; } = new(1200, 800);
+    public partial Size ClientSize { get; set; } = new(1200, 800);
 
     // Open project stuff
     [Reactive]
-    public string OpenProjectName { get; set; }
+    public partial string OpenProjectName { get; set; }
     private SKBitmap _openProjectIcon;
     public SKBitmap OpenProjectIcon
     {
@@ -78,7 +78,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public ProjectsCache ProjectsCache { get; set; }
     public ConfigUser CurrentConfig { get; set; }
     [Reactive]
-    public Project OpenProject { get; set; }
+    public partial Project OpenProject { get; set; }
     public OpenProjectPanel ProjectPanel { get; set; }
     public Dictionary<MenuHeader, NativeMenuItem> WindowMenu { get; set; }
     public Toolbar ToolBar => Window.ToolBar;
@@ -129,11 +129,11 @@ public partial class MainWindowViewModel : ViewModelBase
     public ICommand BuildAndRunCommand { get; }
 
     [Reactive]
-    public KeyGesture SaveHotKey { get; set; }
+    public partial KeyGesture SaveHotKey { get; set; }
     [Reactive]
-    public KeyGesture SearchHotKey { get; set; }
+    public partial KeyGesture SearchHotKey { get; set; }
     [Reactive]
-    public KeyGesture CloseProjectKey { get; set; }
+    public partial KeyGesture CloseProjectKey { get; set; }
 
     public MainWindowViewModel()
     {
@@ -1185,23 +1185,23 @@ public partial class MainWindowViewModel : ViewModelBase
                             nameplateCanvas.DrawBitmap(
                                 characterItem.NameplateOverride,
                                 new SKRect(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64,
-                                    16 * (int)characterItem.MessageInfo.Character));
+                                    16 * (int)characterItem.MessageInfo.Character), SKSamplingOptions.Default);
                             speakerCanvas.DrawBitmap(
                                 characterItem.NameplateOverride,
                                 new SKRect(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64,
-                                    16 * (int)characterItem.MessageInfo.Character));
+                                    16 * (int)characterItem.MessageInfo.Character), SKSamplingOptions.Default);
                         }
                         else
                         {
                             nameplateCanvas.DrawBitmap(
                                 characterItem.GetNewNameplate(_blankNameplate, _blankNameplateBaseArrow, OpenProject),
                                 new SKRect(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64,
-                                    16 * (int)characterItem.MessageInfo.Character));
+                                    16 * (int)characterItem.MessageInfo.Character), SKSamplingOptions.Default);
                             speakerCanvas.DrawBitmap(
                                 characterItem.GetNewNameplate(_blankNameplate, _blankNameplateBaseArrow, OpenProject,
                                     transparent: true),
                                 new SKRect(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64,
-                                    16 * (int)characterItem.MessageInfo.Character));
+                                    16 * (int)characterItem.MessageInfo.Character), SKSamplingOptions.Default);
                         }
                         changedNameplates = true;
                     }

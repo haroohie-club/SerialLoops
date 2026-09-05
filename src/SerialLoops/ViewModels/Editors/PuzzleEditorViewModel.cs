@@ -5,7 +5,7 @@ using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Models;
@@ -194,11 +194,11 @@ public class PuzzleEditorViewModel : EditorViewModel
     }
 }
 
-public class TopicWithUnknown(int topicId, int unknown, Project project) : ReactiveObject
+public partial class TopicWithUnknown(int topicId, int unknown, Project project) : ReactiveObject
 {
     [Reactive]
-    public TopicItem Topic { get; set; } = (TopicItem)project.Items.FirstOrDefault(t => t.Type == ItemDescription.ItemType.Topic &&
+    public partial TopicItem Topic { get; set; } = (TopicItem)project.Items.FirstOrDefault(t => t.Type == ItemDescription.ItemType.Topic &&
                                                                              ((TopicItem)t).TopicEntry.Id == (short)topicId);
     [Reactive]
-    public int Unknown { get; set; } = unknown;
+    public partial int Unknown { get; set; } = unknown;
 }

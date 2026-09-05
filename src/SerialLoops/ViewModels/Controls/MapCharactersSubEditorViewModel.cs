@@ -4,13 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
+using Avalonia.Input;
 using AvaloniaEdit.Utils;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia.Enums;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
@@ -22,15 +23,13 @@ using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Controls;
 
-public class MapCharactersSubEditorViewModel : ViewModelBase
+public partial class MapCharactersSubEditorViewModel : ViewModelBase
 {
-    [Reactive]
-    public bool HasMapCharacters { get; set; }
+    [Reactive] public partial bool HasMapCharacters { get; set; }
 
     public Dictionary<Point, SKPoint> AllGridPositions { get; } = [];
 
-    [Reactive]
-    public SKPoint Origin { get; set; }
+    [Reactive] public partial SKPoint Origin { get; set; }
 
     public ObservableCollection<LayoutEntryWithImage> BgLayer { get; } = [];
     public ObservableCollection<LayoutEntryWithImage> OcclusionLayer { get; } = [];
@@ -39,6 +38,7 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
     public ObservableCollection<ReactiveMapCharacter> MapCharacters { get; } = [];
 
     private ReactiveMapCharacter _selectedMapCharacter;
+
     public ReactiveMapCharacter SelectedMapCharacter
     {
         get => _selectedMapCharacter;
@@ -46,10 +46,7 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
         {
             this.RaiseAndSetIfChanged(ref _selectedMapCharacter, value);
             ChibiDirectionSelector = new(_selectedMapCharacter?.FacingDirection ?? ChibiItem.Direction.DOWN_LEFT,
-                direction =>
-                {
-                    _selectedMapCharacter.FacingDirection = direction;
-                });
+                direction => { _selectedMapCharacter.FacingDirection = direction; });
             ChibiDirectionSelector.SetAvailableDirections(_selectedMapCharacter?.Chibi.ChibiEntries);
         }
     }
@@ -57,20 +54,18 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
     public ObservableCollection<ChibiItem> Chibis { get; }
 
 
-    [Reactive]
-    public int CanvasWidth { get; set; }
-    [Reactive]
-    public int CanvasHeight { get; set; }
+    [Reactive] public partial int CanvasWidth { get; set; }
+    [Reactive] public partial int CanvasHeight { get; set; }
 
     private readonly MainWindowViewModel _window;
     public ScriptEditorViewModel ScriptEditor { get; }
 
-    [Reactive]
-    public ChibiDirectionSelectorViewModel ChibiDirectionSelector { get; set; }
+    [Reactive] public partial ChibiDirectionSelectorViewModel ChibiDirectionSelector { get; set; }
 
     public ObservableCollection<MapItem> Maps { get; } = [];
 
     private MapItem _map;
+
     public MapItem Map
     {
         get => _map;
@@ -126,7 +121,8 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
             LoadMapCharacters(refresh: true);
         }
 
-        RemoveMapCharactersCommand = ReactiveCommand.CreateFromTask(async Task () => await RemoveMapCharactersSection(true));
+        RemoveMapCharactersCommand =
+            ReactiveCommand.CreateFromTask(async Task () => await RemoveMapCharactersSection(true));
         AddMapCharactersCommand = ReactiveCommand.Create(() =>
         {
             _script.Event.MapCharactersSection = new() { Name = "MAPCHARACTERS" };
@@ -202,7 +198,10 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
         {
             if (_map.Map.ObjectMarkers[..^1].Select(o => o.LayoutIndex).Contains((short)i))
             {
-                ObjectLayer.Add(new(layout, i) { Layer = _map.Layout.LayoutEntries[i].RelativeShtxIndex, HitTestVisible = false });
+                ObjectLayer.Add(new(layout, i)
+                {
+                    Layer = _map.Layout.LayoutEntries[i].RelativeShtxIndex, HitTestVisible = false
+                });
                 continue;
             }
 
@@ -210,12 +209,19 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
             {
                 case 0:
                 case 1:
-                    if (_map.Map.Settings.LayoutOcclusionLayerStartIndex > 0 && i >= _map.Map.Settings.LayoutOcclusionLayerStartIndex && i <= _map.Map.Settings.LayoutOcclusionLayerEndIndex)
+                    if (_map.Map.Settings.LayoutOcclusionLayerStartIndex > 0 &&
+                        i >= _map.Map.Settings.LayoutOcclusionLayerStartIndex &&
+                        i <= _map.Map.Settings.LayoutOcclusionLayerEndIndex)
                     {
-                        OcclusionLayer.Add(new(layout, i) { Layer = _map.Layout.LayoutEntries[i].RelativeShtxIndex, HitTestVisible = false });
+                        OcclusionLayer.Add(new(layout, i)
+                        {
+                            Layer = _map.Layout.LayoutEntries[i].RelativeShtxIndex, HitTestVisible = false
+                        });
                     }
-                    else if (_map.Map.Settings.LayoutOcclusionLayerStartIndex > 0 && i > _map.Map.Settings.LayoutOcclusionLayerStartIndex
-                             || _map.Map.Settings.LayoutOcclusionLayerStartIndex == 0 && i > _map.Map.Settings.LayoutBgLayerEndIndex)
+                    else if (_map.Map.Settings.LayoutOcclusionLayerStartIndex > 0 &&
+                             i > _map.Map.Settings.LayoutOcclusionLayerStartIndex
+                             || _map.Map.Settings.LayoutOcclusionLayerStartIndex == 0 &&
+                             i > _map.Map.Settings.LayoutBgLayerEndIndex)
                     {
                         // do nothing (BG junk)
                     }
@@ -223,13 +229,15 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
                     {
                         BgLayer.Add(new(layout, i) { Layer = _map.Layout.LayoutEntries[i].RelativeShtxIndex });
                     }
+
                     break;
             }
         }
 
         for (int i = 0; i < _map.Map.ObjectMarkers[..^1].Count; i++)
         {
-            ObjectLayer.Swap(i, ObjectLayer.ToList()[i..].FindIndex(o => o.Index == _map.Map.ObjectMarkers[i].LayoutIndex) + i);
+            ObjectLayer.Swap(i,
+                ObjectLayer.ToList()[i..].FindIndex(o => o.Index == _map.Map.ObjectMarkers[i].LayoutIndex) + i);
         }
 
         LoadMapCharacters();
@@ -259,7 +267,8 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
         List<ObjectMarker> markers = new(Map?.Map.ObjectMarkers[..^1] ?? []);
         foreach (ReactiveMapCharacter character in MapCharacters)
         {
-            int spaceIndex = markers.FindIndex(m => m.ObjectX > character.MapCharacter.X && m.ObjectY > character.MapCharacter.Y);
+            int spaceIndex = markers.FindIndex(m =>
+                m.ObjectX > character.MapCharacter.X && m.ObjectY > character.MapCharacter.Y);
 
             if (spaceIndex < 0)
             {
@@ -304,6 +313,7 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
                 return;
             }
         }
+
         HasMapCharacters = false;
         _script.Event.MapCharactersSection = null;
         _script.Event.NumSections -= 2;
@@ -322,9 +332,13 @@ public class ReactiveMapCharacter : LayoutEntryWithImage
     private readonly SKPoint _origin;
     private readonly MapCharactersSubEditorViewModel _parent;
 
+    public static readonly DataFormat<ReactiveMapCharacter> MapCharacterFormat =
+        DataFormat.CreateInProcessFormat<ReactiveMapCharacter>(nameof(ReactiveMapCharacter));
+
     public MapCharactersSectionEntry MapCharacter { get; set; }
 
     private ChibiItem _chibi;
+
     public ChibiItem Chibi
     {
         get => _chibi;
@@ -337,6 +351,7 @@ public class ReactiveMapCharacter : LayoutEntryWithImage
             {
                 FacingDirection = ChibiItem.Direction.DOWN_LEFT;
             }
+
             SetUpChibi();
             _script.UnsavedChanges = true;
         }
@@ -370,7 +385,8 @@ public class ReactiveMapCharacter : LayoutEntryWithImage
         }
     }
 
-    public ReactiveMapCharacter(MapCharactersSectionEntry mapCharacter, SKPoint origin, Project project, ScriptItem script,
+    public ReactiveMapCharacter(MapCharactersSectionEntry mapCharacter, SKPoint origin, Project project,
+        ScriptItem script,
         MapCharactersSubEditorViewModel parent)
     {
         _script = script;

@@ -5,7 +5,7 @@ using Avalonia.Media;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
@@ -13,10 +13,10 @@ using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors;
 
-public class ChessToggleGuideScriptCommandEditorViewModel : ScriptCommandEditorViewModel
+public partial class ChessToggleGuideScriptCommandEditorViewModel : ScriptCommandEditorViewModel
 {
     [Reactive]
-    public SKBitmap Chessboard { get; set; }
+    public partial SKBitmap Chessboard { get; set; }
 
     public ObservableCollection<HighlightedChessSpace> GuidePieces { get; } = [];
 
@@ -128,13 +128,13 @@ public class ChessToggleGuideScriptCommandEditorViewModel : ScriptCommandEditorV
     }
 }
 
-public class HighlightedChessSpace(IImmutableSolidColorBrush fill, SKPoint position, int paramIndex, int spaceIndex) : ReactiveObject
+public partial class HighlightedChessSpace(IImmutableSolidColorBrush fill, SKPoint position, int paramIndex, int spaceIndex) : ReactiveObject
 {
     [Reactive]
-    public IImmutableSolidColorBrush Fill { get; set; } = fill;
+    public partial IImmutableSolidColorBrush Fill { get; set; } = fill;
 
     [Reactive]
-    public string SvgFill { get; set; } = string.Empty;
+    public partial string SvgFill { get; set; } = string.Empty;
 
     public SKPoint Position { get; } = position;
 

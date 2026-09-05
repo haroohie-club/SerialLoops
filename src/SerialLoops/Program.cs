@@ -2,8 +2,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Avalonia;
-using Avalonia.ReactiveUI;
-using SerialLoops.Lib;
+using ReactiveUI.Avalonia;
 using SerialLoops.Utility;
 
 namespace SerialLoops;
@@ -18,13 +17,6 @@ internal sealed class Program
     {
         try
         {
-#if !WINDOWS
-            if ((Environment.GetEnvironmentVariable(EnvironmentVariables.Flatpak) ?? bool.FalseString).Equals(
-                    bool.TrueString, StringComparison.OrdinalIgnoreCase))
-            {
-                NativeLibrary.SetDllImportResolver(Assembly.GetAssembly(typeof(NAudio.Sdl2.WaveInSdl))!, DllImportResolver);
-            }
-#endif
             BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
         }
         catch (Exception ex)
@@ -41,7 +33,7 @@ internal sealed class Program
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
-            .UseReactiveUI()
+            .UseReactiveUI(builder => builder.WithAvalonia())
             .WithInterFont()
             .LogToTrace();
 

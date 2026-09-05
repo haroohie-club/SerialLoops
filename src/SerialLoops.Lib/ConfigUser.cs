@@ -6,10 +6,10 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using DynamicData;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Hacks;
 using SerialLoops.Lib.Script;
+using SerialLoops.Lib.Util;
 
 namespace SerialLoops.Lib;
 
@@ -77,7 +77,7 @@ public class ConfigUser
         if (missingHacks.Length != 0)
         {
             IO.CopyFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Hacks"), HacksDirectory, log);
-            Hacks.AddRange(missingHacks);
+            Hacks.AddObservableRange(missingHacks);
             File.WriteAllText(Path.Combine(HacksDirectory, "hacks.json"), JsonSerializer.Serialize(Hacks));
         }
 

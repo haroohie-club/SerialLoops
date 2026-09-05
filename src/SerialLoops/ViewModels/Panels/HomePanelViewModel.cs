@@ -4,11 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Platform.Storage;
-using DynamicData;
+using AvaloniaEdit.Utils;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia.Enums;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Utility;
 using SerialLoops.ViewModels.Dialogs;
@@ -16,7 +16,7 @@ using SerialLoops.Views.Dialogs;
 
 namespace SerialLoops.ViewModels.Panels;
 
-public class HomePanelViewModel : ViewModelBase
+public partial class HomePanelViewModel : ViewModelBase
 {
     public MainWindowViewModel MainWindow { get; set; }
     public ILogger Log => MainWindow.Log;
@@ -24,7 +24,7 @@ public class HomePanelViewModel : ViewModelBase
     public ObservableCollection<RecentProjectViewModel> RecentProjects { get; }
 
     [Reactive]
-    public bool DisplayFirstTimeFlatpakMessage { get; set; }
+    public partial bool DisplayFirstTimeFlatpakMessage { get; set; }
 
     public ICommand ImportProjectsCommand { get; }
 
@@ -54,22 +54,22 @@ public class HomePanelViewModel : ViewModelBase
     }
 }
 
-public class RecentProjectViewModel : ReactiveObject
+public partial class RecentProjectViewModel : ReactiveObject
 {
     [Reactive]
-    public string Text { get; set; }
+    public partial string Text { get; set; }
     public bool IsMissing { get; set; }
     public string IconPath { get; set; }
     public string LinkColorKey { get; set; }
 
     [Reactive]
-    public ICommand OpenCommand { get; private set; }
+    public partial ICommand OpenCommand { get; private set; }
     [Reactive]
-    public ICommand RenameCommand { get; private set; }
+    public partial ICommand RenameCommand { get; private set; }
     [Reactive]
-    public ICommand DuplicateCommand { get; private set; }
+    public partial ICommand DuplicateCommand { get; private set; }
     [Reactive]
-    public ICommand DeleteCommand { get; private set; }
+    public partial ICommand DeleteCommand { get; private set; }
 
     public RecentProjectViewModel(string path, HomePanelViewModel parent)
     {

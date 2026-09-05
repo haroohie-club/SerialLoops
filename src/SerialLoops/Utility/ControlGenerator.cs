@@ -27,12 +27,20 @@ public static class ControlGenerator
         }
     }
 
-    public static SvgImage GetVectorIcon(string iconName, ILogger log)
+    public static Image GetVectorIcon(string iconName, ILogger log, double size = 24)
     {
         try
         {
-            var path = $"avares://SerialLoops/Assets/Icons/{iconName}.svg";
-            return new() { Source = SvgSource.Load(path, new(path)) };
+            string path = $"avares://SerialLoops/Assets/Icons/{iconName}.svg";
+            return new()
+            {
+                Source = new SvgImage { Source = SvgSource.Load(path, new(path)) },
+                Width = size,
+                Height = size,
+                Stretch = Stretch.Uniform,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+            };
         }
         catch (Exception ex)
         {
@@ -41,7 +49,7 @@ public static class ControlGenerator
         }
     }
 
-    public static Avalonia.Svg.Svg GetVectorIcon(string iconName, ILogger log, int size = 100)
+    public static Avalonia.Svg.Svg GetSvg(string iconName, ILogger log, int size = 100)
     {
         try
         {
@@ -100,7 +108,7 @@ public static class ControlGenerator
             VerticalAlignment = VerticalAlignment.Center,
             Spacing = 5,
         };
-        panel.Children.Add(GetVectorIcon(iconName, log, size: 16));
+        panel.Children.Add(GetSvg(iconName, log, size: 16));
         panel.Children.Add(control);
         return panel;
     }

@@ -1,17 +1,17 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.ViewModels.Editors;
 using SerialLoops.Views.Dialogs;
 
 namespace SerialLoops.ViewModels.Dialogs;
 
-public class AddInteractableObjectDialogViewModel : ViewModelBase
+public partial class AddInteractableObjectDialogViewModel : ViewModelBase
 {
     public ObservableCollection<ReactiveInteractableObject> UnusedInteractableObjects { get; }
     [Reactive]
-    public ReactiveInteractableObject SelectedInteractableObject { get; set; }
+    public partial ReactiveInteractableObject SelectedInteractableObject { get; set; }
     public bool HackApplied { get; }
 
     public ICommand AddCommand { get; }

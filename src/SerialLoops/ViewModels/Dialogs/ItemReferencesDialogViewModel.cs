@@ -6,7 +6,7 @@ using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Templates;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
@@ -17,13 +17,13 @@ using SerialLoops.Views.Dialogs;
 
 namespace SerialLoops.ViewModels.Dialogs;
 
-public class ItemReferencesDialogViewModel : ViewModelBase
+public partial class ItemReferencesDialogViewModel : ViewModelBase
 {
     private readonly ILogger _log;
     private Project _project;
 
     [Reactive]
-    public string FoundReferencesLabel { get; private set; } = string.Empty;
+    public partial string FoundReferencesLabel { get; private set; } = string.Empty;
     public EditorTabsPanelViewModel Tabs { get; }
     public ItemDescription Item { get; }
 
@@ -36,19 +36,13 @@ public class ItemReferencesDialogViewModel : ViewModelBase
         set
         {
             this.RaiseAndSetIfChanged(ref _items, value);
-            Source = new(GetSections())
-            {
-                Columns =
+            Source = new HierarchicalTreeDataGridSource<ITreeItem>(GetSections()).WithHierarchicalExpanderColumn(
+                null,
+                new TreeDataGridTemplateColumn
                 {
-                    new HierarchicalExpanderColumn<ITreeItem>(
-                        new TemplateColumn<ITreeItem>(null, new FuncDataTemplate<ITreeItem>((val, namescope) =>
-                        {
-                            return val?.GetDisplay();
-                        })),
-                        i => i.Children
-                    )
-                }
-            };
+                    CellTemplate = new FuncDataTemplate<ITreeItem>((val, namescope) => val?.GetDisplay()),
+                },
+                i => i.Children);
             Source.ExpandAll();
         }
     }
@@ -72,7 +66,7 @@ public class ItemReferencesDialogViewModel : ViewModelBase
 
     public void OpenItem(TreeDataGrid viewer)
     {
-        ItemDescription item = _project.FindItem(((ITreeItem)viewer.RowSelection.SelectedItem)?.Text);
+        ItemDescription item = _project.FindItem((viewer.SelectedItem as ITreeItem)?.Text);
         if (item is not null)
         {
             Tabs.OpenTab(item);
@@ -86,10 +80,10 @@ public class ItemReferencesDialogViewModel : ViewModelBase
             .Select(g => new SectionTreeItem(
                 ControlGenerator.LocalizeItemTypes(g.Key),
                 g.Select(i => new ItemDescriptionTreeItem(i)),
-                ControlGenerator.GetVectorIcon(g.Key.ToString(), _log, size: 16)
+                ControlGenerator.GetSvg(g.Key.ToString(), _log, size: 16)
             )));
     }
 
     [Reactive]
-    public HierarchicalTreeDataGridSource<ITreeItem> Source { get; private set; }
+    public partial HierarchicalTreeDataGridSource<ITreeItem> Source { get; private set; }
 }

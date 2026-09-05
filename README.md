@@ -99,7 +99,7 @@ Please file bugs in the Issues tab in this repository. Please include the follow
 Serial Loops is licensed under the GPLv3. See [LICENSE](LICENSE) for more information.
 
 ### Prerequisites
-Serial Loops requires the .NET 8.0 SDK to build. You can download it [here](https://dotnet.microsoft.com/download/dotnet/8.0).
+Serial Loops requires the .NET 10.0 SDK to build. You can download it [here](https://dotnet.microsoft.com/download/dotnet/10.0).
 
 Additionally, on macOS, you will have to install CMake so that the build can compile SDL2. To do this, download the macOS dmg for your
 [here](https://cmake.org/download/) and install it. Then run:
@@ -116,19 +116,12 @@ To build Serial Loops for your platform, run:
 ```bash
 dotnet build
 ```
-On Linux/Mac, you need to specify the target framework:
-```bash
-dotnet build -f net8.0
-```
-Specifying this prevents dotnet from trying to build the Windows project, which can cause errors.
 
 We recommend [Rider](https://www.jetbrains.com/rider/) for development as it has the best Avalonia support and is now free to use for non-commercial purposes; however, on Windows, you can also use [Visual Studio 2022](https://visualstudio.microsoft.com/).
-You can also build from both of these IDEs; however, when building from Rider on Linux/Mac, you must go into **Settings &rarr; Build, Execution, Deployment &rarr; Toolset and Build** and add `TargetFramework=net8.0`
-to the MSBuild global properties field. This has the same effect as specifying `-f net8.0` on the command line.
 
 If you'd like to contribute new features or fixes, we recommend [getting in touch on Discord first](https://discord.gg/nesRSbpeFM) before submitting a pull request!
 
 ### Testing
 Serial Loops has headless tests that run to test the UI and other functionality of the program.
 
-Tests can be run via `dotnet test` (make sure to add `-f net8.0` on Linux or Mac) or through the test runners in Rider or Visual Studio.
+Tests can be run via `dotnet test` or through the test runners in Rider or Visual Studio.

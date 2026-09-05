@@ -46,7 +46,7 @@ public class MapItem : Item
         }
         SKBitmap mapWithGrid = new(map.Width, map.Height);
         using SKCanvas canvas = new(mapWithGrid);
-        canvas.DrawBitmap(map, new SKPoint(0, 0));
+        canvas.DrawBitmap(map, new SKPoint(0, 0), SKSamplingOptions.Default);
 
         SKPoint gridZero = GetOrigin(grp);
         if (displayPathingMap)
@@ -58,15 +58,15 @@ public class MapItem : Item
                     for (int x = 0; x < Map.PathingMap[y].Length; x++)
                     {
                         SKPoint origin = new(gridZero.X - x * 32 + y * 32, gridZero.Y + x * 16 + y * 16);
-                        SKPath diamond = new();
+                        SKPathBuilder diamond = new();
                         diamond.AddPoly(
                         [
                             origin,
                             new(origin.X - 32, origin.Y + 16),
                             new(origin.X, origin.Y + 32),
-                            new(origin.X + 32, origin.Y + 16)
+                            new(origin.X + 32, origin.Y + 16),
                         ]);
-                        canvas.DrawRegion(new(diamond), GetPathingCellPaint(x, y));
+                        canvas.DrawRegion(new(diamond.Detach()), GetPathingCellPaint(x, y));
                     }
                 }
             }
@@ -77,7 +77,7 @@ public class MapItem : Item
                     for (int y = 0; y < Map.PathingMap[x].Length; y++)
                     {
                         SKPoint origin = new(gridZero.X - x * 16 + y * 16, gridZero.Y + x * 8 + y * 8);
-                        SKPath diamond = new();
+                        SKPathBuilder diamond = new();
                         diamond.AddPoly(
                         [
                             origin,
@@ -85,7 +85,7 @@ public class MapItem : Item
                             new(origin.X, origin.Y + 16),
                             new(origin.X + 16, origin.Y + 8),
                         ]);
-                        canvas.DrawRegion(new(diamond), GetPathingCellPaint(x, y));
+                        canvas.DrawRegion(new(diamond.Detach()), GetPathingCellPaint(x, y));
                     }
                 }
             }
@@ -105,7 +105,7 @@ public class MapItem : Item
                 start = new(gridZero.X - Map.Settings.StartingPosition.x * 16 + Map.Settings.StartingPosition.y * 16, gridZero.Y + Map.Settings.StartingPosition.x * 8 + Map.Settings.StartingPosition.y * 8 + 8);
                 icon = GetMapIcon("Origin_Point", 16);
             }
-            canvas.DrawBitmap(icon, start);
+            canvas.DrawBitmap(icon, start, SKSamplingOptions.Default);
         }
 
         canvas.Flush();

@@ -10,7 +10,7 @@ using System.Windows.Input;
 using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Hacks;
 using SerialLoops.Utility;
@@ -22,11 +22,11 @@ public partial class AsmHackCreationDialogViewModel : ViewModelBase
 {
     public ObservableCollection<HackFileContainer> HackFiles { get; set; } = [];
     [Reactive]
-    public HackFileContainer SelectedHackFile { get; set; }
+    public partial HackFileContainer SelectedHackFile { get; set; }
     [Reactive]
-    public string Name { get; set; }
+    public partial string Name { get; set; }
     [Reactive]
-    public string Description { get; set; }
+    public partial string Description { get; set; }
 
     private ILogger _log;
     public ICommand SelectHackFilesCommand { get; set; }
@@ -188,7 +188,7 @@ public partial class HackFileContainer(string hackFilePath, string hackFileConte
     private static partial Regex NameIsAddressRegex();
 }
 
-public class HackSymbolContainer(string symbol) : ReactiveObject
+public partial class HackSymbolContainer(string symbol) : ReactiveObject
 {
     private uint _location;
     public uint Location => _location;
@@ -207,16 +207,16 @@ public class HackSymbolContainer(string symbol) : ReactiveObject
     }
 
     [Reactive]
-    public string Symbol { get; set; } = symbol;
+    public partial string Symbol { get; set; } = symbol;
 }
 
-public class HackParameterContainer : ReactiveObject
+public partial class HackParameterContainer : ReactiveObject
 {
     public ICommand AddValueCommand { get; }
 
     public string Name { get; }
     [Reactive]
-    public string DescriptiveName { get; set; }
+    public partial string DescriptiveName { get; set; }
     public ObservableCollection<HackParameterValueContainer> Values { get; } = [];
 
     public HackParameterContainer(string name)
@@ -227,14 +227,14 @@ public class HackParameterContainer : ReactiveObject
     }
 }
 
-public class HackParameterValueContainer : ReactiveObject
+public partial class HackParameterValueContainer : ReactiveObject
 {
     public ICommand RemoveValueCommand { get; }
 
     [Reactive]
-    public string Name { get; set; }
+    public partial string Name { get; set; }
     [Reactive]
-    public string Value { get; set; }
+    public partial string Value { get; set; }
 
     public HackParameterValueContainer(string name, string value, HackParameterContainer parent)
     {

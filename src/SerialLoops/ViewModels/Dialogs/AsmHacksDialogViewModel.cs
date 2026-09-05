@@ -17,7 +17,7 @@ using HaroohieClub.NitroPacker.Patcher.Overlay;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia.Enums;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Hacks;
@@ -27,7 +27,7 @@ using SerialLoops.Views.Dialogs;
 
 namespace SerialLoops.ViewModels.Dialogs;
 
-public class AsmHacksDialogViewModel : ViewModelBase
+public partial class AsmHacksDialogViewModel : ViewModelBase
 {
     private const int NUM_OVERLAYS = 26;
 
@@ -36,7 +36,7 @@ public class AsmHacksDialogViewModel : ViewModelBase
     public ConfigUser Configuration { get; set; }
     private Dictionary<HackFile, SelectedHackParameter[]> _hackParameters = [];
     [Reactive]
-    public AsmHack SelectedHack { get; set; }
+    public partial AsmHack SelectedHack { get; set; }
     public ICommand HackChangedCommand { get; set; }
     public ICommand ImportHackCommand { get; set; }
     public ICommand SaveCommand { get; set; }

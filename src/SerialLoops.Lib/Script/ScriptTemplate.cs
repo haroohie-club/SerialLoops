@@ -7,7 +7,6 @@ using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
-using SoftCircuits.Collections;
 
 namespace SerialLoops.Lib.Script;
 

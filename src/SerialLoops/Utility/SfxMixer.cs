@@ -1,7 +1,8 @@
-﻿#if !WINDOWS
-using NAudio.Sdl2;
+﻿using System;
+#if MACOS
+#elif !WINDOWS
+using NAudio.Wave.Alsa;
 #endif
-using System;
 using NAudio.Wave;
 
 namespace SerialLoops.Utility;
@@ -9,9 +10,13 @@ namespace SerialLoops.Utility;
 public class SfxMixer : IDisposable
 {
 #if WINDOWS
-    private WaveOut _player;
+    private readonly WaveOut _player;
+#elif MACOS
+    private readonly AVFoundationOut _player;
 #else
-    private WaveOutSdl _player;
+#pragma warning disable CA1416
+    private readonly AlsaOut _player;
+#pragma warning restore CA1416
 #endif
 
     public IWavePlayer Player => _player;
@@ -19,11 +24,21 @@ public class SfxMixer : IDisposable
     public SfxMixer()
     {
 #if WINDOWS
-        _player = new() { DesiredLatency = 100 };
+        _player = new() { BufferMilliseconds = 100 };
+#elif MACOS
+        _player = new();
 #else
-        _player = new() { DesiredLatency = 10 };
+#pragma warning disable CA1416
+        _player = new();
+#pragma warning restore CA1416
 #endif
     }
 
-    public void Dispose() => _player?.Dispose();
+#pragma warning disable CA1416
+    public void Dispose()
+    {
+        _player?.Dispose();
+        GC.SuppressFinalize(this);
+    }
+#pragma warning restore CA1416
 }

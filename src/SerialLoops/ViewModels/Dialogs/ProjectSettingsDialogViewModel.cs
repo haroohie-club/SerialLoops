@@ -2,7 +2,7 @@
 using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Util;
@@ -12,14 +12,14 @@ using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Dialogs;
 
-public class ProjectSettingsDialogViewModel : ViewModelBase
+public partial class ProjectSettingsDialogViewModel : ViewModelBase
 {
     public ICommand ReplaceCommand { get; private set; }
     public ICommand ApplyCommand { get; private set; }
     public ICommand CancelCommand { get; private set; }
 
     [Reactive]
-    public string GameTitle { get; set; }
+    public partial string GameTitle { get; set; }
 
     private SKBitmap _icon;
     public SKBitmap Icon

@@ -8,29 +8,29 @@ using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia.Enums;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Utility;
 using SerialLoops.Views.Dialogs;
 
 namespace SerialLoops.ViewModels.Dialogs;
 
-public class ImportProjectDialogViewModel : ViewModelBase
+public partial class ImportProjectDialogViewModel : ViewModelBase
 {
     private string _expectedRomHash = string.Empty;
     private string _actualRomHash = string.Empty;
     private ILogger _log;
 
     [Reactive]
-    public string RomHashString { get; set; }
+    public partial string RomHashString { get; set; }
     [Reactive]
-    public string SlzipPath { get; set; }
+    public partial string SlzipPath { get; set; }
     [Reactive]
-    public string RomPath { get; set; }
+    public partial string RomPath { get; set; }
     [Reactive]
-    public bool IgnoreHash { get; set; }
+    public partial bool IgnoreHash { get; set; }
     [Reactive]
-    public bool CanImport { get; set; }
+    public partial bool CanImport { get; set; }
 
     public ICommand SelectExportedProjectCommand { get; }
     public ICommand OpenRomCommand { get; }

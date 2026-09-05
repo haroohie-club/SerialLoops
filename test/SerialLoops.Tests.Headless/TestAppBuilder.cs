@@ -1,6 +1,6 @@
 using Avalonia;
 using Avalonia.Headless;
-using Avalonia.ReactiveUI;
+using ReactiveUI.Avalonia;
 
 [assembly: AvaloniaTestApplication(typeof(SerialLoops.Tests.Headless.TestAppBuilder))]
 namespace SerialLoops.Tests.Headless;
@@ -9,7 +9,7 @@ public class TestAppBuilder
 {
     public static AppBuilder BuildAvaloniaApp() => AppBuilder.Configure<App>()
         .UseSkia()
-        .UseReactiveUI()
+        .UseReactiveUI(b => b.WithAvalonia())
         .UseHeadless(new()
         {
             UseHeadlessDrawing = false,

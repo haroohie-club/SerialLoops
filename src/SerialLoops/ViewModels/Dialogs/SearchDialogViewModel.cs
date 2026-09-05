@@ -11,7 +11,7 @@ using Avalonia.Input;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia.Enums;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
@@ -22,7 +22,7 @@ using SerialLoops.Views.Dialogs;
 
 namespace SerialLoops.ViewModels.Dialogs;
 
-public class SearchDialogViewModel : ViewModelBase
+public partial class SearchDialogViewModel : ViewModelBase
 {
     public ICommand OpenItemCommand { get; }
     public ICommand SearchCommand { get; }
@@ -31,23 +31,23 @@ public class SearchDialogViewModel : ViewModelBase
     public ICommand CloseCommand { get; }
 
     [Reactive]
-    public string SearchStatusLabel { get; private set; } = Strings.SearchProjectLabel;
+    public partial string SearchStatusLabel { get; private set; } = Strings.SearchProjectLabel;
     [Reactive]
-    public KeyGesture CloseHotKey { get; private set; }
+    public partial KeyGesture CloseHotKey { get; private set; }
     [Reactive]
-    public KeyGesture DeepSearchHotKey { get; private set; }
+    public partial KeyGesture DeepSearchHotKey { get; private set; }
     [Reactive]
-    public HierarchicalTreeDataGridSource<ITreeItem> Source { get; private set; }
+    public partial HierarchicalTreeDataGridSource<ITreeItem> Source { get; private set; }
 
     private readonly ILogger _log;
     private readonly Project _project;
     private readonly EditorTabsPanelViewModel _tabs;
 
     [Reactive]
-    public string SearchText { get; set; }
+    public partial string SearchText { get; set; }
 
     [Reactive]
-    public string ToggleText { get; set; }
+    public partial string ToggleText { get; set; }
 
     private bool _toggleScopesTo = false;
 
@@ -63,19 +63,13 @@ public class SearchDialogViewModel : ViewModelBase
         set
         {
             this.RaiseAndSetIfChanged(ref _items, value);
-            Source = new(GetSections())
-            {
-                Columns =
+            Source = new HierarchicalTreeDataGridSource<ITreeItem>(GetSections()).WithHierarchicalExpanderColumn(
+                null,
+                new TreeDataGridTemplateColumn
                 {
-                    new HierarchicalExpanderColumn<ITreeItem>(
-                        new TemplateColumn<ITreeItem>(
-                            null,
-                            new FuncDataTemplate<ITreeItem>((val, _) => val?.GetDisplay()),
-                            cellEditingTemplate: null, options: null
-                        ), i => i.Children
-                    ),
+                    CellTemplate = new FuncDataTemplate<ITreeItem>((val, _) => val?.GetDisplay()),
                 },
-            };
+                i => i.Children);
 
             Source.ExpandAll();
         }
@@ -88,7 +82,7 @@ public class SearchDialogViewModel : ViewModelBase
             .Select(g => new SectionTreeItem(
                 ControlGenerator.LocalizeItemTypes(g.Key),
                 g.Select(i => new ItemDescriptionTreeItem(i)),
-                ControlGenerator.GetVectorIcon(g.Key.ToString(), _log, size: 16)
+                ControlGenerator.GetSvg(g.Key.ToString(), _log, size: 16)
             )));
     }
 
@@ -179,7 +173,7 @@ public class SearchDialogViewModel : ViewModelBase
 
     public void OpenItem(TreeDataGrid viewer)
     {
-        ItemDescription item = _project.FindItem(((ITreeItem)viewer.RowSelection?.SelectedItem)?.Text);
+        ItemDescription item = _project.FindItem((viewer.SelectedItem as ITreeItem)?.Text);
         if (item is null)
         {
             return;
@@ -189,19 +183,19 @@ public class SearchDialogViewModel : ViewModelBase
     }
 }
 
-public class LocalizedSearchScope(SearchQuery.DataHolder scope) : ReactiveObject
+public partial class LocalizedSearchScope(SearchQuery.DataHolder scope) : ReactiveObject
 {
     public SearchQuery.DataHolder Scope { get; } = scope;
     public string DisplayText { get; } = Strings.ResourceManager.GetString(scope.ToString());
     [Reactive]
-    public bool IsActive { get; set; }
+    public partial bool IsActive { get; set; }
 }
 
-public class LocalizedItemScope(ItemDescription.ItemType type) : ReactiveObject
+public partial class LocalizedItemScope(ItemDescription.ItemType type) : ReactiveObject
 {
     public ItemDescription.ItemType Type { get; } = type;
     public string Icon => $"avares://SerialLoops/Assets/Icons/{Type.ToString()}.svg";
     public string DisplayText { get; } = Strings.ResourceManager.GetString($"ItemsPanel{type.ToString().Replace("_", "")}s");
     [Reactive]
-    public bool IsActive { get; set; } = true;
+    public partial bool IsActive { get; set; } = true;
 }

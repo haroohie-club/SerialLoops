@@ -12,7 +12,7 @@ using AvaloniaEdit.Utils;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
@@ -25,11 +25,12 @@ using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Controls;
 
-public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
+public partial class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
 {
     public ScriptPreviewCanvas PreviewCanvas { get; set; }
 
     private ScriptPreview _preview;
+
     public ScriptPreview Preview
     {
         get => _preview;
@@ -59,58 +60,73 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
                 {
                     switch (_preview.CurrentFade.Verb)
                     {
-                       case EventFile.CommandVerb.SCREEN_FADEOUT:
-                           FadeColor =
-                               ((ColorMonochromeScriptParameter)_preview.CurrentFade.Parameters[4]).ColorType switch
-                               {
-                                   ColorMonochromeScriptParameter.ColorMonochrome.ColorMonoParamCustom =>
-                                       new ImmutableSolidColorBrush(((ColorScriptParameter)_preview.CurrentFade.Parameters[2]).Color.ToAvalonia()),
-                                   ColorMonochromeScriptParameter.ColorMonochrome.ColorMonoParamWhite => Brushes.White,
-                                   _ => Brushes.Black,
-                               };
-                           FadeTime = TimeSpan.FromSeconds(((ShortScriptParameter)_preview.CurrentFade.Parameters[0]).Value / 60.0);
-                           FadeTopScreen = ((ScreenScriptParameter)_preview.CurrentFade.Parameters[3]).Screen is ScreenScriptParameter.DsScreen.TOP or ScreenScriptParameter.DsScreen.BOTH;
-                           FadeBottomScreen = ((ScreenScriptParameter)_preview.CurrentFade.Parameters[3]).Screen is ScreenScriptParameter.DsScreen.BOTTOM or ScreenScriptParameter.DsScreen.BOTH;
-                           StartFadeOpacity = 0.0;
-                           EndFadeOpacity = 1.0;
-                           ConstantFadeOpacity = 0.5;
-                           break;
+                        case EventFile.CommandVerb.SCREEN_FADEOUT:
+                            FadeColor =
+                                ((ColorMonochromeScriptParameter)_preview.CurrentFade.Parameters[4]).ColorType switch
+                                {
+                                    ColorMonochromeScriptParameter.ColorMonochrome.ColorMonoParamCustom =>
+                                        new ImmutableSolidColorBrush(
+                                            ((ColorScriptParameter)_preview.CurrentFade.Parameters[2]).Color
+                                            .ToAvalonia()),
+                                    ColorMonochromeScriptParameter.ColorMonochrome.ColorMonoParamWhite => Brushes.White,
+                                    _ => Brushes.Black,
+                                };
+                            FadeTime = TimeSpan.FromSeconds(
+                                ((ShortScriptParameter)_preview.CurrentFade.Parameters[0]).Value / 60.0);
+                            FadeTopScreen =
+                                ((ScreenScriptParameter)_preview.CurrentFade.Parameters[3]).Screen is
+                                ScreenScriptParameter.DsScreen.TOP or ScreenScriptParameter.DsScreen.BOTH;
+                            FadeBottomScreen =
+                                ((ScreenScriptParameter)_preview.CurrentFade.Parameters[3]).Screen is
+                                ScreenScriptParameter.DsScreen.BOTTOM or ScreenScriptParameter.DsScreen.BOTH;
+                            StartFadeOpacity = 0.0;
+                            EndFadeOpacity = 1.0;
+                            ConstantFadeOpacity = 0.5;
+                            break;
 
-                       case EventFile.CommandVerb.SCREEN_FADEIN:
-                           FadeColor =
-                               ((ColorMonochromeScriptParameter)_preview.CurrentFade.Parameters[3]).ColorType switch
-                               {
-                                   ColorMonochromeScriptParameter.ColorMonochrome.ColorMonoParamCustom => new ImmutableSolidColorBrush(((SKColor)_preview.FadedColor!).ToAvalonia()),
-                                   ColorMonochromeScriptParameter.ColorMonochrome.ColorMonoParamWhite => Brushes.White,
-                                   _ => Brushes.Black,
-                               };
-                           FadeTime = TimeSpan.FromSeconds(((ShortScriptParameter)_preview.CurrentFade.Parameters[0]).Value / 60.0);
-                           FadeTopScreen = ((ScreenScriptParameter)_preview.CurrentFade.Parameters[2]).Screen is ScreenScriptParameter.DsScreen.TOP or ScreenScriptParameter.DsScreen.BOTH;
-                           FadeBottomScreen = ((ScreenScriptParameter)_preview.CurrentFade.Parameters[2]).Screen is ScreenScriptParameter.DsScreen.BOTTOM or ScreenScriptParameter.DsScreen.BOTH;
-                           StartFadeOpacity = 1.0;
-                           EndFadeOpacity = 0.0;
-                           ConstantFadeOpacity = 0.0;
-                           break;
+                        case EventFile.CommandVerb.SCREEN_FADEIN:
+                            FadeColor =
+                                ((ColorMonochromeScriptParameter)_preview.CurrentFade.Parameters[3]).ColorType switch
+                                {
+                                    ColorMonochromeScriptParameter.ColorMonochrome.ColorMonoParamCustom =>
+                                        new ImmutableSolidColorBrush(((SKColor)_preview.FadedColor!).ToAvalonia()),
+                                    ColorMonochromeScriptParameter.ColorMonochrome.ColorMonoParamWhite => Brushes.White,
+                                    _ => Brushes.Black,
+                                };
+                            FadeTime = TimeSpan.FromSeconds(
+                                ((ShortScriptParameter)_preview.CurrentFade.Parameters[0]).Value / 60.0);
+                            FadeTopScreen =
+                                ((ScreenScriptParameter)_preview.CurrentFade.Parameters[2]).Screen is
+                                ScreenScriptParameter.DsScreen.TOP or ScreenScriptParameter.DsScreen.BOTH;
+                            FadeBottomScreen =
+                                ((ScreenScriptParameter)_preview.CurrentFade.Parameters[2]).Screen is
+                                ScreenScriptParameter.DsScreen.BOTTOM or ScreenScriptParameter.DsScreen.BOTH;
+                            StartFadeOpacity = 1.0;
+                            EndFadeOpacity = 0.0;
+                            ConstantFadeOpacity = 0.0;
+                            break;
 
-                       case EventFile.CommandVerb.INVEST_START:
-                           FadeColor = Brushes.Black;
-                           FadeTime = TimeSpan.FromSeconds(1.0);
-                           FadeTopScreen = false;
-                           FadeBottomScreen = true;
-                           StartFadeOpacity = 0.0;
-                           EndFadeOpacity = 1.0;
-                           ConstantFadeOpacity = 0.0;
-                           break;
+                        case EventFile.CommandVerb.INVEST_START:
+                            FadeColor = Brushes.Black;
+                            FadeTime = TimeSpan.FromSeconds(1.0);
+                            FadeTopScreen = false;
+                            FadeBottomScreen = true;
+                            StartFadeOpacity = 0.0;
+                            EndFadeOpacity = 1.0;
+                            ConstantFadeOpacity = 0.0;
+                            break;
 
-                       case EventFile.CommandVerb.SCREEN_FLASH:
-                           FadeColor = new ImmutableSolidColorBrush(((ColorScriptParameter)_preview.CurrentFade.Parameters[3]).Color.ToAvalonia());
-                           short fadeInFrames = ((ShortScriptParameter)_preview.CurrentFade.Parameters[0]).Value;
-                           short fadeOutFrames = ((ShortScriptParameter)_preview.CurrentFade.Parameters[2]).Value;
-                           FlashTime = TimeSpan.FromSeconds(
-                               (fadeInFrames + ((ShortScriptParameter)_preview.CurrentFade.Parameters[1]).Value + fadeOutFrames) / 60.0);
-                           Hold1Percentage = fadeInFrames / 60.0 / FlashTime.TotalSeconds;
-                           Hold2Percentage = 1 - fadeOutFrames / 60.0 / FlashTime.TotalSeconds;
-                           break;
+                        case EventFile.CommandVerb.SCREEN_FLASH:
+                            FadeColor = new ImmutableSolidColorBrush(
+                                ((ColorScriptParameter)_preview.CurrentFade.Parameters[3]).Color.ToAvalonia());
+                            short fadeInFrames = ((ShortScriptParameter)_preview.CurrentFade.Parameters[0]).Value;
+                            short fadeOutFrames = ((ShortScriptParameter)_preview.CurrentFade.Parameters[2]).Value;
+                            FlashTime = TimeSpan.FromSeconds(
+                                (fadeInFrames + ((ShortScriptParameter)_preview.CurrentFade.Parameters[1]).Value +
+                                 fadeOutFrames) / 60.0);
+                            Hold1Percentage = fadeInFrames / 60.0 / FlashTime.TotalSeconds;
+                            Hold2Percentage = 1 - fadeOutFrames / 60.0 / FlashTime.TotalSeconds;
+                            break;
                     }
                 }
                 else
@@ -118,8 +134,11 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
                     FadeTime = TimeSpan.Zero;
                     FlashTime = TimeSpan.Zero;
                     FadeColor = new ImmutableSolidColorBrush(((SKColor)_preview.FadedColor!).ToAvalonia());
-                    FadeTopScreen = _preview.FadedScreens is ScreenScriptParameter.DsScreen.TOP or ScreenScriptParameter.DsScreen.BOTH;
-                    FadeBottomScreen = _preview.FadedScreens is ScreenScriptParameter.DsScreen.BOTTOM or ScreenScriptParameter.DsScreen.BOTH;
+                    FadeTopScreen =
+                        _preview.FadedScreens is ScreenScriptParameter.DsScreen.TOP
+                            or ScreenScriptParameter.DsScreen.BOTH;
+                    FadeBottomScreen = _preview.FadedScreens is ScreenScriptParameter.DsScreen.BOTTOM
+                        or ScreenScriptParameter.DsScreen.BOTH;
                     ConstantFadeOpacity = 0.5;
                 }
             }
@@ -147,7 +166,8 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
                     else
                     {
                         EpisodeHeader = new(EpisodeHeaderScriptParameter
-                            .GetTexture((EpisodeHeaderScriptParameter.Episode)_preview.EpisodeHeader, project).GetTexture());
+                            .GetTexture((EpisodeHeaderScriptParameter.Episode)_preview.EpisodeHeader, project)
+                            .GetTexture());
                         EpisodeHeaderVisible = true;
                         KbgVisible = false;
                         PlaceVisible = false;
@@ -170,9 +190,11 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
 
                 if (_preview.ChibiEmote.EmotingChibi is not null)
                 {
-                    SKBitmap emotes = project.Grp.GetFileByName("SYS_ADV_T08DNX").GetImage(width: 32, transparentIndex: 0);
+                    SKBitmap emotes = project.Grp.GetFileByName("SYS_ADV_T08DNX")
+                        .GetImage(width: 32, transparentIndex: 0);
                     SKBitmap emote = new(32, 32);
-                    emotes.ExtractSubset(emote, new(0, _preview.ChibiEmote.InternalYOffset, 32, _preview.ChibiEmote.InternalYOffset + 32));
+                    emotes.ExtractSubset(emote,
+                        new(0, _preview.ChibiEmote.InternalYOffset, 32, _preview.ChibiEmote.InternalYOffset + 32));
                     int chibiY = _preview.TopScreenChibis.First(c => c.Chibi == _preview.ChibiEmote.EmotingChibi).Y;
                     ChibiEmote = new(new(emote), _preview.ChibiEmote.ExternalXOffset + 16, chibiY - 32);
                 }
@@ -196,19 +218,22 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
                 ChessBoard = new(_preview.ChessPuzzle.GetChessboard(project));
 
                 ChessGuideSpaces.Clear();
-                foreach (SKPoint rectOrigin in _preview.ChessGuideSpaces.Select(g => ChessPuzzleItem.GetChessPiecePosition(g)))
+                foreach (SKPoint rectOrigin in _preview.ChessGuideSpaces.Select(g =>
+                             ChessPuzzleItem.GetChessPiecePosition(g)))
                 {
                     ChessGuideSpaces.Add(new(rectOrigin.X + 5, rectOrigin.Y + 203));
                 }
 
                 ChessHighlightedSpaces.Clear();
-                foreach (SKPoint rectOrigin in _preview.ChessHighlightedSpaces.Select(h => ChessPuzzleItem.GetChessSpacePosition(h)))
+                foreach (SKPoint rectOrigin in _preview.ChessHighlightedSpaces.Select(h =>
+                             ChessPuzzleItem.GetChessSpacePosition(h)))
                 {
                     ChessHighlightedSpaces.Add(new(rectOrigin.X + 5, rectOrigin.Y + 203));
                 }
 
                 ChessCrossedSpaces.Clear();
-                foreach (SKPoint rectOrigin in _preview.ChessCrossedSpaces.Select(c => ChessPuzzleItem.GetChessSpacePosition(c)))
+                foreach (SKPoint rectOrigin in _preview.ChessCrossedSpaces.Select(c =>
+                             ChessPuzzleItem.GetChessSpacePosition(c)))
                 {
                     ChessCrossedSpaces.Add(new(rectOrigin.X + 5, rectOrigin.Y + 203));
                 }
@@ -233,19 +258,25 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
                         case BgType.TEX_CG_DUAL_SCREEN:
                             SKBitmap dualScreenBg = _preview.Background.GetBackground();
                             if (_preview.BgScrollCommand is not null &&
-                                ((BgScrollDirectionScriptParameter)_preview.BgScrollCommand.Parameters[0]).ScrollDirection ==
+                                ((BgScrollDirectionScriptParameter)_preview.BgScrollCommand.Parameters[0])
+                                .ScrollDirection ==
                                 BgScrollDirectionScriptParameter.BgScrollDirection.BgScrollDown)
                             {
-
-                                dualScreenBg.ExtractSubset(topScreenBitmap, new(0, _preview.Background.Graphic2.Height - 192, 256, _preview.Background.Graphic2.Height));
+                                dualScreenBg.ExtractSubset(topScreenBitmap,
+                                    new(0, _preview.Background.Graphic2.Height - 192, 256,
+                                        _preview.Background.Graphic2.Height));
                                 int bottomScreenY = dualScreenBg.Height - 192;
-                                dualScreenBg.ExtractSubset(bottomScreenBitmap, new(0, bottomScreenY, 256, bottomScreenY + 192));
+                                dualScreenBg.ExtractSubset(bottomScreenBitmap,
+                                    new(0, bottomScreenY, 256, bottomScreenY + 192));
                             }
                             else
                             {
                                 dualScreenBg.ExtractSubset(topScreenBitmap, new(0, 0, 256, 192));
-                                dualScreenBg.ExtractSubset(bottomScreenBitmap, new(0, _preview.Background.Graphic2.Height, 256, _preview.Background.Graphic2.Height + 192));
+                                dualScreenBg.ExtractSubset(bottomScreenBitmap,
+                                    new(0, _preview.Background.Graphic2.Height, 256,
+                                        _preview.Background.Graphic2.Height + 192));
                             }
+
                             TopScreenCg = new(topScreenBitmap);
                             BottomScreenCg = new(bottomScreenBitmap);
                             break;
@@ -253,9 +284,10 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
                         case BgType.TEX_CG_SINGLE:
                             TopScreenCg = null;
                             if (_preview.BgPositionBool || (_preview.BgScrollCommand is not null &&
-                                                           ((BgScrollDirectionScriptParameter)_preview.BgScrollCommand
-                                                               .Parameters[0]).ScrollDirection ==
-                                                           BgScrollDirectionScriptParameter.BgScrollDirection.BgScrollDown))
+                                                            ((BgScrollDirectionScriptParameter)_preview.BgScrollCommand
+                                                                .Parameters[0]).ScrollDirection ==
+                                                            BgScrollDirectionScriptParameter.BgScrollDirection
+                                                                .BgScrollDown))
                             {
                                 SKBitmap bgBitmap = _preview.Background.GetBackground();
                                 bgBitmap.ExtractSubset(bottomScreenBitmap,
@@ -266,13 +298,15 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
                                 _preview.Background.GetBackground()
                                     .ExtractSubset(bottomScreenBitmap, new(0, 0, 256, 192));
                             }
+
                             BottomScreenCg = new(bottomScreenBitmap);
                             break;
 
                         case BgType.TEX_CG_WIDE:
                             TopScreenCg = null;
                             if (_preview.BgScrollCommand is not null &&
-                                ((BgScrollDirectionScriptParameter)_preview.BgScrollCommand.Parameters[0]).ScrollDirection ==
+                                ((BgScrollDirectionScriptParameter)_preview.BgScrollCommand.Parameters[0])
+                                .ScrollDirection ==
                                 BgScrollDirectionScriptParameter.BgScrollDirection.BgScrollRight)
                             {
                                 SKBitmap bgBitmap = _preview.Background.GetBackground();
@@ -281,8 +315,10 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
                             }
                             else
                             {
-                                _preview.Background.GetBackground().ExtractSubset(bottomScreenBitmap, new(0, 0, 256, 192));
+                                _preview.Background.GetBackground()
+                                    .ExtractSubset(bottomScreenBitmap, new(0, 0, 256, 192));
                             }
+
                             BottomScreenCg = new(bottomScreenBitmap);
                             break;
 
@@ -297,6 +333,7 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
                             BottomScreenCg = null;
                             using SKCanvas canvas = new(bottomScreenBitmap);
                             canvas.DrawBitmap(_preview.Background.GetBackground(), new SKPoint(0, 0),
+                                SKSamplingOptions.Default,
                                 PaletteEffectScriptParameter.GetPaletteEffectPaint(_preview.PalEffect));
                             canvas.Flush();
                             Bg = new(bottomScreenBitmap);
@@ -326,7 +363,8 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
                 }
                 else
                 {
-                    Item = new(_preview.Item.Item, _preview.Item.Location, _preview.Item.Transition, _preview.ItemPreviousLocation, VerticalOffset);
+                    Item = new(_preview.Item.Item, _preview.Item.Location, _preview.Item.Transition,
+                        _preview.ItemPreviousLocation, VerticalOffset);
                 }
             }
 
@@ -349,20 +387,22 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
                     SKBitmap dialogueBitmap = new(256, 52);
                     using SKCanvas canvas = new(dialogueBitmap);
 
-                    canvas.DrawBitmap(project.DialogueBitmap, new(0, 24, 32, 36), new SKRect(0, 12, 256, 24));
+                    canvas.DrawBitmap(project.DialogueBitmap, new(0, 24, 32, 36), new SKRect(0, 12, 256, 24),
+                        SKSamplingOptions.Default);
                     SKColor dialogueBoxColor = project.DialogueBitmap.GetPixel(0, 28);
                     canvas.DrawRect(0, 24, 256, 28, new() { Color = dialogueBoxColor });
                     canvas.DrawBitmap(project.DialogueBitmap, new(0, 37, 32, 64),
-                        new SKRect(224, 25, 256, 52));
+                        new SKRect(224, 25, 256, 52), SKSamplingOptions.Default);
                     if (_preview.LastDialogueCommand.Verb != EventFile.CommandVerb.PIN_MNL)
                     {
                         canvas.DrawBitmap(project.SpeakerBitmap,
                             new(0, 16 * ((int)line.Speaker - 1), 64, 16 * ((int)line.Speaker)),
-                            new SKRect(0, 0, 64, 16));
+                            new SKRect(0, 0, 64, 16), SKSamplingOptions.Default);
                     }
 
                     canvas.DrawHaroohieText(line.Text, dialoguePaint, project, y: 20);
-                    canvas.DrawBitmap(project.DialogueArrow, new(0, 0, 16, 16), new SKRect(240, 36, 256, 52));
+                    canvas.DrawBitmap(project.DialogueArrow, new(0, 0, 16, 16), new SKRect(240, 36, 256, 52),
+                        SKSamplingOptions.Default);
                     canvas.Flush();
                     Dialogue = new(dialogueBitmap);
                 }
@@ -381,9 +421,9 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
                 using SKCanvas flyoutCanvas = new(topicFlyout);
 
                 flyoutCanvas.DrawBitmap(flyoutSysTex, new(0, 20, 32, 32),
-                    new SKRect(0, 12, 32, 24));
+                    new SKRect(0, 12, 32, 24), SKSamplingOptions.Default);
                 flyoutCanvas.DrawBitmap(flyoutSysTex, new(0, 0, 44, 20),
-                    new SKRect(32, 6, 76, 26));
+                    new SKRect(32, 6, 76, 26), SKSamplingOptions.Default);
 
                 SKBitmap topicCards = project.Grp.GetFileByName("SYS_CMN_B09DNX").GetImage(transparentIndex: 0);
                 int srcX = _preview.Topic.TopicEntry.CardType switch
@@ -397,7 +437,7 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
                 };
 
                 flyoutCanvas.DrawBitmap(topicCards, new(srcX, 0, srcX + 20, 24),
-                    new SKRect(10, 2, 30, 26));
+                    new SKRect(10, 2, 30, 26), SKSamplingOptions.Default);
                 flyoutCanvas.Flush();
                 TopicFlyout = new(topicFlyout);
                 TopicFlyoutY = VerticalOffset + 128;
@@ -418,7 +458,8 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
                     choiceCanvas.DrawRect(1, 1, 216, 16, new() { Color = new(146, 146, 146) });
                     choiceCanvas.DrawRect(2, 2, 214, 14, new() { Color = new(69, 69, 69) });
                     int choiceWidth = choice.CalculateHaroohieTextWidth(project);
-                    choiceCanvas.DrawHaroohieText(choice, project.DialogueColorFilters[0], project, (218 - choiceWidth) / 2, 2);
+                    choiceCanvas.DrawHaroohieText(choice, project.DialogueColorFilters[0], project,
+                        (218 - choiceWidth) / 2, 2);
                     choiceCanvas.Flush();
                     choiceGraphics.Add(choiceGraphic);
                 }
@@ -437,102 +478,70 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
         }
     }
 
-    [Reactive]
-    public bool FadeTopScreen { get; set; }
-    [Reactive]
-    public bool FadeBottomScreen { get; set; }
-    [Reactive]
-    public IImmutableSolidColorBrush FadeColor { get; set; }
-    [Reactive]
-    public TimeSpan FadeTime { get; set; }
-    [Reactive]
-    public double StartFadeOpacity { get; set; }
-    [Reactive]
-    public double EndFadeOpacity { get; set; }
-    [Reactive]
-    public double ConstantFadeOpacity { get; set; }
+    [Reactive] public partial bool FadeTopScreen { get; set; }
+    [Reactive] public partial bool FadeBottomScreen { get; set; }
+    [Reactive] public partial IImmutableSolidColorBrush FadeColor { get; set; }
+    [Reactive] public partial TimeSpan FadeTime { get; set; }
+    [Reactive] public partial double StartFadeOpacity { get; set; }
+    [Reactive] public partial double EndFadeOpacity { get; set; }
+    [Reactive] public partial double ConstantFadeOpacity { get; set; }
 
-    [Reactive]
-    public TimeSpan FlashTime { get; set; }
-    [Reactive]
-    public double Hold1Percentage { get; set; }
-    [Reactive]
-    public double Hold2Percentage { get; set; }
+    [Reactive] public partial TimeSpan FlashTime { get; set; }
+    [Reactive] public partial double Hold1Percentage { get; set; }
+    [Reactive] public partial double Hold2Percentage { get; set; }
 
-    [Reactive]
-    public SKAvaloniaImage EpisodeHeader { get; set; }
-    [Reactive]
-    public bool EpisodeHeaderVisible { get; set; }
+    [Reactive] public partial SKAvaloniaImage EpisodeHeader { get; set; }
+    [Reactive] public partial bool EpisodeHeaderVisible { get; set; }
 
-    [Reactive]
-    public SKAvaloniaImage Kbg { get; set; }
-    [Reactive]
-    public bool KbgVisible { get; set; }
+    [Reactive] public partial SKAvaloniaImage Kbg { get; set; }
+    [Reactive] public partial bool KbgVisible { get; set; }
 
-    [Reactive]
-    public SKAvaloniaImage Place { get; set; }
-    [Reactive]
-    public bool PlaceVisible { get; set; }
+    [Reactive] public partial SKAvaloniaImage Place { get; set; }
+    [Reactive] public partial bool PlaceVisible { get; set; }
 
     public ObservableCollection<AnimatedPositionedChibi> TopScreenChibis { get; set; } = [];
-    [Reactive]
-    public bool TopScreenChibisVisible { get; set; }
-    [Reactive]
-    public PositionedChibiEmote ChibiEmote { get; set; }
+    [Reactive] public partial bool TopScreenChibisVisible { get; set; }
+    [Reactive] public partial PositionedChibiEmote ChibiEmote { get; set; }
 
-    [Reactive]
-    public SKAvaloniaImage TopScreenCg { get; set; }
-    [Reactive]
-    public SKAvaloniaImage BottomScreenCg { get; set; }
-    [Reactive]
-    public SKAvaloniaImage Bg { get; set; }
-    [Reactive]
-    public Point BgOrigin { get; set; }
-    [Reactive]
-    public SKAvaloniaImage PreviousBg { get; set; }
-    [Reactive]
-    public TimeSpan BgFadeTime { get; set; }
+    [Reactive] public partial SKAvaloniaImage TopScreenCg { get; set; }
+    [Reactive] public partial SKAvaloniaImage BottomScreenCg { get; set; }
+    [Reactive] public partial SKAvaloniaImage Bg { get; set; }
+    [Reactive] public partial Point BgOrigin { get; set; }
+    [Reactive] public partial SKAvaloniaImage PreviousBg { get; set; }
+    [Reactive] public partial TimeSpan BgFadeTime { get; set; }
 
-    [Reactive]
-    public AnimatedPositionedItem Item { get; set; }
+    [Reactive] public partial AnimatedPositionedItem Item { get; set; }
 
     public ObservableCollection<AnimatedPositionedSprite> Sprites { get; set; } = [];
-    [Reactive]
-    public int VerticalOffset { get; set; }
+    [Reactive] public partial int VerticalOffset { get; set; }
 
-    [Reactive]
-    public SKAvaloniaImage Dialogue { get; set; }
-    [Reactive]
-    public int DialogueY { get; set; }
+    [Reactive] public partial SKAvaloniaImage Dialogue { get; set; }
+    [Reactive] public partial int DialogueY { get; set; }
 
-    [Reactive]
-    public SKAvaloniaImage TopicFlyout { get; set; }
-    [Reactive]
-    public int TopicFlyoutY { get; set; }
+    [Reactive] public partial SKAvaloniaImage TopicFlyout { get; set; }
+    [Reactive] public partial int TopicFlyoutY { get; set; }
 
     public ObservableCollection<PositionedChoice> CurrentChoices { get; set; } = [];
 
-    public SKAvaloniaImage HaruhiMeter { get; } = new(((SystemTextureItem)project.Items.First(i => i.Name == "SYSTEX_SYS_CMN_B14")).GetTexture());
-    [Reactive]
-    public bool HaruhiMeterVisible { get; set; }
+    public SKAvaloniaImage HaruhiMeter { get; } =
+        new(((SystemTextureItem)project.Items.First(i => i.Name == "SYSTEX_SYS_CMN_B14")).GetTexture());
 
-    [Reactive]
-    public bool ChessMode { get; set; }
-    [Reactive]
-    public SKAvaloniaImage ChessBoard { get; set; }
+    [Reactive] public partial bool HaruhiMeterVisible { get; set; }
+
+    [Reactive] public partial bool ChessMode { get; set; }
+    [Reactive] public partial SKAvaloniaImage ChessBoard { get; set; }
     public ObservableCollection<Point> ChessHighlightedSpaces { get; set; } = [];
     public ObservableCollection<Point> ChessGuideSpaces { get; set; } = [];
     public ObservableCollection<Point> ChessCrossedSpaces { get; set; } = [];
 
-    [Reactive]
-    public Bitmap ErrorImage { get; set; }
-    [Reactive]
-    public bool DisplayError { get; set; }
+    [Reactive] public partial Bitmap ErrorImage { get; set; }
+    [Reactive] public partial bool DisplayError { get; set; }
 }
 
-public class AnimatedPositionedChibi(PositionedChibi chibi) : ReactiveObject
+public partial class AnimatedPositionedChibi(PositionedChibi chibi) : ReactiveObject
 {
     private PositionedChibi _chibi = chibi;
+
     public PositionedChibi Chibi
     {
         get => _chibi;
@@ -544,13 +553,15 @@ public class AnimatedPositionedChibi(PositionedChibi chibi) : ReactiveObject
     }
 
     [Reactive]
-    public AnimatedImageViewModel AnimatedImage { get; set; } = new(chibi.Chibi.ChibiAnimations.ElementAt(0).Value);
+    public partial AnimatedImageViewModel AnimatedImage { get; set; } =
+        new(chibi.Chibi.ChibiAnimations.ElementAt(0).Value);
 }
 
-public class AnimatedPositionedSprite : ReactiveObject
+public partial class AnimatedPositionedSprite : ReactiveObject
 {
     private Project _project;
     private PositionedSprite _sprite;
+
     public PositionedSprite Sprite
     {
         get => _sprite;
@@ -561,24 +572,16 @@ public class AnimatedPositionedSprite : ReactiveObject
         }
     }
 
-    [Reactive]
-    public int YPosition { get; set; }
+    [Reactive] public partial int YPosition { get; set; }
 
-    [Reactive]
-    public double StartXPosition { get; set; }
-    [Reactive]
-    public double EndXPosition { get; set; }
-    [Reactive]
-    public Easing AnimEasing { get; set; }
-    [Reactive]
-    public double StartOpacity { get; set; }
-    [Reactive]
-    public double EndOpacity { get; set; }
-    [Reactive]
-    public TimeSpan AnimDuration { get; set; }
+    [Reactive] public partial double StartXPosition { get; set; }
+    [Reactive] public partial double EndXPosition { get; set; }
+    [Reactive] public partial Easing AnimEasing { get; set; }
+    [Reactive] public partial double StartOpacity { get; set; }
+    [Reactive] public partial double EndOpacity { get; set; }
+    [Reactive] public partial TimeSpan AnimDuration { get; set; }
 
-    [Reactive]
-    public AnimatedImageViewModel AnimatedImage { get; set; }
+    [Reactive] public partial AnimatedImageViewModel AnimatedImage { get; set; }
 
     public AnimatedPositionedSprite(PositionedSprite sprite, Project project)
     {
@@ -591,13 +594,14 @@ public class AnimatedPositionedSprite : ReactiveObject
             {
                 SKBitmap tintedFrame = new(framesWithTimings[i].Frame.Width, framesWithTimings[i].Frame.Height);
                 using SKCanvas canvas = new(tintedFrame);
-                canvas.DrawBitmap(framesWithTimings[i].Frame, 0, 0, sprite.PalEffect);
+                canvas.DrawBitmap(framesWithTimings[i].Frame, 0, 0, SKSamplingOptions.Default, sprite.PalEffect);
                 canvas.Flush();
                 framesWithTimings[i] = (tintedFrame, framesWithTimings[i].Timing);
             }
         }
+
         AnimatedImage = new(framesWithTimings);
-        YPosition  = 192 - AnimatedImage.CurrentFrame.Height;
+        YPosition = 192 - AnimatedImage.CurrentFrame.Height;
 
         if (sprite.PreTransition != SpritePreTransitionScriptParameter.SpritePreTransition.NO_TRANSITION)
         {
@@ -645,14 +649,16 @@ public class AnimatedPositionedSprite : ReactiveObject
 
                 case SpritePreTransitionScriptParameter.SpritePreTransition.SLIDE_LEFT:
                     AnimDuration = TimeSpan.FromSeconds(0.25);
-                    StartXPosition = sprite.StartPosition == 0 ? 256 :  sprite.StartPosition;
+                    StartXPosition = sprite.StartPosition == 0 ? 256 : sprite.StartPosition;
                     StartOpacity = 1;
                     AnimEasing = new LinearEasing();
                     break;
 
                 case SpritePreTransitionScriptParameter.SpritePreTransition.SLIDE_RIGHT:
                     AnimDuration = TimeSpan.FromSeconds(0.25);
-                    StartXPosition = sprite.StartPosition == 0 ? -framesWithTimings[0].Frame.Width :  sprite.StartPosition;
+                    StartXPosition = sprite.StartPosition == 0
+                        ? -framesWithTimings[0].Frame.Width
+                        : sprite.StartPosition;
                     StartOpacity = 1;
                     AnimEasing = new LinearEasing();
                     break;
@@ -807,8 +813,10 @@ public class AnimatedPositionedItem
                         _ => new(0, 0),
                     };
             }
+
             return;
         }
+
         Image = new(item.ItemGraphic.GetImage(transparentIndex: 0));
         if (transition == 0)
         {

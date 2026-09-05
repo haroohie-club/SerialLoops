@@ -25,6 +25,7 @@ public class BackgroundItem : Item, IPreviewableGraphic
     public BackgroundItem(string name) : base(name, ItemType.Background)
     {
     }
+
     public BackgroundItem(string name, int id, BgTableEntry entry, Project project) : base(name, ItemType.Background)
     {
         Id = id;
@@ -66,14 +67,15 @@ public class BackgroundItem : Item, IPreviewableGraphic
                 {
                     SKRect crop = new(0, currentTile * 64, 64, (currentTile + 1) * 64);
                     SKRect dest = new(x, y, x + 64, y + 64);
-                    tileCanvas.DrawBitmap(tiles, crop, dest);
+                    tileCanvas.DrawBitmap(tiles, crop, dest, SKSamplingOptions.Default);
                     currentTile++;
                 }
             }
+
             tileCanvas.Flush();
 
-            canvas.DrawBitmap(tileBitmap, new SKPoint(0, 0));
-            canvas.DrawBitmap(Graphic1.GetImage(), new SKPoint(0, Graphic2.Height));
+            canvas.DrawBitmap(tileBitmap, new SKPoint(0, 0), SKSamplingOptions.Default);
+            canvas.DrawBitmap(Graphic1.GetImage(), new SKPoint(0, Graphic2.Height), SKSamplingOptions.Default);
             canvas.Flush();
 
             return bitmap;
@@ -87,8 +89,8 @@ public class BackgroundItem : Item, IPreviewableGraphic
             SKBitmap bitmap = new(Graphic1.Width, Graphic1.Height + Graphic2.Height);
             using SKCanvas canvas = new(bitmap);
 
-            canvas.DrawBitmap(Graphic1.GetImage(), new SKPoint(0, 0));
-            canvas.DrawBitmap(Graphic2.GetImage(), new SKPoint(0, Graphic1.Height));
+            canvas.DrawBitmap(Graphic1.GetImage(), new SKPoint(0, 0), SKSamplingOptions.Default);
+            canvas.DrawBitmap(Graphic2.GetImage(), new SKPoint(0, Graphic1.Height), SKSamplingOptions.Default);
             canvas.Flush();
 
             return bitmap;
@@ -108,16 +110,19 @@ public class BackgroundItem : Item, IPreviewableGraphic
                     log.LogError(localize("ErrorFailedReplacingKbg"));
                     return false;
                 }
+
                 tracker.Finished++;
                 break;
 
             case BgType.TEX_CG_SINGLE:
                 tracker.Focus(localize("BackgroundEditorCGSingleReplaceProgressMessage"), 1);
-                List<SKColor> singlePalette = Helpers.GetPaletteFromImage(image, transparentIndex == 0 ? 255 : 256, log);
+                List<SKColor> singlePalette =
+                    Helpers.GetPaletteFromImage(image, transparentIndex == 0 ? 255 : 256, log);
                 if (singlePalette.Count == 255)
                 {
                     singlePalette.Insert(0, new(0, 248, 0));
                 }
+
                 Graphic1.SetPalette(singlePalette);
                 Graphic1.SetImage(image);
                 tracker.Finished++;
@@ -131,15 +136,18 @@ public class BackgroundItem : Item, IPreviewableGraphic
 
                 tracker.Focus(localize("BgItemBottomScreenProgressMessage"), 1);
                 using SKCanvas textureCanvas = new(newTextureBitmap);
-                textureCanvas.DrawBitmap(image, new(0, image.Height - newTextureBitmap.Height, newTextureBitmap.Width, image.Height), new SKRect(0, 0, newTextureBitmap.Width, newTextureBitmap.Height));
+                textureCanvas.DrawBitmap(image,
+                    new(0, image.Height - newTextureBitmap.Height, newTextureBitmap.Width, image.Height),
+                    new SKRect(0, 0, newTextureBitmap.Width, newTextureBitmap.Height), SKSamplingOptions.Default);
                 textureCanvas.Flush();
                 tracker.Finished++;
 
                 using SKCanvas tileSourceCanvas = new(tileSource);
-                tileSourceCanvas.DrawBitmap(image, 0, 0);
+                tileSourceCanvas.DrawBitmap(image, 0, 0, SKSamplingOptions.Default);
                 tileSourceCanvas.Flush();
 
-                tracker.Focus(localize("BgEditorTopScreenProgressMessage"), newTileBitmap.Height / 64 * newTileBitmap.Width / 64);
+                tracker.Focus(localize("BgEditorTopScreenProgressMessage"),
+                    newTileBitmap.Height / 64 * newTileBitmap.Width / 64);
                 using SKCanvas tileCanvas = new(newTileBitmap);
                 int currentTile = 0;
                 for (int y = 0; y < tileSource.Height; y += 64)
@@ -148,11 +156,12 @@ public class BackgroundItem : Item, IPreviewableGraphic
                     {
                         SKRect crop = new(x, y, x + 64, y + 64);
                         SKRect dest = new(0, currentTile * 64, 64, (currentTile + 1) * 64);
-                        tileCanvas.DrawBitmap(tileSource, crop, dest);
+                        tileCanvas.DrawBitmap(tileSource, crop, dest, SKSamplingOptions.Default);
                         currentTile++;
                         tracker.Finished++;
                     }
                 }
+
                 tileCanvas.Flush();
 
                 tracker.Focus(localize("BackgroundEditorSettingPalettesAndImages"), 5);
@@ -161,6 +170,7 @@ public class BackgroundItem : Item, IPreviewableGraphic
                 {
                     tilePalette.Insert(0, new(0, 248, 0));
                 }
+
                 tracker.Finished++;
                 Graphic1.SetPalette(tilePalette);
                 tracker.Finished++;
@@ -181,14 +191,14 @@ public class BackgroundItem : Item, IPreviewableGraphic
                 tracker.Focus(localize("BgItemDrawingTexturesProgressMessage"), 2);
                 using SKCanvas canvas1 = new(newGraphic1);
                 canvas1.DrawBitmap(image, new(0, 0, newGraphic1.Width, newGraphic1.Height),
-                    new SKRect(0, 0, newGraphic1.Width, newGraphic1.Height));
+                    new SKRect(0, 0, newGraphic1.Width, newGraphic1.Height), SKSamplingOptions.Default);
                 canvas1.Flush();
                 tracker.Finished++;
 
                 using SKCanvas canvas2 = new(newGraphic2);
                 canvas2.DrawBitmap(image,
                     new(0, newGraphic1.Height, newGraphic2.Width, newGraphic1.Height + newGraphic2.Height),
-                    new SKRect(0, 0, newGraphic2.Width, newGraphic2.Height));
+                    new SKRect(0, 0, newGraphic2.Width, newGraphic2.Height), SKSamplingOptions.Default);
                 canvas2.Flush();
                 tracker.Finished++;
 
@@ -216,6 +226,7 @@ public class BackgroundItem : Item, IPreviewableGraphic
         {
             SetThumbnail(image, log);
         }
+
         return true;
     }
 
@@ -225,7 +236,9 @@ public class BackgroundItem : Item, IPreviewableGraphic
         {
             return null;
         }
-        SKBitmap tileBitmap = new(Graphic1.Width == 512 ? 192 : 96, (Graphic1.Height + Graphic2?.Height ?? 0) >= 256 ? 128 : 96);
+
+        SKBitmap tileBitmap = new(Graphic1.Width == 512 ? 192 : 96,
+            (Graphic1.Height + Graphic2?.Height ?? 0) >= 256 ? 128 : 96);
         SKBitmap tiles = Thumbnail.GetImage(width: 32, transparentIndex: 0);
         using SKCanvas tileCanvas = new(tileBitmap);
         int currentTile = 0;
@@ -235,10 +248,11 @@ public class BackgroundItem : Item, IPreviewableGraphic
             {
                 SKRect crop = new(0, currentTile * 32, 32, (currentTile + 1) * 32);
                 SKRect dest = new(x, y, x + 32, y + 32);
-                tileCanvas.DrawBitmap(tiles, crop, dest);
+                tileCanvas.DrawBitmap(tiles, crop, dest, SKSamplingOptions.Default);
                 currentTile++;
             }
         }
+
         tileCanvas.Flush();
 
         return tileBitmap;
@@ -259,7 +273,8 @@ public class BackgroundItem : Item, IPreviewableGraphic
             {
                 centeredBitmap = new(96, 128);
                 canvas = new(centeredBitmap);
-                canvas.DrawImage(SKImage.FromBitmap(image), new(0, 0, image.Width, image.Height), new SKRect(0, 12, 96, 84), new(SKCubicResampler.Mitchell), paint);
+                canvas.DrawImage(SKImage.FromBitmap(image), new(0, 0, image.Width, image.Height),
+                    new SKRect(0, 12, 96, 84), new(SKCubicResampler.Mitchell), paint);
                 break;
             }
 
@@ -267,7 +282,8 @@ public class BackgroundItem : Item, IPreviewableGraphic
             {
                 centeredBitmap = new(96, 128);
                 canvas = new(centeredBitmap);
-                canvas.DrawImage(SKImage.FromBitmap(image), new(0, 0, image.Width, image.Height), new SKRect(0, 0, 96, 96), new(SKCubicResampler.Mitchell), paint);
+                canvas.DrawImage(SKImage.FromBitmap(image), new(0, 0, image.Width, image.Height),
+                    new SKRect(0, 0, 96, 96), new(SKCubicResampler.Mitchell), paint);
                 break;
             }
 
@@ -275,7 +291,8 @@ public class BackgroundItem : Item, IPreviewableGraphic
             {
                 centeredBitmap = new(128, 128);
                 canvas = new(centeredBitmap);
-                canvas.DrawImage(SKImage.FromBitmap(image), new(0, 0, image.Width, image.Height), new SKRect(0, 12, 128, 84), new(SKCubicResampler.Mitchell), paint);
+                canvas.DrawImage(SKImage.FromBitmap(image), new(0, 0, image.Width, image.Height),
+                    new SKRect(0, 12, 128, 84), new(SKCubicResampler.Mitchell), paint);
                 break;
             }
 
@@ -283,7 +300,8 @@ public class BackgroundItem : Item, IPreviewableGraphic
             {
                 centeredBitmap = new(96, 128);
                 canvas = new(centeredBitmap);
-                canvas.DrawImage(SKImage.FromBitmap(image), new(0, 0, image.Width, image.Height), new SKRect(8, 2, 120, 126), new(SKCubicResampler.Mitchell), paint);
+                canvas.DrawImage(SKImage.FromBitmap(image), new(0, 0, image.Width, image.Height),
+                    new SKRect(8, 2, 120, 126), new(SKCubicResampler.Mitchell), paint);
                 break;
             }
 
@@ -303,10 +321,11 @@ public class BackgroundItem : Item, IPreviewableGraphic
             {
                 SKRect crop = new(x, y, x + 32, y + 32);
                 SKRect dest = new(0, currentTile * 32, 32, (currentTile + 1) * 32);
-                tileCanvas.DrawBitmap(centeredBitmap, crop, dest);
+                tileCanvas.DrawBitmap(centeredBitmap, crop, dest, SKSamplingOptions.Default);
                 currentTile++;
             }
         }
+
         tileCanvas.Flush();
 
         Thumbnail.SetImage(tileBitmap, newSize: true);
@@ -318,27 +337,34 @@ public class BackgroundItem : Item, IPreviewableGraphic
     {
         using MemoryStream grp1Stream = new();
         Graphic1.GetImage().Encode(grp1Stream, SKEncodedImageFormat.Png, 1);
-        IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{Graphic1.Index:X3}.png"), grp1Stream.ToArray(), project, log);
-        IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Graphic1.Index:X3}.gi"), Graphic1.GetGraphicInfoFile(), project, log);
+        IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{Graphic1.Index:X3}.png"), grp1Stream.ToArray(),
+            project, log);
+        IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Graphic1.Index:X3}.gi"), Graphic1.GetGraphicInfoFile(),
+            project, log);
 
         if (BackgroundType != BgType.KINETIC_SCREEN && BackgroundType != BgType.TEX_CG_SINGLE)
         {
             using MemoryStream grp2Stream = new();
             Graphic2.GetImage().Encode(grp2Stream, SKEncodedImageFormat.Png, 1);
-            IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{Graphic2.Index:X3}.png"), grp2Stream.ToArray(), project, log);
-            IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Graphic2.Index:X3}.gi"), Graphic1.GetGraphicInfoFile(), project, log);
+            IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{Graphic2.Index:X3}.png"), grp2Stream.ToArray(),
+                project, log);
+            IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Graphic2.Index:X3}.gi"),
+                Graphic1.GetGraphicInfoFile(), project, log);
         }
         else if (BackgroundType == BgType.KINETIC_SCREEN)
         {
-            IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Graphic2.Index:X3}.scr"), JsonSerializer.Serialize(Graphic2.ScreenData), project, log);
+            IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Graphic2.Index:X3}.scr"),
+                JsonSerializer.Serialize(Graphic2.ScreenData), project, log);
         }
 
         if (Thumbnail is not null)
         {
             using MemoryStream thumbStream = new();
             Thumbnail.GetImage().Encode(thumbStream, SKEncodedImageFormat.Png, 1);
-            IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{Thumbnail.Index:X3}.png"), thumbStream.ToArray(), project, log);
-            IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Thumbnail.Index:X3}.gi"), Thumbnail.GetGraphicInfoFile(), project, log);
+            IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{Thumbnail.Index:X3}.png"), thumbStream.ToArray(),
+                project, log);
+            IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Thumbnail.Index:X3}.gi"),
+                Thumbnail.GetGraphicInfoFile(), project, log);
         }
     }
 

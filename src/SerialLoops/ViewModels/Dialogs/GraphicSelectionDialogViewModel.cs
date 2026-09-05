@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows.Input;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
@@ -14,7 +14,7 @@ using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Dialogs;
 
-public class GraphicSelectionDialogViewModel : ViewModelBase
+public partial class GraphicSelectionDialogViewModel : ViewModelBase
 {
     private readonly Project _project;
     private readonly ILogger _log;
@@ -24,7 +24,7 @@ public class GraphicSelectionDialogViewModel : ViewModelBase
     private string _filter;
 
     [Reactive]
-    public ObservableCollection<IPreviewableGraphic> Items { get; set; }
+    public partial ObservableCollection<IPreviewableGraphic> Items { get; set; }
     public IPreviewableGraphic CurrentSelection
     {
         get => _currentSelection;
@@ -52,9 +52,9 @@ public class GraphicSelectionDialogViewModel : ViewModelBase
         }
     }
     [Reactive]
-    public string PreviewLabel { get; set; }
+    public partial string PreviewLabel { get; set; }
     [Reactive]
-    public SKBitmap Preview { get; set; }
+    public partial SKBitmap Preview { get; set; }
 
     public ICommand ConfirmCommand { get; }
     public ICommand CancelCommand { get; }

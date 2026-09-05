@@ -7,16 +7,15 @@ using QuikGraph;
 using QuikGraph.Algorithms.Observers;
 using QuikGraph.Algorithms.Search;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
-using SoftCircuits.Collections;
 using static HaruhiChokuretsuLib.Archive.Event.EventFile;
 
 namespace SerialLoops.Lib.Script;
 
-public class ScriptItemCommand : ReactiveObject
+public partial class ScriptItemCommand : ReactiveObject
 {
     public ScriptCommandInvocation Invocation { get; set; }
     public CommandVerb Verb { get; set; }
@@ -699,7 +698,7 @@ public class ScriptItemCommand : ReactiveObject
     }
 
     [Reactive]
-    public string Display { get; set; }
+    public partial string Display { get; set; }
 
     public void UpdateDisplay()
     {

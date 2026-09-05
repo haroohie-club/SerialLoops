@@ -1,13 +1,13 @@
 ﻿using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
 
 namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors;
 
-public class HaruhiMeterScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log, bool noShow)
+public partial class HaruhiMeterScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log, bool noShow)
     : ScriptCommandEditorViewModel(command, scriptEditor, log)
 {
     public string[] Modes => NoShow ? [Strings.AddAmountLabel] : [Strings.AddAmountLabel, Strings.SetAmountLabel];
@@ -21,7 +21,7 @@ public class HaruhiMeterScriptCommandEditorViewModel(ScriptItemCommand command, 
             IsAdd = value == Strings.AddAmountLabel;
         }
     }
-    [Reactive] public bool IsAdd { get; set; } = noShow || ((ShortScriptParameter)command.Parameters[1]).Value == 0;
+    [Reactive] public partial bool IsAdd { get; set; } = noShow || ((ShortScriptParameter)command.Parameters[1]).Value == 0;
 
     public bool NoShow { get; } = noShow;
 

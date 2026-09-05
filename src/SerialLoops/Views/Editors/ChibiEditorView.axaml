@@ -45,7 +45,6 @@
 
         <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="5">
             <Button Content="{x:Static assets:Strings.AnimationExportFramesButton}" Command="{Binding ExportFramesCommand}"/>
-            <Button Content="{x:Static assets:Strings.AnimationExportGifButton}" Command="{Binding ExportGifCommand}"/>
             <Button Content="{x:Static assets:Strings.AnimationReplaceFrames}" Command="{Binding ReplaceFramesCommand}"/>
         </StackPanel>
     </Grid>

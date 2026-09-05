@@ -7,7 +7,7 @@ using Avalonia.Input;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia.Enums;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
@@ -18,7 +18,7 @@ using SerialLoops.ViewModels.Editors;
 
 namespace SerialLoops.ViewModels.Panels;
 
-public class EditorTabsPanelViewModel : ViewModelBase
+public partial class EditorTabsPanelViewModel : ViewModelBase
 {
     private readonly Project _project;
     private readonly ILogger _log;
@@ -26,9 +26,9 @@ public class EditorTabsPanelViewModel : ViewModelBase
     public MainWindowViewModel MainWindow { get; private set; }
 
     [Reactive]
-    public EditorViewModel SelectedTab { get; set; }
+    public partial EditorViewModel SelectedTab { get; set; }
     [Reactive]
-    public bool ShowTabsPanel { get; set; }
+    public partial bool ShowTabsPanel { get; set; }
 
     public ObservableCollection<EditorViewModel> Tabs { get; set; } = [];
     private readonly DropOutStack<EditorViewModel> _closedTabs = new(20);
@@ -37,9 +37,9 @@ public class EditorTabsPanelViewModel : ViewModelBase
     public ICommand ReopenTabCommand { get; }
 
     [Reactive]
-    public KeyGesture CloseTabKeyGesture { get; set; }
+    public partial KeyGesture CloseTabKeyGesture { get; set; }
     [Reactive]
-    public KeyGesture ReopenTabKeyGesture { get; set; }
+    public partial KeyGesture ReopenTabKeyGesture { get; set; }
 
     public EditorTabsPanelViewModel(MainWindowViewModel mainWindow, Project project, ILogger log)
     {
@@ -99,20 +99,7 @@ public class EditorTabsPanelViewModel : ViewModelBase
             case ItemDescription.ItemType.Background:
                 return new BackgroundEditorViewModel((BackgroundItem)item, MainWindow, _project, _log);
             case ItemDescription.ItemType.BGM:
-#if !WINDOWS
-                try
-                {
-#endif
-                    return new BackgroundMusicEditorViewModel((BackgroundMusicItem)item, MainWindow, _project, _log);
-#if !WINDOWS
-                }
-                catch (NAudio.Sdl2.Structures.SdlException ex)
-                {
-                    _log.LogWarning($"SDL Exception: {ex.Message}\n{ex.StackTrace}");
-                    _log.LogError(Strings.SdlExceptionTooManyDevicesText);
-                    return null;
-                }
-#endif
+                return new BackgroundMusicEditorViewModel((BackgroundMusicItem)item, MainWindow, _project, _log);
             case ItemDescription.ItemType.Character:
                 return new CharacterEditorViewModel((CharacterItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Character_Sprite:
@@ -138,39 +125,13 @@ public class EditorTabsPanelViewModel : ViewModelBase
             case ItemDescription.ItemType.Script:
                 return new ScriptEditorViewModel((ScriptItem)item, MainWindow, _log);
             case ItemDescription.ItemType.SFX:
-#if !WINDOWS
-                try
-                {
-#endif
-                    return new SfxEditorViewModel((SfxItem)item, MainWindow, _log);
-#if !WINDOWS
-                }
-                catch (NAudio.Sdl2.Structures.SdlException ex)
-                {
-                    _log.LogWarning($"SDL Exception: {ex.Message}\n{ex.StackTrace}");
-                    _log.LogError(Strings.SdlExceptionTooManyDevicesText);
-                    return null;
-                }
-#endif
+                return new SfxEditorViewModel((SfxItem)item, MainWindow, _log);
             case ItemDescription.ItemType.System_Texture:
                 return new SystemTextureEditorViewModel((SystemTextureItem)item, MainWindow, _project, _log);
             case ItemDescription.ItemType.Topic:
                 return new TopicEditorViewModel((TopicItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Voice:
-#if !WINDOWS
-                try
-                {
-#endif
-                    return new VoicedLineEditorViewModel((VoicedLineItem)item, MainWindow, _log);
-#if !WINDOWS
-                }
-                catch (NAudio.Sdl2.Structures.SdlException ex)
-                {
-                    _log.LogWarning($"SDL Exception: {ex.Message}\n{ex.StackTrace}");
-                    _log.LogError(Strings.SdlExceptionTooManyDevicesText);
-                    return null;
-                }
-#endif
+                return new VoicedLineEditorViewModel((VoicedLineItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Save:
                 return new SaveEditorViewModel((SaveItem)item, MainWindow, _log);
             default:

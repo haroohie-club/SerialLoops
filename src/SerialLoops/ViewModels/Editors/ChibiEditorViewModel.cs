@@ -7,11 +7,11 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Platform.Storage;
-using DynamicData;
+using AvaloniaEdit.Utils;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia.Enums;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Models;
@@ -28,10 +28,10 @@ public partial class ChibiEditorViewModel : EditorViewModel
     private ChibiItem _chibi;
 
     [Reactive]
-    public AnimatedImageViewModel AnimatedChibi { get; set; }
+    public partial AnimatedImageViewModel AnimatedChibi { get; set; }
 
     [Reactive]
-    public ChibiDirectionSelectorViewModel DirectionSelector { get; set; }
+    public partial ChibiDirectionSelectorViewModel DirectionSelector { get; set; }
 
     private ChibiItem.Direction _selectedDirection;
 
@@ -66,12 +66,11 @@ public partial class ChibiEditorViewModel : EditorViewModel
         }
     }
     [Reactive]
-    public string SelectedAnimToolTip { get; set; } = Strings.ChibiEditorAnim00Help;
+    public partial string SelectedAnimToolTip { get; set; } = Strings.ChibiEditorAnim00Help;
 
     public ObservableCollection<ReactiveFrameWithTiming> ChibiFrames { get; } = [];
 
     public ICommand ExportFramesCommand { get; }
-    public ICommand ExportGifCommand { get; }
     public ICommand ReplaceFramesCommand { get; }
 
     public ChibiEditorViewModel(ChibiItem chibi, MainWindowViewModel window, ILogger log) : base(chibi, window, log)
@@ -92,7 +91,6 @@ public partial class ChibiEditorViewModel : EditorViewModel
         UpdateChibi();
 
         ExportFramesCommand = ReactiveCommand.CreateFromTask(ExportFrames);
-        ExportGifCommand = ReactiveCommand.CreateFromTask(ExportGif);
         ReplaceFramesCommand = ReactiveCommand.CreateFromTask(ReplaceFrames);
     }
 
@@ -132,28 +130,6 @@ public partial class ChibiEditorViewModel : EditorViewModel
             }
         }
         await Window.Window.ShowMessageBoxAsync(Strings.MessageBoxTitleSuccessGeneric, Strings.ChibiEditorFramesExportedMessage, ButtonEnum.Ok, Icon.Success, _log);
-    }
-
-    private async Task ExportGif()
-    {
-        string savedGif = (await Window.Window.ShowSaveFilePickerAsync(Strings.ChibiEditorSaveGifFileDialogTitle, [new(Strings.FiletypeGif) { Patterns = ["*.gif"] }]))?.TryGetLocalPath();
-        if (string.IsNullOrEmpty(savedGif))
-        {
-            return;
-        }
-
-        List<SKBitmap> frames = [];
-        foreach (ReactiveFrameWithTiming frame in ChibiFrames)
-        {
-            for (int i = 0; i < frame.Timing; i++)
-            {
-                frames.Add(frame.Frame);
-            }
-        }
-
-        ProgressDialogViewModel tracker = new(Strings.AnimationExportingGifProgressMessage);
-        tracker.InitializeTasks(() => frames.SaveGif(savedGif, tracker), async void () => await Window.Window.ShowMessageBoxAsync(Strings.MessageBoxTitleSuccessGeneric, Strings.AnimationExportedGifSuccessMessage, ButtonEnum.Ok, Icon.Success, _log));
-        await new ProgressDialog { DataContext = tracker }.ShowDialog(Window.Window);
     }
 
     private async Task ReplaceFrames()

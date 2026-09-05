@@ -12,7 +12,6 @@ using SerialLoops.Lib;
 using SerialLoops.Lib.Script;
 using SerialLoops.Utility;
 using SerialLoops.Views.Dialogs;
-using SoftCircuits.Collections;
 
 namespace SerialLoops.ViewModels.Dialogs;
 

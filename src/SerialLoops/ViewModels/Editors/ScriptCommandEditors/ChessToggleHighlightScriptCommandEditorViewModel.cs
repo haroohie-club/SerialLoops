@@ -3,7 +3,7 @@ using System.Linq;
 using Avalonia;
 using Avalonia.Media;
 using HaruhiChokuretsuLib.Util;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
@@ -11,10 +11,10 @@ using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors;
 
-public class ChessToggleHighlightScriptCommandEditorViewModel : ScriptCommandEditorViewModel
+public partial class ChessToggleHighlightScriptCommandEditorViewModel : ScriptCommandEditorViewModel
 {
     [Reactive]
-    public SKBitmap Chessboard { get; set; }
+    public partial SKBitmap Chessboard { get; set; }
 
     public ObservableCollection<HighlightedChessSpace> HighlightedSpaces { get; } = [];
 

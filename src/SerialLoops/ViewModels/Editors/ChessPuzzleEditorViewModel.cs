@@ -6,7 +6,7 @@ using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Util;
 using ReactiveHistory;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
@@ -14,14 +14,14 @@ using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Editors;
 
-public class ChessPuzzleEditorViewModel : EditorViewModel
+public partial class ChessPuzzleEditorViewModel : EditorViewModel
 {
     private readonly ChessPuzzleItem _chessPuzzle;
 
     public SKBitmap EmptyChessboard { get; }
 
     [Reactive]
-    public ObservableCollection<ChessPieceOnBoard> Pieces { get; private set; }
+    public partial ObservableCollection<ChessPieceOnBoard> Pieces { get; private set; }
 
     private bool _removeMovesLimit = false;
 
@@ -35,7 +35,7 @@ public class ChessPuzzleEditorViewModel : EditorViewModel
         }
     }
     [Reactive]
-    public int NumMovesLimit { get; set; } = 5;
+    public partial int NumMovesLimit { get; set; } = 5;
     private int _numMoves;
     public int NumMoves
     {
@@ -119,17 +119,17 @@ public class ChessPuzzleEditorViewModel : EditorViewModel
     }
 }
 
-public class ChessPieceOnBoard : ReactiveObject
+public partial class ChessPieceOnBoard : ReactiveObject
 {
     public ChessFile.ChessPiece Piece { get; }
     public SKBitmap Image { get; }
 
 
     [Reactive]
-    public float X { get; set; }
+    public partial float X { get; set; }
 
     [Reactive]
-    public float Y { get; set; }
+    public partial float Y { get; set; }
 
     private readonly ChessPuzzleEditorViewModel _editor;
 

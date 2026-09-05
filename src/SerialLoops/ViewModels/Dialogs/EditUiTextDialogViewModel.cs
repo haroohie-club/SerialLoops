@@ -4,7 +4,7 @@ using System.IO;
 using System.Windows.Input;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Util;
@@ -176,12 +176,12 @@ public class EditUiTextDialogViewModel : ViewModelBase
     };
 }
 
-public class UiTextWithDescription(Project project, string description, int index) : ReactiveObject
+public partial class UiTextWithDescription(Project project, string description, int index) : ReactiveObject
 {
     public string Description { get; } = description;
 
     [Reactive]
-    public string UiText { get; set; } = project.UiText.Messages[index].GetSubstitutedString(project);
+    public partial string UiText { get; set; } = project.UiText.Messages[index].GetSubstitutedString(project);
 
     public int Index { get; } = index;
 }

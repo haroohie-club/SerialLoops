@@ -73,7 +73,6 @@ public partial class CharacterSpriteEditorViewModel : EditorViewModel
 
     public ICommand ReplaceCommand { get; set; }
     public ICommand ExportFramesCommand { get; set; }
-    public ICommand ExportGIFCommand { get; set; }
 
     public ICommand UndoCommand { get; }
     public ICommand RedoCommand { get; }
@@ -95,7 +94,6 @@ public partial class CharacterSpriteEditorViewModel : EditorViewModel
 
         ReplaceCommand = ReactiveCommand.CreateFromTask(ReplaceSprite);
         ExportFramesCommand = ReactiveCommand.CreateFromTask(ExportFrames);
-        ExportGIFCommand = ReactiveCommand.CreateFromTask(ExportGIF);
 
         UndoCommand = ReactiveCommand.Create(() => _history.Undo());
         RedoCommand = ReactiveCommand.Create(() => _history.Redo());
@@ -210,37 +208,6 @@ public partial class CharacterSpriteEditorViewModel : EditorViewModel
                 }
             }
             await Window.Window.ShowMessageBoxAsync(Strings.MessageBoxTitleSuccessGeneric, Strings.CharacterSpriteEditorFramesExportedMessage, MsBox.Avalonia.Enums.ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Success, _log);
-        }
-    }
-
-    private async Task ExportGIF()
-    {
-        List<(SKBitmap bitmap, int timing)> animationFrames;
-        if (await Window.Window.ShowMessageBoxAsync(Strings.ChibiEditorAnimationExportOptionMessageBoxTitle, Strings.CharacterSpriteEditorIncludeLipFlapAnimationTitle, MsBox.Avalonia.Enums.ButtonEnum.YesNo, MsBox.Avalonia.Enums.Icon.Question, _log) == MsBox.Avalonia.Enums.ButtonResult.Yes)
-        {
-            animationFrames = _sprite.GetLipFlapAnimation(Window.OpenProject);
-        }
-        else
-        {
-            animationFrames = _sprite.GetClosedMouthAnimation(Window.OpenProject);
-        }
-
-        IStorageFile saveFile = await Window.Window.ShowSaveFilePickerAsync(Strings.CharacterSpriteEditorSaveGifFileDialogTitle, [new(Strings.FiletypeGif) { Patterns = ["*.gif"] }]);
-        if (saveFile is not null)
-        {
-            List<SKBitmap> frames = [];
-            foreach ((SKBitmap frame, int timing) in animationFrames)
-            {
-                for (int i = 0; i < timing; i++)
-                {
-                    frames.Add(frame);
-                }
-            }
-
-            ProgressDialogViewModel tracker = new(Strings.AnimationExportingGifProgressMessage);
-            tracker.InitializeTasks(() => frames.SaveGif(saveFile.Path.LocalPath, tracker),
-                async void () => await Window.Window.ShowMessageBoxAsync(Strings.MessageBoxTitleSuccessGeneric, Strings.AnimationExportedGifSuccessMessage, MsBox.Avalonia.Enums.ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Success, _log));
-            await new ProgressDialog { DataContext = tracker }.ShowDialog(Window.Window);
         }
     }
 
