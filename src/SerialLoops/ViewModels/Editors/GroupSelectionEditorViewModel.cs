@@ -18,24 +18,25 @@ namespace SerialLoops.ViewModels.Editors;
 
 public partial class GroupSelectionEditorViewModel : EditorViewModel
 {
-    [Reactive]
-    public partial GroupSelectionItem GroupSelection { get; set; }
-    [Reactive]
-    public partial ObservableCollection<ScenarioActivityViewModel> Activities { get; set; }
-    [Reactive]
-    public partial ScenarioActivityViewModel SelectedActivity { get; set; }
+    [Reactive] public partial GroupSelectionItem GroupSelection { get; set; }
+    [Reactive] public partial ObservableCollection<ScenarioActivityViewModel> Activities { get; set; }
+    [Reactive] public partial ScenarioActivityViewModel SelectedActivity { get; set; }
     public Project OpenProject { get; }
     public EditorTabsPanelViewModel Tabs { get; }
     public Dictionary<Speaker, SKBitmap> CharacterPortraits { get; } = [];
 
-    public GroupSelectionEditorViewModel(GroupSelectionItem groupSelection, MainWindowViewModel window, ILogger log) : base(groupSelection, window, log)
+    public GroupSelectionEditorViewModel(GroupSelectionItem groupSelection, MainWindowViewModel window, ILogger log) :
+        base(groupSelection, window, log)
     {
         Tabs = window.EditorTabs;
         GroupSelection = groupSelection;
         OpenProject = window.OpenProject;
 
         SKBitmap characterPortraitImage = OpenProject.Grp.GetFileByIndex(0xBAA).GetImage(transparentIndex: 0);
-        foreach (Speaker speaker in new[] { Speaker.KYON, Speaker.HARUHI, Speaker.MIKURU, Speaker.NAGATO, Speaker.KOIZUMI })
+        foreach (Speaker speaker in new[]
+                 {
+                     Speaker.KYON, Speaker.HARUHI, Speaker.MIKURU, Speaker.NAGATO, Speaker.KOIZUMI
+                 })
         {
             int yOffset = (((int)speaker - 1) / 4) * 32;
             int xOffset = (((int)speaker - 1) % 4) * 32;
@@ -45,31 +46,32 @@ public partial class GroupSelectionEditorViewModel : EditorViewModel
 
             CharacterPortraits.Add(speaker, characterPortrait);
         }
+
         SKBitmap anyPortrait = new(24, 24);
         characterPortraitImage.ExtractSubset(anyPortrait, new(96, 96, 120, 120));
         CharacterPortraits.Add(Speaker.INFO, anyPortrait);
 
         // We don't do the Where in advance because we need the index to be accurate
-        Activities = new(groupSelection.Selection.Activities.Select((a, i) => a is not null ? new ScenarioActivityViewModel(this, a, i) : null)
+        Activities = new(groupSelection.Selection.Activities
+            .Select((a, i) => a is not null ? new ScenarioActivityViewModel(this, a, i) : null)
             .Where(a => a is not null));
     }
 }
 
 public partial class ScenarioActivityViewModel : ViewModelBase
 {
-    private GroupSelectionEditorViewModel _selection;
+    private readonly GroupSelectionEditorViewModel _selection;
 
-    [Reactive]
-    public partial bool Selected { get; set; }
+    [Reactive] public partial bool Selected { get; set; }
 
-    [Reactive]
-    public partial ScenarioActivity Activity { get; set; }
+    [Reactive] public partial ScenarioActivity Activity { get; set; }
 
     public ICommand SelectActivityCommand { get; }
     public ICommand SelectFutureDescCommand { get; }
     public ICommand SelectPastDescCommand { get; }
 
     private int _index;
+
     public int Index
     {
         get => _index;
@@ -86,6 +88,7 @@ public partial class ScenarioActivityViewModel : ViewModelBase
     }
 
     private string _title;
+
     public string Title
     {
         get => _title.GetSubstitutedString(_selection.OpenProject);
@@ -99,6 +102,7 @@ public partial class ScenarioActivityViewModel : ViewModelBase
     }
 
     private string _futureDesc;
+
     public string FutureDesc
     {
         get => _futureDesc.GetSubstitutedString(_selection.OpenProject);
@@ -112,6 +116,7 @@ public partial class ScenarioActivityViewModel : ViewModelBase
     }
 
     private string _pastDesc;
+
     public string PastDesc
     {
         get => _pastDesc.GetSubstitutedString(_selection.OpenProject);
@@ -124,11 +129,9 @@ public partial class ScenarioActivityViewModel : ViewModelBase
         }
     }
 
-    [Reactive]
-    public partial SKBitmap SelectedDescriptionImage { get; set; }
+    [Reactive] public partial SKBitmap SelectedDescriptionImage { get; set; }
 
-    [Reactive]
-    public partial ObservableCollection<ScenarioRouteViewModel> Routes { get; set; }
+    [Reactive] public partial ObservableCollection<ScenarioRouteViewModel> Routes { get; set; }
 
     public ScenarioActivityViewModel(GroupSelectionEditorViewModel selection, ScenarioActivity activity, int index)
     {
@@ -162,6 +165,7 @@ public partial class ScenarioActivityViewModel : ViewModelBase
             {
                 _selection.SelectedActivity.Selected = false;
             }
+
             Selected = true;
             SelectedDescriptionImage = null;
             _selection.SelectedActivity = this;
@@ -174,41 +178,40 @@ public partial class ScenarioActivityViewModel : ViewModelBase
         {
             LockedIcons.Add(Activity.RequiredBrigadeMember switch
             {
-                ScenarioActivity.BrigadeMember.MIKURU => _selection.CharacterPortraits[Speaker.MIKURU].Resize(new SKSizeI(48, 48), SKSamplingOptions.Default),
-                ScenarioActivity.BrigadeMember.NAGATO => _selection.CharacterPortraits[Speaker.NAGATO].Resize(new SKSizeI(48, 48), SKSamplingOptions.Default),
-                ScenarioActivity.BrigadeMember.KOIZUMI => _selection.CharacterPortraits[Speaker.KOIZUMI].Resize(new SKSizeI(48, 48), SKSamplingOptions.Default),
-                ScenarioActivity.BrigadeMember.ANY => _selection.CharacterPortraits[Speaker.INFO].Resize(new SKSizeI(48, 48), SKSamplingOptions.Default),
+                ScenarioActivity.BrigadeMember.MIKURU => _selection.CharacterPortraits[Speaker.MIKURU]
+                    .Resize(new SKSizeI(48, 48), SKSamplingOptions.Default),
+                ScenarioActivity.BrigadeMember.NAGATO => _selection.CharacterPortraits[Speaker.NAGATO]
+                    .Resize(new SKSizeI(48, 48), SKSamplingOptions.Default),
+                ScenarioActivity.BrigadeMember.KOIZUMI => _selection.CharacterPortraits[Speaker.KOIZUMI]
+                    .Resize(new SKSizeI(48, 48), SKSamplingOptions.Default),
+                ScenarioActivity.BrigadeMember.ANY => _selection.CharacterPortraits[Speaker.INFO]
+                    .Resize(new SKSizeI(48, 48), SKSamplingOptions.Default),
                 _ => null,
             });
         }
+
         if (Activity.HaruhiPresent)
         {
-            LockedIcons.Add(_selection.CharacterPortraits[Speaker.HARUHI].Resize(new SKSizeI(24, 24), SKSamplingOptions.Default));
+            LockedIcons.Add(_selection.CharacterPortraits[Speaker.HARUHI]
+                .Resize(new SKSizeI(24, 24), SKSamplingOptions.Default));
         }
     }
 
     // Drawing properties
-    private SKBitmap _layoutSource;
+    private readonly SKBitmap _layoutSource;
 
-    [Reactive]
-    public partial SolidColorBrush BackgroundColor { get; private set; }
+    [Reactive] public partial SolidColorBrush BackgroundColor { get; private set; }
 
-    [Reactive]
-    public partial double CanvasLeft { get; private set; }
-    [Reactive]
-    public partial double CanvasTop { get; private set; }
-    [Reactive]
-    public partial double CanvasWidth { get; private set; }
-    [Reactive]
-    public partial double CanvasHeight { get; private set; }
+    [Reactive] public partial double CanvasLeft { get; private set; }
+    [Reactive] public partial double CanvasTop { get; private set; }
+    [Reactive] public partial double CanvasWidth { get; private set; }
+    [Reactive] public partial double CanvasHeight { get; private set; }
 
-    [Reactive]
-    public partial SKBitmap Letter { get; private set; }
+    [Reactive] public partial SKBitmap Letter { get; private set; }
 
     public SKBitmap TitlePlateSlope { get; }
     public SKBitmap TitlePlateMain { get; }
-    [Reactive]
-    public partial SKBitmap TitlePlateText { get; set; }
+    [Reactive] public partial SKBitmap TitlePlateText { get; set; }
 
     public ObservableCollection<SKBitmap> LockedIcons { get; }
 
@@ -250,7 +253,7 @@ public partial class ScenarioActivityViewModel : ViewModelBase
         SKColor tint = index switch
         {
             0 => new(0xD9, 0x80, 0x80, 0xFF),
-            1 => new (0x80, 0x80, 0xFF, 0xFF),
+            1 => new(0x80, 0x80, 0xFF, 0xFF),
             2 => new(0x80, 0xD0, 0x80, 0xFF),
             3 => new(0xD0, 0xC0, 0x40, 0xFF),
             _ => new(255, 255, 255, 255),
@@ -274,7 +277,8 @@ public partial class ScenarioActivityViewModel : ViewModelBase
     {
         TitlePlateText = new(68, 16);
         using SKCanvas titlePlateCanvas = new(TitlePlateText);
-        titlePlateCanvas.DrawHaroohieText(Activity.Title, _selection.OpenProject.DialogueColorFilters[0], _selection.OpenProject, 0, 0);
+        titlePlateCanvas.DrawHaroohieText(Activity.Title, _selection.OpenProject.DialogueColorFilters[0],
+            _selection.OpenProject, 0, 0);
         titlePlateCanvas.Flush();
         TitlePlateText = TitlePlateText.Resize(new SKSizeI(136, 32), SKSamplingOptions.Default);
     }
@@ -283,12 +287,14 @@ public partial class ScenarioActivityViewModel : ViewModelBase
     {
         SelectedDescriptionImage = new(256, 40);
         using SKCanvas canvas = new(SelectedDescriptionImage);
-        canvas.DrawBitmap(_selection.OpenProject.DialogueBitmap, new(0, 24, 32, 36), new SKRect(0, 0, 256, 12));
+        canvas.DrawBitmap(_selection.OpenProject.DialogueBitmap, new(0, 24, 32, 36), new SKRect(0, 0, 256, 12),
+            SKSamplingOptions.Default);
         SKColor dialogueBoxColor = _selection.OpenProject.DialogueBitmap.GetPixel(0, 28);
         canvas.DrawRect(0, 12, 256, 28, new() { Color = dialogueBoxColor });
         canvas.DrawBitmap(_selection.OpenProject.DialogueBitmap, new(0, 37, 32, 64),
-            new SKRect(224, 13, 256, 40));
-        canvas.DrawHaroohieText(description, _selection.OpenProject.DialogueColorFilters[0], _selection.OpenProject, y: 8);
+            new SKRect(224, 13, 256, 40), SKSamplingOptions.Default);
+        canvas.DrawHaroohieText(description, _selection.OpenProject.DialogueColorFilters[0], _selection.OpenProject,
+            y: 8);
         canvas.Flush();
         SelectedDescriptionImage = SelectedDescriptionImage.Resize(new SKSizeI(512, 80), SKSamplingOptions.Default);
     }
@@ -300,10 +306,10 @@ public partial class ScenarioRouteViewModel : ViewModelBase
 
     public EditorTabsPanelViewModel Tabs => _selection.Tabs;
 
-    [Reactive]
-    public partial ScenarioRoute Route { get; set; }
+    [Reactive] public partial ScenarioRoute Route { get; set; }
 
     private string _title;
+
     public string Title
     {
         get => _title.GetSubstitutedString(_selection.OpenProject);
@@ -318,6 +324,7 @@ public partial class ScenarioRouteViewModel : ViewModelBase
     public ObservableCollection<TopicItem> KyonlessTopics { get; set; }
 
     private ScriptItem _script;
+
     public ScriptItem Script
     {
         get => _script;
@@ -334,14 +341,17 @@ public partial class ScenarioRouteViewModel : ViewModelBase
         _selection = selection;
         Route = route;
         _title = route.Title;
-        KyonlessTopics = new(route.KyonlessTopics.Select(t =>
-                (TopicItem)selection.OpenProject.Items.FirstOrDefault(i =>
-                    i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).TopicEntry.Id == t))
-            .Where(t => t is not null));
+        KyonlessTopics =
+        [
+            .. route.KyonlessTopics.Select(t =>
+                    (TopicItem)selection.OpenProject.Items.FirstOrDefault(i =>
+                        i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).TopicEntry.Id == t))
+                .Where(t => t is not null),
+        ];
         _script = (ScriptItem)selection.OpenProject.Items.FirstOrDefault(i =>
             i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == route.ScriptIndex);
 
-        CharacterIcons = new(Route.CharactersInvolved.Select(s => _selection.CharacterPortraits[s]));
+        CharacterIcons = [.. Route.CharactersInvolved.Select(s => _selection.CharacterPortraits[s])];
     }
 
     public ObservableCollection<SKBitmap> CharacterIcons { get; }

@@ -13,7 +13,9 @@ public class SfxMixer : IDisposable
     private WaveOut _player;
 #elif MACOS
 #else
+#pragma warning disable CA1416
     private AlsaOut _player;
+#pragma warning restore CA1416
 #endif
 
     public IWavePlayer Player => _player;
@@ -25,9 +27,17 @@ public class SfxMixer : IDisposable
 #elif MACOS
 
 #else
+#pragma warning disable CA1416
         _player = new();
+#pragma warning restore CA1416
 #endif
     }
 
-    public void Dispose() => _player?.Dispose();
+#pragma warning disable CA1416
+    public void Dispose()
+    {
+        _player?.Dispose();
+        GC.SuppressFinalize(this);
+    }
+#pragma warning restore CA1416
 }
