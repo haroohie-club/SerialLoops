@@ -1,7 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>net10.0;net10.0-macos;net10.0-windows</TargetFrameworks>
+    <TargetFramework Condition="$([MSBuild]::IsOSPlatform('OSX'))">net10.0-macos</TargetFramework>
+    <TargetFramework Condition="$([MSBuild]::IsOSPlatform('Windows'))">net10.0-windows</TargetFramework>
+    <TargetFramework Condition="$([MSBuild]::IsOSPlatform('Linux'))">net10.0</TargetFramework>
     <Nullable>disable</Nullable>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -114,7 +116,7 @@
     <PackageReference Include="Tabalonia" Version="12.0.0" />
     <PackageReference Include="Xaml.Behaviors.Avalonia" Version="12.0.7" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <AvaloniaUILicenseKey Include="avln_on_key:v1:4d99629b51b147a2ac2f592f9915c234" />
   </ItemGroup>

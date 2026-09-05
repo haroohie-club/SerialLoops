@@ -10,7 +10,7 @@ jobs:
       matrix:
         platform:
         - { rid: 'linux-x64', vm: 'ubuntu-latest', tfm: 'net10.0', filter: '--filter "Name !~ BackgroundMusicEditor_ReplacementAndRestoreWork"' }
-        - { rid: 'osx-arm64', vm: 'macos-latest', tfm: 'net10.0', filter: '' }
+        - { rid: 'osx-arm64', vm: 'macos-latest', tfm: 'net10.0-macos', filter: '' }
         - { rid: 'win-x64', vm: 'windows-latest', tfm: 'net10.0-windows', filter: '--filter "Name !~ BackgroundMusicEditor_ReplacementAndRestoreWork"' }
       fail-fast: false
     runs-on: ${{ matrix.platform.vm }}
@@ -23,6 +23,9 @@ jobs:
         uses: actions/setup-dotnet@v4.1.0
         with:
           dotnet-version: '10.0.x'
+      - name: Install macOS workload
+        run: dotnet install workload macos
+        if: ${{ matrix.platform.tfm == 'net10.0-macos' }}
       - name: Build
         run: dotnet build src/SerialLoops/SerialLoops.csproj -f ${{ matrix.platform.tfm }}
       - name: Test

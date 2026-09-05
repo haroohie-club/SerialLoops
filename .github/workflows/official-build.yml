@@ -185,11 +185,11 @@ jobs:
       - name: Restore
         run: dotnet restore src/SerialLoops/SerialLoops.csproj -r ${{ matrix.type.rid }}
       - name: Build .app
-        run: dotnet msbuild src/SerialLoops/SerialLoops.csproj -t:BundleApp -p:Configuration=Release -p:TargetFramework=net10.0 -p:RuntimeIdentifier=${{ matrix.type.rid }} -p:UseAppHost=true -p:SelfContained=true -p:DebugType=None -p:DebugSymbols=false -p:PublishSingleFile=true -p:CIBuild=true
+        run: dotnet msbuild src/SerialLoops/SerialLoops.csproj -t:BundleApp -p:Configuration=Release -p:TargetFramework=net10.0-macos -p:RuntimeIdentifier=${{ matrix.type.rid }} -p:UseAppHost=true -p:SelfContained=true -p:DebugType=None -p:DebugSymbols=false -p:PublishSingleFile=true -p:CIBuild=true
       - name: Build pkg installer
         run: |
           mkdir "install/macos/Serial Loops.app"
-          cp -r "src/SerialLoops/bin/Release/net10.0/${{ matrix.type.rid }}/publish/Serial Loops.app" "install/macos/"
+          cp -r "src/SerialLoops/bin/Release/net10.0-macos/${{ matrix.type.rid }}/publish/Serial Loops.app" "install/macos/"
           cd install/macos/
           chmod +x "./Serial Loops.app/Contents/MacOS/SerialLoops"
           chmod +x "./Serial Loops.app/Contents/MacOS/NitroPacker.SymTableHelper"
