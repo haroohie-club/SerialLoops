@@ -43,9 +43,9 @@ public partial class ItemExplorerPanelViewModel : ViewModelBase
 
                         return val?.GetDisplay();
                     }),
-                    BeginEditGestures = BeginEditGestures.F2,
                 },
-                i => i.Children);
+                i => i.Children,
+                options: o => o.BeginEditGestures = BeginEditGestures.F2);
 
             if (ExpandItems)
             {
