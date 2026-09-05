@@ -1082,24 +1082,24 @@ public class ScriptItem : Item
                 canvas.DrawBitmap(
                     EpisodeHeaderScriptParameter
                         .GetTexture((EpisodeHeaderScriptParameter.Episode)preview.EpisodeHeader, project).GetTexture(),
-                    new SKPoint(0, 0));
+                    new SKPoint(0, 0), SKSamplingOptions.Default);
             }
             else
             {
                 if (preview.Kbg is not null)
                 {
-                    canvas.DrawBitmap(preview.Kbg.GetBackground(), new SKPoint(0, 0));
+                    canvas.DrawBitmap(preview.Kbg.GetBackground(), new SKPoint(0, 0), SKSamplingOptions.Default);
                 }
 
                 if (preview.Place is not null)
                 {
-                    canvas.DrawBitmap(preview.Place.GetPreview(project), new SKPoint(5, 40));
+                    canvas.DrawBitmap(preview.Place.GetPreview(project), new SKPoint(5, 40), SKSamplingOptions.Default);
                 }
 
                 foreach (var chibi in preview.TopScreenChibis)
                 {
                     SKBitmap chibiFrame = chibi.Chibi.ChibiAnimations.First().Value.ElementAt(0).Frame;
-                    canvas.DrawBitmap(chibiFrame, new SKPoint(chibi.X, chibi.Y));
+                    canvas.DrawBitmap(chibiFrame, new SKPoint(chibi.X, chibi.Y), SKSamplingOptions.Default);
                 }
 
                 if (preview.ChibiEmote.EmotingChibi is not null)
@@ -1110,13 +1110,13 @@ public class ScriptItem : Item
                     canvas.DrawBitmap(emotes,
                         new(0, preview.ChibiEmote.InternalYOffset, 32, preview.ChibiEmote.InternalYOffset + 32),
                         new SKRect(preview.ChibiEmote.ExternalXOffset + 16, chibiY - 32,
-                            preview.ChibiEmote.ExternalXOffset + 48, chibiY));
+                            preview.ChibiEmote.ExternalXOffset + 48, chibiY), SKSamplingOptions.Default);
                 }
             }
         }
         else if (preview.ChessPuzzle is not null)
         {
-            canvas.DrawBitmap(preview.ChessPuzzle.GetChessboard(project), 8, 188);
+            canvas.DrawBitmap(preview.ChessPuzzle.GetChessboard(project), 8, 188, SKSamplingOptions.Default);
 
             foreach (SKPoint rectOrigin in preview.ChessGuideSpaces.Select(g => ChessPuzzleItem.GetChessPiecePosition(g)))
             {
@@ -1147,17 +1147,17 @@ public class ScriptItem : Item
                     {
                         canvas.DrawBitmap(dualScreenBg,
                             new(0, preview.Background.Graphic2.Height - 192, 256,
-                                preview.Background.Graphic2.Height), new SKRect(0, 0, 256, 192));
+                                preview.Background.Graphic2.Height), new SKRect(0, 0, 256, 192), SKSamplingOptions.Default);
                         int bottomScreenX = dualScreenBg.Height - 192;
                         canvas.DrawBitmap(dualScreenBg, new(0, bottomScreenX, 256, bottomScreenX + 192),
-                            new SKRect(0, 192, 256, 384));
+                            new SKRect(0, 192, 256, 384), SKSamplingOptions.Default);
                     }
                     else
                     {
-                        canvas.DrawBitmap(dualScreenBg, new(0, 0, 256, 192), new SKRect(0, 0, 256, 192));
+                        canvas.DrawBitmap(dualScreenBg, new(0, 0, 256, 192), new SKRect(0, 0, 256, 192), SKSamplingOptions.Default);
                         canvas.DrawBitmap(dualScreenBg,
                             new(0, preview.Background.Graphic2.Height, 256,
-                                preview.Background.Graphic2.Height + 192), new SKRect(0, 192, 256, 384));
+                                preview.Background.Graphic2.Height + 192), new SKRect(0, 192, 256, 384), SKSamplingOptions.Default);
                     }
 
                     break;
@@ -1171,11 +1171,11 @@ public class ScriptItem : Item
                         SKBitmap bgBitmap = preview.Background.GetBackground();
                         canvas.DrawBitmap(bgBitmap,
                             new(0, bgBitmap.Height - 192, bgBitmap.Width, bgBitmap.Height),
-                            new SKRect(0, verticalOffset, 256, verticalOffset + 192));
+                            new SKRect(0, verticalOffset, 256, verticalOffset + 192), SKSamplingOptions.Default);
                     }
                     else
                     {
-                        canvas.DrawBitmap(preview.Background.GetBackground(), new SKPoint(0, verticalOffset));
+                        canvas.DrawBitmap(preview.Background.GetBackground(), new SKPoint(0, verticalOffset), SKSamplingOptions.Default);
                     }
 
                     break;
@@ -1187,21 +1187,21 @@ public class ScriptItem : Item
                     {
                         SKBitmap bgBitmap = preview.Background.GetBackground();
                         canvas.DrawBitmap(bgBitmap, new(bgBitmap.Width - 256, 0, bgBitmap.Width, 192),
-                            new SKRect(0, verticalOffset, 256, verticalOffset + 192));
+                            new SKRect(0, verticalOffset, 256, verticalOffset + 192), SKSamplingOptions.Default);
                     }
                     else
                     {
-                        canvas.DrawBitmap(preview.Background.GetBackground(), new SKPoint(0, verticalOffset));
+                        canvas.DrawBitmap(preview.Background.GetBackground(), new SKPoint(0, verticalOffset), SKSamplingOptions.Default);
                     }
 
                     break;
 
                 case BgType.TEX_CG:
-                    canvas.DrawBitmap(preview.Background.GetBackground(), new SKPoint(0, verticalOffset));
+                    canvas.DrawBitmap(preview.Background.GetBackground(), new SKPoint(0, verticalOffset), SKSamplingOptions.Default);
                     break;
 
                 default:
-                    canvas.DrawBitmap(preview.Background.GetBackground(), new SKPoint(0, verticalOffset),
+                    canvas.DrawBitmap(preview.Background.GetBackground(), new SKPoint(0, verticalOffset), SKSamplingOptions.Default,
                         PaletteEffectScriptParameter.GetPaletteEffectPaint(preview.PalEffect));
                     break;
             }
@@ -1214,16 +1214,16 @@ public class ScriptItem : Item
             {
                 case ItemItem.ItemLocation.Left:
                     canvas.DrawBitmap(preview.Item.Item.ItemGraphic.GetImage(transparentIndex: 0), 128 - width,
-                        verticalOffset + 12);
+                        verticalOffset + 12, SKSamplingOptions.Default);
                     break;
 
                 case ItemItem.ItemLocation.Center:
                     canvas.DrawBitmap(preview.Item.Item.ItemGraphic.GetImage(transparentIndex: 0), 128 - width / 2,
-                        verticalOffset + 12);
+                        verticalOffset + 12, SKSamplingOptions.Default);
                     break;
 
                 case ItemItem.ItemLocation.Right:
-                    canvas.DrawBitmap(preview.Item.Item.ItemGraphic.GetImage(transparentIndex: 0), 128, verticalOffset + 12);
+                    canvas.DrawBitmap(preview.Item.Item.ItemGraphic.GetImage(transparentIndex: 0), 128, verticalOffset + 12, SKSamplingOptions.Default);
                     break;
 
                 default:
@@ -1238,7 +1238,7 @@ public class ScriptItem : Item
             if (sprite.Sprite is not null)
             {
                 SKBitmap spriteBitmap = sprite.Sprite.GetClosedMouthAnimation(project)[0].Frame;
-                canvas.DrawBitmap(spriteBitmap, sprite.Positioning.GetSpritePosition(spriteBitmap, verticalOffset),
+                canvas.DrawBitmap(spriteBitmap, sprite.Positioning.GetSpritePosition(spriteBitmap, verticalOffset), SKSamplingOptions.Default,
                     sprite.PalEffect ?? PaletteEffectScriptParameter.IdentityPaint);
             }
         }
@@ -1257,16 +1257,16 @@ public class ScriptItem : Item
                 };
             if (!string.IsNullOrEmpty(line.Text))
             {
-                canvas.DrawBitmap(project.DialogueBitmap, new(0, 24, 32, 36), new SKRect(0, verticalOffset + 152, 256, verticalOffset + 164));
+                canvas.DrawBitmap(project.DialogueBitmap, new(0, 24, 32, 36), new SKRect(0, verticalOffset + 152, 256, verticalOffset + 164), SKSamplingOptions.Default);
                 SKColor dialogueBoxColor = project.DialogueBitmap.GetPixel(0, 28);
                 canvas.DrawRect(0, verticalOffset + 164, 256, 28, new() { Color = dialogueBoxColor });
                 canvas.DrawBitmap(project.DialogueBitmap, new(0, 37, 32, 64),
-                    new SKRect(224, verticalOffset + 165, 256, verticalOffset + 192));
+                    new SKRect(224, verticalOffset + 165, 256, verticalOffset + 192), SKSamplingOptions.Default);
                 if (preview.LastDialogueCommand.Verb != CommandVerb.PIN_MNL)
                 {
                     canvas.DrawBitmap(project.SpeakerBitmap,
                         new(0, 16 * ((int)line.Speaker - 1), 64, 16 * ((int)line.Speaker)),
-                        new SKRect(0, verticalOffset + 140, 64, verticalOffset + 156));
+                        new SKRect(0, verticalOffset + 140, 64, verticalOffset + 156), SKSamplingOptions.Default);
                 }
 
                 canvas.DrawHaroohieText(line.Text, dialoguePaint, project, y: verticalOffset + 160);
@@ -1281,9 +1281,9 @@ public class ScriptItem : Item
             using SKCanvas flyoutCanvas = new(topicFlyout);
 
             flyoutCanvas.DrawBitmap(flyoutSysTex, new(0, 20, 32, 32),
-                new SKRect(0, 12, 32, 24));
+                new SKRect(0, 12, 32, 24), SKSamplingOptions.Default);
             flyoutCanvas.DrawBitmap(flyoutSysTex, new(0, 0, 44, 20),
-                new SKRect(32, 6, 76, 26));
+                new SKRect(32, 6, 76, 26), SKSamplingOptions.Default);
 
             SKBitmap topicCards = project.Grp.GetFileByName("SYS_CMN_B09DNX").GetImage(transparentIndex: 0);
             int srcX = preview.Topic.TopicEntry.CardType switch
@@ -1297,10 +1297,10 @@ public class ScriptItem : Item
             };
 
             flyoutCanvas.DrawBitmap(topicCards, new(srcX, 0, srcX + 20, 24),
-                new SKRect(10, 2, 30, 26));
+                new SKRect(10, 2, 30, 26), SKSamplingOptions.Default);
             flyoutCanvas.Flush();
 
-            canvas.DrawBitmap(topicFlyout, 256 - topicFlyout.Width, verticalOffset + 128);
+            canvas.DrawBitmap(topicFlyout, 256 - topicFlyout.Width, verticalOffset + 128, SKSamplingOptions.Default);
         }
 
         // Draw select choices
@@ -1322,7 +1322,7 @@ public class ScriptItem : Item
             int graphicY = (192 - (choiceGraphics.Count * 18 + (choiceGraphics.Count - 1) * 8)) / 2 + 184;
             foreach (SKBitmap choiceGraphic in choiceGraphics)
             {
-                canvas.DrawBitmap(choiceGraphic, 19, graphicY);
+                canvas.DrawBitmap(choiceGraphic, 19, graphicY, SKSamplingOptions.Default);
                 graphicY += 26;
             }
         }
@@ -1330,7 +1330,7 @@ public class ScriptItem : Item
         if (preview.HaruhiMeterVisible)
         {
             SKBitmap haruhiMeterBitmap = ((SystemTextureItem)project.Items.First(i => i.Name == "SYSTEX_SYS_CMN_B14")).GetTexture();
-            canvas.DrawBitmap(haruhiMeterBitmap, 0, 192);
+            canvas.DrawBitmap(haruhiMeterBitmap, 0, 192, SKSamplingOptions.Default);
         }
 
         canvas.Flush();
@@ -1365,7 +1365,7 @@ public class ScriptItem : Item
         {
             try
             {
-                for (int i = 0; i < Event.LabelsSection.Objects.Count; i++)
+                for (int i = 0; i < Event.LabelsSection!.Objects!.Count; i++)
                 {
                     if (Event.LabelsSection.Objects[i].Id == 0)
                     {

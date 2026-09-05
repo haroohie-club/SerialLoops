@@ -114,19 +114,14 @@ On Linux, you will need to install the SDL2 binaries for your distribution.
 ### Building
 To build Serial Loops for your platform, run:
 ```bash
-dotnet build -f TARGET_FRAMEWORK
+dotnet build
 ```
-The target framework for each platform is:
-* Windows: `net10.0-windows`
-* macOS: `net10.0-macos`
-* Linux: `net10.0`
 
 We recommend [Rider](https://www.jetbrains.com/rider/) for development as it has the best Avalonia support and is now free to use for non-commercial purposes; however, on Windows, you can also use [Visual Studio 2022](https://visualstudio.microsoft.com/).
-You can also build from both of these IDEs; however, when building from Rider, you must go into **Settings &rarr; Build, Execution, Deployment &rarr; Toolset and Build** and add `TargetFramework=TARGET_FRAMEWORK` (replacing TARGET_FRAMEWORK with the framework listed above) to the MSBuild global properties field. This has the same effect as specifying `-f TARGET_FRAMEWORK` on the command line.
 
 If you'd like to contribute new features or fixes, we recommend [getting in touch on Discord first](https://discord.gg/nesRSbpeFM) before submitting a pull request!
 
 ### Testing
 Serial Loops has headless tests that run to test the UI and other functionality of the program.
 
-Tests can be run via `dotnet test -f TARGET_FRAMEWORK` or through the test runners in Rider or Visual Studio.
+Tests can be run via `dotnet test` or through the test runners in Rider or Visual Studio.

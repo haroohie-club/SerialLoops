@@ -540,7 +540,7 @@ public static partial class Extensions
                 if ((charIndex + 1) * 16 <= project.FontBitmap.Height)
                 {
                     canvas.DrawBitmap(project.FontBitmap, new(0, charIndex * 16, 16, (charIndex + 1) * 16),
-                        new SKRect(currentX, currentY, currentX + 16, currentY + 16), color);
+                        new SKRect(currentX, currentY, currentX + 16, currentY + 16), SKSamplingOptions.Default, color);
                 }
             }
 
@@ -702,7 +702,7 @@ public class SKColorJsonConverter : JsonConverter<SKColor>
 {
     public override SKColor Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        string html = reader.GetString();
+        string html = reader.GetString()!;
         return new(
             byte.Parse(html[2..4], NumberStyles.HexNumber),
             byte.Parse(html[4..6], NumberStyles.HexNumber),

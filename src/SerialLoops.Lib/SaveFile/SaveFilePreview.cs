@@ -85,15 +85,15 @@ public class SaveFilePreview(SaveSlotData slotData, Project project)
 
         // Draw "EPISODE: (number)"
         var numberXOffSet = 8 * (number - 1);
-        episodeCanvas.DrawBitmap(bitmap, 0, 0);
+        episodeCanvas.DrawBitmap(bitmap, 0, 0, SKSamplingOptions.Default);
         episodeCanvas.DrawBitmap(
             bitmap,
             new SKRectI(numberXOffSet, bitmap.Height / 2, numberXOffSet + 8, bitmap.Height),
-            new SKRectI(bitmap.Width - 8, 0, bitmap.Width, bitmap.Height / 2)
+            new SKRectI(bitmap.Width - 8, 0, bitmap.Width, bitmap.Height / 2), SKSamplingOptions.Default
         );
         episodeCanvas.Flush();
 
-        canvas.DrawBitmap(episodeNumber, 10, 5);
+        canvas.DrawBitmap(episodeNumber, 10, 5, SKSamplingOptions.Default);
     }
 
     private void DrawSaveTime(SKCanvas canvas, DateTimeOffset saveTime)
@@ -120,7 +120,7 @@ public class SaveFilePreview(SaveSlotData slotData, Project project)
             DrawLargeGlyph(time[i], timeCanvas, bitmap, 160 + i * 8);
         }
         timeCanvas.Flush();
-        canvas.DrawBitmap(timeBitmap, 0, 23);
+        canvas.DrawBitmap(timeBitmap, 0, 23, SKSamplingOptions.Default);
     }
 
     private static void DrawLargeGlyph(char glyph, SKCanvas canvas, SKBitmap bitmap, int x, int y = 0)
@@ -145,7 +145,7 @@ public class SaveFilePreview(SaveSlotData slotData, Project project)
         canvas.DrawBitmap(
             bitmap,
             new SKRectI(offset, 0, offset + 8, bitmap.Height),
-            new SKRectI(x, y, x + 8, y + bitmap.Height)
+            new SKRectI(x, y, x + 8, y + bitmap.Height), SKSamplingOptions.Default
         );
     }
 

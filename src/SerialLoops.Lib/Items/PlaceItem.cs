@@ -35,7 +35,7 @@ public class PlaceItem : Item, IPreviewableGraphic
             {
                 canvas.DrawBitmap(placeGraphic,
                     new(x * placeGraphic.Width / 2, y * placeGraphic.Height / 4, (x + 1) * placeGraphic.Width / 2, (y + 1) * placeGraphic.Height / 4),
-                    new SKRect(col * placeGraphic.Width / 2, row * placeGraphic.Height / 4, (col + 1) * placeGraphic.Width / 2, (row + 1) * placeGraphic.Height / 4));
+                    new SKRect(col * placeGraphic.Width / 2, row * placeGraphic.Height / 4, (col + 1) * placeGraphic.Width / 2, (row + 1) * placeGraphic.Height / 4), SKSamplingOptions.Default);
                 row++;
                 if (row >= 4)
                 {
